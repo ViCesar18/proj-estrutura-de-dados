@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]){
     int i = 1, j = 0;
-    int nx;
+    int nx = 1000;
     char *pathIn = NULL, *nameIn = NULL, *arqGeo = NULL;
     char *nameConsulta = NULL;
     char *pathOut = NULL, *nameOut = NULL, *arqSVG = NULL;
@@ -16,29 +16,7 @@ int main(int argc, char *argv[]){
     Formas *figuras;
 
     /*Recebe os parametros da main (argv)*/
-    while(i < argc){
-        if(strcmp("-e", argv[i]) == 0){
-            i++;
-            pathIn = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
-            strcpy(pathIn, argv[i]);
-        }
-        else if(strcmp("-f", argv[i]) == 0){
-            i++;
-            nameIn = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
-            strcpy(nameIn, argv[i]);
-        }
-        else if(strcmp("-q", argv[i]) == 0){
-            i++;
-            nameConsulta = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
-            strcpy(nameConsulta, argv[i]);
-        }
-        else if(strcmp("-o", argv[i]) == 0){
-            i++;
-            pathOut = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
-            strcpy(pathOut, argv[i]);
-        }
-        i++;
-    }
+    receberParametros(argc, argv, &pathIn, &nameIn, &nameConsulta, &pathOut);
     
     /*Prepara o diretorio para abrir o arquivo de entrada*/
     if(pathIn != NULL){
@@ -76,6 +54,9 @@ int main(int argc, char *argv[]){
     arqOut = fopen(arqSVG, "w");
     fputs("<svg>\n", arqOut);
 
+    /*Cria o vetor de structs para armazenar as dados das formas*/
+    figuras = (Formas *)malloc(nx * sizeof(Formas));
+
     /*Le os dados das formas geometricas do arquivo de entrada*/
     while(1){
         if(feof(arqIn))
@@ -90,47 +71,17 @@ int main(int argc, char *argv[]){
             lerRetangulo(arqIn, figuras, arqOut);
         }
         else if(forma == 'n'){
-            nx = criarStruct(arqIn);
-            figuras = (Formas *)malloc(nx * sizeof(Formas));
+            nx = lerNX(arqIn);
+            figuras = realloc(figuras, nx * sizeof(Formas));
         }
         else if(forma == 't'){
             lerTexto(arqIn, arqOut);
         }
     }
 
-    fputs("</svg>\n", arqOut);
+    fputs("\n</svg>\n", arqOut);
     fclose(arqOut);
     fclose(arqIn);
-
-    /*printf("%d\n", figuras[1].idC);
-    printf("%lf\n", figuras[1].rC);
-    printf("%lf\n", figuras[1].xC);
-    printf("%lf\n", figuras[1].yC);
-    printf("%s\n", figuras[1].strokeCollorC);
-    printf("%s\n", figuras[1].fillCollorC);
-
-    printf("%d\n", figuras[2].idR);
-    printf("%lf\n", figuras[2].wR);
-    printf("%lf\n", figuras[2].hR);
-    printf("%lf\n", figuras[2].xR);
-    printf("%lf\n", figuras[2].yR);
-    printf("%s\n", figuras[2].strokeCollorR);
-    printf("%s\n", figuras[2].fillCollorR);
-
-    printf("%d\n", figuras[8].idR);
-    printf("%lf\n", figuras[8].wR);
-    printf("%lf\n", figuras[8].hR);
-    printf("%lf\n", figuras[8].xR);
-    printf("%lf\n", figuras[8].yR);
-    printf("%s\n", figuras[8].strokeCollorR);
-    printf("%s\n", figuras[8].fillCollorR);
-
-    printf("%d\n", figuras[4].idC);
-    printf("%lf\n", figuras[4].rC);
-    printf("%lf\n", figuras[4].xC);
-    printf("%lf\n", figuras[4].yC);
-    printf("%s\n", figuras[4].strokeCollorC);
-    printf("%s\n", figuras[4].fillCollorC);*/
 
     /*Libera a memoria reservada para strings e vetores*/
     free(pathIn);

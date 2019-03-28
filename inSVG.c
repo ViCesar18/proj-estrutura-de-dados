@@ -1,17 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "inSVG.h"
 #include "structs.h"
 #include "outSVG.h"
 
-int criarStruct(FILE *arq){
+void receberParametros(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **pathOut){
+    int i = 1;
+
+    while(i < argc){
+        if(strcmp("-e", argv[i]) == 0){
+            i++;
+            *pathIn = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(*pathIn, argv[i]);
+        }
+        else if(strcmp("-f", argv[i]) == 0){
+            i++;
+            *nameIn = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(*nameIn, argv[i]);
+        }
+        else if(strcmp("-q", argv[i]) == 0){
+            i++;
+            *nameConsulta = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(*nameConsulta, argv[i]);
+        }
+        else if(strcmp("-o", argv[i]) == 0){
+            i++;
+            *pathOut = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(*pathOut, argv[i]);
+        }
+        i++;
+    }
+}
+
+int lerNX(FILE *arq){
     int nx;
 
     fgetc(arq);
     fscanf(arq, "%d", &nx);
 
     return nx;
-
 }
 
 void lerFormaGeometrica(FILE *arq, char *forma){

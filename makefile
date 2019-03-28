@@ -1,7 +1,7 @@
-siguel: main.o inSVG.o
-	gcc -o siguel main.o inSVG.o
+siguel: main.o inSVG.o outSVG.o
+	gcc -o siguel main.o inSVG.o outSVG.o
 
-main. o: main.c inSVG.h structs.h
+main.o: main.c inSVG.h structs.h
 	gcc -c main.c -o main.o
 
 inSVG.o: inSVG.c inSVG.h outSVG.h structs.h
