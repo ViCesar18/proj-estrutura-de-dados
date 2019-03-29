@@ -22,4 +22,14 @@ void lerRetangulo(FILE *arqIn, Formas figuras[], FILE *arqOut);
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
 void lerTexto(FILE *arqIn, FILE *arqOut);
 
+void lerQry(FILE *arqConsul, char q[]);
+
+void lerO(FILE *arqConsul, int *j, int *k);
+
+void lerI(FILE *arqConsul, int *j, double *x, double *y);
+
+void lerD(FILE *arqConsul, int *j, int *k);
+
+void lerBB(FILE *arqConsul, char sufixo[], char cor[]);
+
 #endif

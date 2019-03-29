@@ -100,3 +100,33 @@ void lerTexto(FILE *arqIn, FILE *arqOut){
 
     printarTexto(arqOut, x, y, text);
 }
+
+void lerQry(FILE *arqConsul, char q[]){
+    
+    fscanf(arqConsul, "%s", q);
+}
+
+void lerO(FILE *arqConsul, int *j, int *k){
+
+    fscanf(arqConsul, "%d", j);
+    fscanf(arqConsul, "%d", k);
+}
+
+void lerI(FILE *arqConsul, int *j, double *x, double *y){
+
+    fscanf(arqConsul, "%d", j);
+    fscanf(arqConsul, "%lf", x);
+    fscanf(arqConsul, "%lf", y);
+}
+
+void lerD(FILE *arqConsul, int *j, int *k){
+
+    fscanf(arqConsul, "%d", j);
+    fscanf(arqConsul, "%d", k);
+}
+
+void lerBB(FILE *arqConsul, char sufixo[], char cor[]){
+
+    fscanf(arqConsul, "%s", sufixo);
+    fscanf(arqConsul, "%s", cor);
+}

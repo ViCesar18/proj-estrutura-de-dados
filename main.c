@@ -6,21 +6,23 @@
 #include "structs.h"
 
 int main(int argc, char *argv[]){
-    int i = 1, j = 0;
     int nx = 1000;
     char *pathIn = NULL, *nameIn = NULL, *arqGeo = NULL;
     char *nameConsulta = NULL, *arqQry = NULL;
     char *pathOut = NULL, *nameOut = NULL, *arqSVG = NULL;
-    char forma;
+    char forma, q[3];
     FILE *arqIn, *arqOut, *arqConsul;
+
+    int j, k;
+    double x, y;
+    char sufixo[30], cor[10];
 
     Formas *figuras;
 
     /*Recebe os parametros da main (argv)*/
     receberParametros(argc, argv, &pathIn, &nameIn, &nameConsulta, &pathOut);
     
-    /*Prepara o diretorio para abrir o arquivo de entrada*/
-
+    /*Prepara o diretorio para abrir os arquivos de entrada*/
     if(pathIn != NULL){
         alocarMemoria(nameIn, pathIn, &arqGeo);
         arqIn = fopen(arqGeo, "r");
@@ -68,6 +70,31 @@ int main(int argc, char *argv[]){
         }
         else if(forma == 't'){
             lerTexto(arqIn, arqOut);
+        }
+    }
+
+    while(1){
+        if(feof(arqConsul))
+            break;
+
+        lerQry(arqConsul, q);
+        printf("%s\n", q);
+
+        if(strcmp(q, "o?") == 0){
+            lerO(arqConsul, &j, &k);
+            printf("%d %d\n", j, k);
+        }
+        else if(strcmp(q, "i?") == 0){
+            lerI(arqConsul, &j, &x, &y);
+            printf("%d %lf %lf\n", j, x, y);
+        }
+        else if(strcmp(q, "d?") == 0){
+            lerD(arqConsul, &j, &k);
+            printf("%d %d\n", j, k);
+        }
+        else if(strcmp(q, "bb") == 0){
+            lerBB(arqConsul, sufixo, cor);
+            printf("%s %s\n", sufixo, cor);
         }
     }
 
