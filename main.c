@@ -2,16 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include "inSVG.h"
+#include "outSVG.h"
 #include "structs.h"
 
 int main(int argc, char *argv[]){
     int i = 1, j = 0;
     int nx = 1000;
     char *pathIn = NULL, *nameIn = NULL, *arqGeo = NULL;
-    char *nameConsulta = NULL;
+    char *nameConsulta = NULL, *arqQry = NULL;
     char *pathOut = NULL, *nameOut = NULL, *arqSVG = NULL;
     char forma;
-    FILE *arqIn, *arqOut;
+    FILE *arqIn, *arqOut, *arqConsul;
 
     Formas *figuras;
 
@@ -19,38 +20,29 @@ int main(int argc, char *argv[]){
     receberParametros(argc, argv, &pathIn, &nameIn, &nameConsulta, &pathOut);
     
     /*Prepara o diretorio para abrir o arquivo de entrada*/
-    if(pathIn != NULL){
-        if(pathIn[strlen(pathIn) - 1] == '/'){
-            arqGeo = (char *)malloc((strlen(pathIn) + strlen(nameIn) + 1) * sizeof(char));
-            sprintf(arqGeo, "%s%s", pathIn, nameIn);
-        }
-        else{
-            arqGeo = (char *)malloc((strlen(pathIn) + strlen(nameIn) + 2) * sizeof(char));
-            sprintf(arqGeo, "%s/%s", pathIn, nameIn);
-        }
 
+    if(pathIn != NULL){
+        alocarMemoria(nameIn, pathIn, &arqGeo);
         arqIn = fopen(arqGeo, "r");
     }
     else{
         arqIn = fopen(nameIn, "r");
     }
 
-    /*Prepara o diretorio para criar o arquivo de saida*/
-    nameOut = (char *)malloc(strlen(nameIn) * sizeof(char));
-    while(nameIn[j] != '.'){
-        nameOut[j] = nameIn[j];
-        j++;
-    }
-    strcat(nameOut, ".svg");
-    if(pathOut[strlen(pathOut) - 1] == '/'){
-        arqSVG = (char *)malloc((strlen(pathOut) + strlen(nameOut) + 1) * sizeof(char));
-        sprintf(arqSVG, "%s%s", pathOut, nameOut);
-    }
-    else{
-        arqSVG = (char *)malloc((strlen(pathOut) + strlen(nameOut) + 2) * sizeof(char));
-        sprintf(arqSVG, "%s/%s", pathOut, nameOut);
+    if(nameConsulta != NULL){
+        if(pathIn != NULL){
+            alocarMemoria(nameConsulta, pathIn, &arqQry);
+            arqConsul = fopen(arqQry, "r");
+        }
+        else{
+            arqConsul = fopen(nameConsulta, "r");
+        }
     }
 
+    /*Prepara o diretorio para criar o arquivo de saida*/
+    criarArqSaida(&nameOut, nameIn);
+    strcat(nameOut, ".svg");
+    alocarMemoria(nameOut, pathOut, &arqSVG);
     arqOut = fopen(arqSVG, "w");
     fputs("<svg>\n", arqOut);
 
@@ -79,13 +71,18 @@ int main(int argc, char *argv[]){
         }
     }
 
+    /*Finalizacao e fechamento dos arquivos*/
     fputs("\n</svg>\n", arqOut);
+    if(nameConsulta != NULL)
+        fclose(arqConsul);
     fclose(arqOut);
     fclose(arqIn);
 
     /*Libera a memoria reservada para strings e vetores*/
     free(pathIn);
     free(nameIn);
+    free(arqGeo);
+    free(arqQry);
     free(nameConsulta);
     free(pathOut);
     free(nameOut);

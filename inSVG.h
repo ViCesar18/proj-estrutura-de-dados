@@ -5,6 +5,8 @@
 
 void receberParametros(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **pathOut);
 
+void alocarMemoria(char nome[], char dir[], char **arq);
+
 /*Le o valor de NX do arquivo de entrada .geo*/
 int lerNX(FILE *arq);
 

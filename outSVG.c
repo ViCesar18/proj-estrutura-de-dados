@@ -1,6 +1,18 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "outSVG.h"
 #include "structs.h"
+
+void criarArqSaida(char **nameOut, char nameIn[]){
+    int i = 0;
+
+    *nameOut = (char *)malloc(strlen(nameIn) * sizeof(char));
+    while(nameIn[i] != '.'){
+        (*nameOut)[i] = nameIn[i];
+        i++;
+    }
+}
 
 /*Printa as informacoes de circulo armazenadas no vetor de struct e formatadas para SVG no arquivo SVG*/
 void printarCirculo(FILE *arqOut, Formas figuras){

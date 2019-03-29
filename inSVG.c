@@ -33,6 +33,18 @@ void receberParametros(int argc, char *argv[], char **pathIn, char **nameIn, cha
     }
 }
 
+void alocarMemoria(char nome[], char dir[], char **arq){
+
+    if(dir[strlen(dir) - 1] == '/'){
+        *arq = (char *)malloc((strlen(dir) + strlen(nome) + 1) * sizeof(char));
+        sprintf(*arq, "%s%s", dir, nome);
+    }
+    else{
+        *arq = (char *)malloc((strlen(dir) + strlen(nome) + 2) * sizeof(char));
+        sprintf(*arq, "%s/%s", dir, nome);
+    }
+}
+
 int lerNX(FILE *arq){
     int nx;
 

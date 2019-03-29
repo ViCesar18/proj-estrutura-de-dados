@@ -3,6 +3,8 @@
 
 #include "structs.h"
 
+void criarArqSaida(char **nameOut, char nameIn[]);
+
 void printarCirculo(FILE *arqOut, Formas figuras);
 
 void printarRetangulo(FILE *arqOut, Formas figuras);
