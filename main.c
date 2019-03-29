@@ -3,6 +3,7 @@
 #include <string.h>
 #include "inSVG.h"
 #include "outSVG.h"
+#include "consulta.h"
 #include "structs.h"
 
 int main(int argc, char *argv[]){
@@ -10,8 +11,10 @@ int main(int argc, char *argv[]){
     char *pathIn = NULL, *nameIn = NULL, *arqGeo = NULL;
     char *nameConsulta = NULL, *arqQry = NULL;
     char *pathOut = NULL, *nameOut = NULL, *arqSVG = NULL;
+    char *nameTXT, *arqTXT;
+    char *nameOut2, *arqSVG2;
     char forma, q[3];
-    FILE *arqIn, *arqOut, *arqConsul;
+    FILE *arqIn, *arqOut, *arqConsul, *arqTexto, *arqOut2;
 
     int j, k;
     double x, y;
@@ -39,6 +42,11 @@ int main(int argc, char *argv[]){
         else{
             arqConsul = fopen(nameConsulta, "r");
         }
+
+        criarArqSaida(&nameTXT, nameIn);
+        alocarMemoria(nameTXT, pathOut, &arqTXT);
+        strcat(arqTXT, ".txt");
+        arqTexto = fopen(arqTXT, "w");
     }
 
     /*Prepara o diretorio para criar o arquivo de saida*/
@@ -74,34 +82,32 @@ int main(int argc, char *argv[]){
     }
 
     while(1){
+        lerQry(arqConsul, q);
+
         if(feof(arqConsul))
             break;
 
-        lerQry(arqConsul, q);
-        printf("%s\n", q);
-
         if(strcmp(q, "o?") == 0){
             lerO(arqConsul, &j, &k);
-            printf("%d %d\n", j, k);
+            verificarO(arqTexto,figuras[j], figuras[k]);
         }
         else if(strcmp(q, "i?") == 0){
             lerI(arqConsul, &j, &x, &y);
-            printf("%d %lf %lf\n", j, x, y);
         }
         else if(strcmp(q, "d?") == 0){
             lerD(arqConsul, &j, &k);
-            printf("%d %d\n", j, k);
         }
         else if(strcmp(q, "bb") == 0){
             lerBB(arqConsul, sufixo, cor);
-            printf("%s %s\n", sufixo, cor);
         }
     }
 
     /*Finalizacao e fechamento dos arquivos*/
     fputs("\n</svg>\n", arqOut);
-    if(nameConsulta != NULL)
+    if(nameConsulta != NULL){
         fclose(arqConsul);
+        fclose(arqTexto);
+    }
     fclose(arqOut);
     fclose(arqIn);
 

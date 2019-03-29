@@ -3,6 +3,7 @@
 
 /*Structs para armazenar os circulos, retangulos e textos para o arquivo svg*/
 typedef struct{
+    char f;
     int idC, idR;
     double rC, xC, yC, wR, hR, xR, yR;
     char strokeCollorC[10], fillCollorC[10], strokeCollorR[10], fillCollorR[10];

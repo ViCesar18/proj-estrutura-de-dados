@@ -63,6 +63,7 @@ void lerCirculo(FILE *arqIn, Formas figuras[], FILE *arqOut){
     int id;
 
     fscanf(arqIn, "%d", &id);
+    figuras[id].f = 'c';
     figuras[id].idC = id;
     fscanf(arqIn, "%lf", &figuras[id].rC);
     fscanf(arqIn, "%lf", &figuras[id].xC);
@@ -78,6 +79,7 @@ void lerRetangulo(FILE *arqIn, Formas figuras[], FILE *arqOut){
     int id;
 
     fscanf(arqIn, "%d", &id);
+    figuras[id].f = 'r';
     figuras[id].idR = id;
     fscanf(arqIn, "%lf", &figuras[id].wR);
     fscanf(arqIn, "%lf", &figuras[id].hR);

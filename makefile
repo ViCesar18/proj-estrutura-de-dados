@@ -1,7 +1,7 @@
-siguel: main.o inSVG.o outSVG.o
-	gcc -o siguel main.o inSVG.o outSVG.o
+siguel: main.o inSVG.o outSVG.o consulta.o
+	gcc -o siguel main.o inSVG.o outSVG.o consulta.o -lm
 
-main.o: main.c inSVG.h structs.h outSVG.h
+main.o: main.c inSVG.h structs.h outSVG.h consulta.h
 	gcc -c main.c -o main.o
 
 inSVG.o: inSVG.c inSVG.h outSVG.h structs.h
@@ -9,3 +9,6 @@ inSVG.o: inSVG.c inSVG.h outSVG.h structs.h
 
 outSVG.o: outSVG.c outSVG.h structs.h
 	gcc -c outSVG.c -o outSVG.o
+
+consulta.o: consulta.c structs.h consulta.h
+	gcc -c consulta.c -o consulta.o
