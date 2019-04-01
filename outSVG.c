@@ -14,6 +14,25 @@ void criarArqSaida(char **nameOut, char nameIn[]){
     }
 }
 
+void criarArqSaida2(char **nameOut, char nameIn[], char nameConsulta[]){
+    int i = 0, j = 0;
+
+    *nameOut = (char *)malloc((strlen(nameIn) + strlen(nameConsulta)) * sizeof(char));
+    while(nameIn[i] != '.'){
+        (*nameOut)[i] = nameIn[i];
+        i++;
+        j++;
+    }
+    strcat(*nameOut, "-");
+    i = 0;
+    j++;
+    while(nameConsulta[i] != '.'){
+        (*nameOut)[j] = nameConsulta[i];
+        i++;
+        j++;
+    }
+}
+
 /*Printa as informacoes de circulo armazenadas no vetor de struct e formatadas para SVG no arquivo SVG*/
 void printarCirculo(FILE *arqOut, Formas figuras){
 
@@ -24,8 +43,8 @@ void printarCirculo(FILE *arqOut, Formas figuras){
 /*Printa as informacoes de retangulo armazenadas no vetor de struct e formatadas para SVG no arquivo SVG*/
 void printarRetangulo(FILE *arqOut, Formas figuras){
 
-    fprintf(arqOut, "\n<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\"/>\n",
-    figuras.xR, figuras.yR, figuras.wR, figuras.hR, figuras.strokeCollorR, figuras.fillCollorR);
+    fprintf(arqOut, "\n<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\" stroke-dasharray=\"%d\"/>\n",
+    figuras.xR, figuras.yR, figuras.wR, figuras.hR, figuras.strokeCollorR, figuras.fillCollorR, figuras.tracoR);
 }
 
 /*Printa as informacoes de texto armazenadas em variaveis locais no vetor de struct e formatadas para SVG no arquivo SVG*/

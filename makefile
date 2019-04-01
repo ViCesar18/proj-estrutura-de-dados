@@ -1,3 +1,6 @@
+CC = gcc
+COMPILER_FLAGS = -std=c99
+
 siguel: main.o inSVG.o outSVG.o consulta.o
 	gcc -o siguel main.o inSVG.o outSVG.o consulta.o -lm
 
@@ -10,5 +13,5 @@ inSVG.o: inSVG.c inSVG.h outSVG.h structs.h
 outSVG.o: outSVG.c outSVG.h structs.h
 	gcc -c outSVG.c -o outSVG.o
 
-consulta.o: consulta.c structs.h consulta.h
+consulta.o: consulta.c structs.h consulta.h outSVG.h
 	gcc -c consulta.c -o consulta.o

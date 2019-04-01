@@ -26,6 +26,7 @@ int main(int argc, char *argv[]){
     receberParametros(argc, argv, &pathIn, &nameIn, &nameConsulta, &pathOut);
     
     /*Prepara o diretorio para abrir os arquivos de entrada*/
+    //.geo
     if(pathIn != NULL){
         alocarMemoria(nameIn, pathIn, &arqGeo);
         arqIn = fopen(arqGeo, "r");
@@ -34,6 +35,7 @@ int main(int argc, char *argv[]){
         arqIn = fopen(nameIn, "r");
     }
 
+    //.qry, .txt e .svg(2)
     if(nameConsulta != NULL){
         if(pathIn != NULL){
             alocarMemoria(nameConsulta, pathIn, &arqQry);
@@ -47,9 +49,16 @@ int main(int argc, char *argv[]){
         alocarMemoria(nameTXT, pathOut, &arqTXT);
         strcat(arqTXT, ".txt");
         arqTexto = fopen(arqTXT, "w");
+
+        criarArqSaida2(&nameOut2, nameIn, nameConsulta);
+        strcat(nameOut2, ".svg");
+        alocarMemoria(nameOut2, pathOut, &arqSVG2);
+        arqOut2 = fopen(arqSVG2, "w");
+        fputs("<svg>\n", arqOut2);
     }
 
     /*Prepara o diretorio para criar o arquivo de saida*/
+    //.svg(1)
     criarArqSaida(&nameOut, nameIn);
     strcat(nameOut, ".svg");
     alocarMemoria(nameOut, pathOut, &arqSVG);
@@ -89,7 +98,7 @@ int main(int argc, char *argv[]){
 
         if(strcmp(q, "o?") == 0){
             lerO(arqConsul, &j, &k);
-            verificarO(arqTexto,figuras[j], figuras[k]);
+            verificarO(arqTexto, arqOut2, figuras[j], figuras[k]);
         }
         else if(strcmp(q, "i?") == 0){
             lerI(arqConsul, &j, &x, &y);
@@ -107,6 +116,8 @@ int main(int argc, char *argv[]){
     if(nameConsulta != NULL){
         fclose(arqConsul);
         fclose(arqTexto);
+        fputs("\n</svg>\n", arqOut2);
+        fclose(arqOut2);
     }
     fclose(arqOut);
     fclose(arqIn);
@@ -119,7 +130,9 @@ int main(int argc, char *argv[]){
     free(nameConsulta);
     free(pathOut);
     free(nameOut);
+    free(nameOut2);
     free(arqSVG);
+    free(arqSVG2);
     free(figuras);
 
     return 0;

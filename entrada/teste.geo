@@ -1,2 +1,2 @@
-c 1 100 140 256 grey magenta
-c 10 80 200 300 blue purple
+r 1 10 20 40 50 pink red
+r 2 20 400 80 100 red pink

@@ -5,6 +5,8 @@
 
 void criarArqSaida(char **nameOut, char nameIn[]);
 
+void criarArqSaida2(char **nameOut, char nameIn[], char nameConsulta[]);
+
 void printarCirculo(FILE *arqOut, Formas figuras);
 
 void printarRetangulo(FILE *arqOut, Formas figuras);

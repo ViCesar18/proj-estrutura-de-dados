@@ -81,12 +81,13 @@ void lerRetangulo(FILE *arqIn, Formas figuras[], FILE *arqOut){
     fscanf(arqIn, "%d", &id);
     figuras[id].f = 'r';
     figuras[id].idR = id;
-    fscanf(arqIn, "%lf", &figuras[id].wR);
-    fscanf(arqIn, "%lf", &figuras[id].hR);
     fscanf(arqIn, "%lf", &figuras[id].xR);
     fscanf(arqIn, "%lf", &figuras[id].yR);
+    fscanf(arqIn, "%lf", &figuras[id].wR);
+    fscanf(arqIn, "%lf", &figuras[id].hR);
     fscanf(arqIn, "%s", figuras[id].strokeCollorR);
     fscanf(arqIn, "%s", figuras[id].fillCollorR);
+    figuras[id].tracoR = 0;
 
     printarRetangulo(arqOut, figuras[id]);
 
