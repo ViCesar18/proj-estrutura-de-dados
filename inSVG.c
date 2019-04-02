@@ -43,6 +43,7 @@ void alocarMemoria(char nome[], char dir[], char **arq){
         *arq = (char *)malloc((strlen(dir) + strlen(nome) + 2) * sizeof(char));
         sprintf(*arq, "%s/%s", dir, nome);
     }
+
 }
 
 int lerNX(FILE *arq){

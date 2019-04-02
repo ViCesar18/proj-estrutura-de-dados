@@ -12,6 +12,7 @@ void criarArqSaida(char **nameOut, char nameIn[]){
         (*nameOut)[i] = nameIn[i];
         i++;
     }
+
 }
 
 void criarArqSaida2(char **nameOut, char nameIn[], char nameConsulta[]){

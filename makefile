@@ -1,5 +1,5 @@
 CC = gcc
-COMPILER_FLAGS = -std=c99
+COMPILER_FLAGS = -g -std=c99
 
 siguel: main.o inSVG.o outSVG.o consulta.o
 	gcc -o siguel main.o inSVG.o outSVG.o consulta.o -lm
