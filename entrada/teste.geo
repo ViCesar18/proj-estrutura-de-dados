@@ -1,2 +1,3 @@
-r 1 10 20 40 50 pink red
-r 2 20 400 80 100 red pink
+c 1 50 350 150 blue green
+r 2 150 150 200 200 pink red
+c 3 50 600 600 red pink

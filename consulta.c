@@ -65,7 +65,7 @@ void retanguloEnvolveRetangulo(FILE *svg2, Formas figura1, Formas figura2, bool 
         xMenor = figura2.xR;
         xMaior = figura1.xR;
         wMenor = figura2.wR;
-        wMaior - figura1.wR;
+        wMaior = figura1.wR;
     }
     
     if(figura1.yR < figura2.yR){
@@ -81,41 +81,71 @@ void retanguloEnvolveRetangulo(FILE *svg2, Formas figura1, Formas figura2, bool 
         hMaior = figura1.hR;
     }
 
-    retangulo.x = xMenor;
-    retangulo.y = yMenor;
+    retangulo.xR = xMenor;
+    retangulo.yR = yMenor;
+    retangulo.wR = xMaior + wMaior - xMenor;
+    retangulo.hR = yMaior + hMaior - yMenor;
+    strcpy(retangulo.strokeCollorR, "black");
+    strcpy(retangulo.fillCollorR, "none");
+    if(colisao)
+        retangulo.tracoR = 0;
+    else
+        retangulo.tracoR = 5;
+    printarRetangulo(svg2, retangulo);
 }
 
 void verificarO(FILE *txt, FILE *svg2, Formas figura1, Formas figura2){
-    double a;
+    double a, pontoProx;
     bool colisao;
+    Formas aux;
 
     if(figura1.f == 'c' && figura2.f == 'c'){
         if(figura1.rC + figura2.rC >= distEuclid(figura1.xC, figura1.yC, figura2.xC, figura2.yC)){
             fprintf(txt, "o? %d %d\nSIM", figura1.idC, figura2.idC);
             colisao = true;
-            printarCirculo(svg2, figura1);
-            printarCirculo(svg2, figura2);
-            retanguloEnvolveCirculo(svg2, figura1, figura2, colisao);
         }
         else{
             fprintf(txt, "o? %d %d\nNAO", figura1.idC, figura2.idC);
             colisao = false;
-            printarCirculo(svg2, figura1);
-            printarCirculo(svg2, figura2);
-            retanguloEnvolveCirculo(svg2, figura1, figura2, colisao);
         }
+        printarCirculo(svg2, figura1);
+        printarCirculo(svg2, figura2);
+        retanguloEnvolveCirculo(svg2, figura1, figura2, colisao);
     }
     else if(figura1.f == 'r' && figura2.f == 'r'){
         if(figura1.xR <=figura2.xR + figura2.wR && figura1.yR <= figura2.yR + figura2.hR
         && figura1.xR + figura1.wR >= figura2.xR && figura1.yR + figura1.hR >= figura2.yR){
             fprintf(txt, "o? %d %d\nSIM", figura1.idR, figura2.idR);
             colisao = true;
-            printarRetangulo(svg2, figura1);
-            printarRetangulo(svg2, figura2);
-            printarRetangulo(svg2, figura1, figura2, colisao);
         }
         else{
-            printf("Nao Colisao\n");
+            fprintf(txt, "o? %d %d\nNAO", figura1.idR, figura2.idR);
+            colisao = false;
+        }
+        printarRetangulo(svg2, figura1);
+        printarRetangulo(svg2, figura2);
+        retanguloEnvolveRetangulo(svg2, figura1, figura2, colisao);
+    }
+    else if(figura1.f == 'c' && figura2.f == 'r'){
+        if(figura1.f == 'r' && figura2.f == 'c'){
+            aux = figura1;
+            figura1 = figura2;
+            figura2 = aux;
+        }
+
+        pontoProx = distEuclid(figura1.xC, figura1.yC, figura2.xR, figura2.yR);
+        if(pontoProx < distEuclid(figura1.xC, figura1.yC, figura2.xR + figura2.wR, figura2.yR))
+            pontoProx = distEuclid(figura1.xC, figura1.yC, figura2.xR + figura2.wR, figura2.yR);
+        else if(pontoProx < distEuclid(figura1.xC, figura1.yC, figura2.xR, figura2.yR + figura2.hR))
+            pontoProx = distEuclid(figura1.xC, figura1.yC, figura2.xR, figura2.yR + figura2.hR);
+        else if(pontoProx < distEuclid(figura1.xC, figura1.yC, figura2.xR + figura2.wR, figura2.yR + figura2.hR))
+            pontoProx = distEuclid(figura1.xC, figura1.yC, figura2.xR + figura2.wR, figura2.yR + figura2.hR);
+
+        if(pontoProx <= figura1.rC){
+            printf("Colide!\n");
+        }
+        else{
+            printf("Nao Colide!\n");
         }
     }
 }
