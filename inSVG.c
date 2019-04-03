@@ -5,6 +5,14 @@
 #include "structs.h"
 #include "outSVG.h"
 
+void verificarArquivo(FILE *arq, char nome[]){
+
+    if(arq == NULL){
+        printf("Arquivo nao encontrado: %s\n", nome);
+        exit(1);
+    }
+}
+
 void receberParametros(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **pathOut){
     int i = 1;
 

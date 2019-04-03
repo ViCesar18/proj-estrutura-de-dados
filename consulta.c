@@ -195,3 +195,27 @@ void verificarO(FILE *txt, FILE *svg2, Formas figura1, Formas figura2){
         retanguloEnvolveCR(svg2, figura1, figura2, colisao);
     }
 }
+
+void verificarI(FILE *txt, FILE *svg2, Formas figura, double x, double y){
+    Formas ponto;
+
+    ponto.xC = x;
+    ponto.yC = y;
+    ponto.rC = 2;
+
+    if(figura.f == 'c'){
+        if(figura.xC + figura.rC >= x && figura.yC + figura.rC >= y && figura.xC - figura.rC <= x
+        && figura.yC - figura.rC <= y){
+            fprintf(txt, "i? %d %fl %fl\nINTERNO\n\n", figura.idC, x, y);
+            strcpy(ponto.strokeCollorC, "green");
+            strcpy(ponto.fillCollorC, "green");
+            printarCirculo(svg2, ponto);
+        }
+        else{
+            fprintf(txt, "i? %d %fl %fl\nNAO INTERNO\n\n", figura.idC, x, y);
+            strcpy(ponto.strokeCollorC, "red");
+            strcpy(ponto.fillCollorC, "red");
+            printarCirculo(svg2, ponto);
+        }
+    }
+}

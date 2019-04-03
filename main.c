@@ -30,9 +30,11 @@ int main(int argc, char *argv[]){
     if(pathIn != NULL){
         alocarMemoria(nameIn, pathIn, &arqGeo);
         arqIn = fopen(arqGeo, "r");
+        verificarArquivo(arqIn, arqGeo);
     }
     else{
         arqIn = fopen(nameIn, "r");
+        verificarArquivo(arqIn, nameIn);
     }
 
     //.qry, .txt e .svg(2)
@@ -40,20 +42,24 @@ int main(int argc, char *argv[]){
         if(pathIn != NULL){
             alocarMemoria(nameConsulta, pathIn, &arqQry);
             arqConsul = fopen(arqQry, "r");
+            verificarArquivo(arqConsul, arqQry);
         }
         else{
             arqConsul = fopen(nameConsulta, "r");
+            verificarArquivo(arqConsul, nameConsulta);
         }
 
         criarArqSaida2(&nameTXT, nameIn, nameConsulta);
         strcat(nameTXT, ".txt");
         alocarMemoria(nameTXT, pathOut, &arqTXT);
         arqTexto = fopen(arqTXT, "w");
+        verificarArquivo(arqTexto, arqTXT);
 
         criarArqSaida2(&nameOut2, nameIn, nameConsulta);
         strcat(nameOut2, ".svg");
         alocarMemoria(nameOut2, pathOut, &arqSVG2);
         arqOut2 = fopen(arqSVG2, "w");
+        verificarArquivo(arqOut2, arqSVG2);
 
         fputs("<svg>\n", arqOut2);
     }
@@ -64,6 +70,7 @@ int main(int argc, char *argv[]){
     strcat(nameOut, ".svg");
     alocarMemoria(nameOut, pathOut, &arqSVG);
     arqOut = fopen(arqSVG, "w");
+    verificarArquivo(arqOut, arqSVG);
 
     fputs("<svg>\n", arqOut);
 
@@ -105,6 +112,7 @@ int main(int argc, char *argv[]){
             }
             else if(strcmp(q, "i?") == 0){
                 lerI(arqConsul, &j, &x, &y);
+                verificarI(arqTexto, arqOut2, figuras[j], x, y);
             }
             else if(strcmp(q, "d?") == 0){
                 lerD(arqConsul, &j, &k);

@@ -3,6 +3,8 @@
 
 #include "structs.h"
 
+void verificarArquivo(FILE *arq, char nome[]);
+
 void receberParametros(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **pathOut);
 
 void alocarMemoria(char nome[], char dir[], char **arq);
