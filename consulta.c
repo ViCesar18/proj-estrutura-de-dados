@@ -109,27 +109,27 @@ void retanguloEnvolveCR(FILE *svg2, Formas figura1, Formas figura2, bool colisao
     double xMenor, xMaior, yMenor, yMaior;
     Formas retangulo;
 
-    if(figura1.xC - figura1.rC < figura2.xR){
+    if(figura1.xC - figura1.rC <= figura2.xR){
         xMenor = figura1.xC -figura1.rC;
-        xMaior = figura1.xR + figura2.wR;
+        xMaior = figura2.xR + figura2.wR;
     }
     else{
         xMenor = figura2.xR;
-        xMaior = figura2.xC + figura1.rC;
+        xMaior = figura1.xC + figura1.rC;
     }
 
-    if(figura1.yC - figura1.rC < figura2.yR){
+    if(figura1.yC - figura1.rC <= figura2.yR){
         yMenor = figura1.yC - figura1.rC;
         yMaior = figura2.yR + figura2.hR;
     }
     else{
         yMenor = figura2.yR;
-        yMaior = figura2.yC + figura1.rC;
+        yMaior = figura1.yC + figura1.rC;
     }
     
     retangulo.xR = xMenor;
     retangulo.yR = yMenor;
-    retangulo.wR = distEuclid(xMaior, 0, xMaior, 0);
+    retangulo.wR = distEuclid(xMenor, 0, xMaior, 0);
     retangulo.hR = distEuclid(0, yMenor, 0, yMaior);
     strcpy(retangulo.strokeCollorR, "black");
     strcpy(retangulo.fillCollorR, "none");
