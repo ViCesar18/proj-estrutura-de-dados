@@ -14,13 +14,13 @@ int lerNX(FILE *arq);
 void lerFormaGeometrica(FILE *arq, char *forma);
 
 /*Le as informacoes de circulo do arquivo .geo e armazena na struct*/
-void lerCirculo(FILE *arqIn, Formas figuras[], FILE *arqOut);
+void lerCirculo(FILE *arqIn, Formas figuras[], FILE *arqOut, FILE *arqOut2);
 
 /*Le as informacoes de retangulo do arquivo .geo e armazena na struct*/
-void lerRetangulo(FILE *arqIn, Formas figuras[], FILE *arqOut);
+void lerRetangulo(FILE *arqIn, Formas figuras[], FILE *arqOut, FILE *arqOut2);
 
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
-void lerTexto(FILE *arqIn, FILE *arqOut);
+void lerTexto(FILE *arqIn, FILE *arqOut, FILE *arqOut2);
 
 void lerQry(FILE *arqConsul, char q[]);
 

@@ -45,15 +45,16 @@ int main(int argc, char *argv[]){
             arqConsul = fopen(nameConsulta, "r");
         }
 
-        criarArqSaida(&nameTXT, nameIn);
+        criarArqSaida2(&nameTXT, nameIn, nameConsulta);
+        strcat(nameTXT, ".txt");
         alocarMemoria(nameTXT, pathOut, &arqTXT);
-        strcat(arqTXT, ".txt");
         arqTexto = fopen(arqTXT, "w");
 
         criarArqSaida2(&nameOut2, nameIn, nameConsulta);
         strcat(nameOut2, ".svg");
         alocarMemoria(nameOut2, pathOut, &arqSVG2);
         arqOut2 = fopen(arqSVG2, "w");
+
         fputs("<svg>\n", arqOut2);
     }
 
@@ -63,6 +64,7 @@ int main(int argc, char *argv[]){
     strcat(nameOut, ".svg");
     alocarMemoria(nameOut, pathOut, &arqSVG);
     arqOut = fopen(arqSVG, "w");
+
     fputs("<svg>\n", arqOut);
 
     /*Cria o vetor de structs para armazenar as dados das formas*/
@@ -76,40 +78,43 @@ int main(int argc, char *argv[]){
         lerFormaGeometrica(arqIn, &forma);
 
         if(forma == 'c'){
-            lerCirculo(arqIn, figuras, arqOut);
+            lerCirculo(arqIn, figuras, arqOut, arqOut2);
         }
         else if(forma == 'r'){
-            lerRetangulo(arqIn, figuras, arqOut);
+            lerRetangulo(arqIn, figuras, arqOut, arqOut2);
         }
         else if(forma == 'n'){
             nx = lerNX(arqIn);
             figuras = realloc(figuras, nx * sizeof(Formas));
         }
         else if(forma == 't'){
-            lerTexto(arqIn, arqOut);
+            lerTexto(arqIn, arqOut, arqOut2);
         }
     }
 
-    while(1){
-        lerQry(arqConsul, q);
+    if(nameConsulta != NULL){
+        while(1){
+            lerQry(arqConsul, q);
 
-        if(feof(arqConsul))
-            break;
+            if(feof(arqConsul))
+                break;
 
-        if(strcmp(q, "o?") == 0){
-            lerO(arqConsul, &j, &k);
-            verificarO(arqTexto, arqOut2, figuras[j], figuras[k]);
-        }
-        else if(strcmp(q, "i?") == 0){
-            lerI(arqConsul, &j, &x, &y);
-        }
-        else if(strcmp(q, "d?") == 0){
-            lerD(arqConsul, &j, &k);
-        }
-        else if(strcmp(q, "bb") == 0){
-            lerBB(arqConsul, sufixo, cor);
+            if(strcmp(q, "o?") == 0){
+                lerO(arqConsul, &j, &k);
+                verificarO(arqTexto, arqOut2, figuras[j], figuras[k]);
+            }
+            else if(strcmp(q, "i?") == 0){
+                lerI(arqConsul, &j, &x, &y);
+            }
+            else if(strcmp(q, "d?") == 0){
+                lerD(arqConsul, &j, &k);
+            }
+            else if(strcmp(q, "bb") == 0){
+                lerBB(arqConsul, sufixo, cor);
+            }
         }
     }
+
 
     /*Finalizacao e fechamento dos arquivos*/
     fputs("\n</svg>\n", arqOut);
@@ -118,21 +123,24 @@ int main(int argc, char *argv[]){
         fclose(arqTexto);
         fputs("\n</svg>\n", arqOut2);
         fclose(arqOut2);
+
+        free(nameConsulta);
+        free(nameOut2);
+        free(arqSVG2);
+        free(nameTXT);
+        free(arqTXT);
+        free(arqQry);
     }
     fclose(arqOut);
     fclose(arqIn);
-
+ 
     /*Libera a memoria reservada para strings e vetores*/
     free(pathIn);
     free(nameIn);
     free(arqGeo);
-    free(arqQry);
-    free(nameConsulta);
     free(pathOut);
     free(nameOut);
-    free(nameOut2);
     free(arqSVG);
-    free(arqSVG2);
     free(figuras);
 
     return 0;

@@ -60,7 +60,7 @@ void lerFormaGeometrica(FILE *arq, char *forma){
     fscanf(arq, "%c", forma);
 }
 
-void lerCirculo(FILE *arqIn, Formas figuras[], FILE *arqOut){
+void lerCirculo(FILE *arqIn, Formas figuras[], FILE *arqOut, FILE *arqOut2){
     int id;
 
     fscanf(arqIn, "%d", &id);
@@ -73,36 +73,37 @@ void lerCirculo(FILE *arqIn, Formas figuras[], FILE *arqOut){
     fscanf(arqIn, "%s", figuras[id].fillCollorC);
 
     printarCirculo(arqOut, figuras[id]);
-
+    printarCirculo(arqOut2, figuras[id]);
 }
 
-void lerRetangulo(FILE *arqIn, Formas figuras[], FILE *arqOut){
+void lerRetangulo(FILE *arqIn, Formas figuras[], FILE *arqOut, FILE *arqOut2){
     int id;
 
     fscanf(arqIn, "%d", &id);
     figuras[id].f = 'r';
     figuras[id].idR = id;
-    fscanf(arqIn, "%lf", &figuras[id].xR);
-    fscanf(arqIn, "%lf", &figuras[id].yR);
     fscanf(arqIn, "%lf", &figuras[id].wR);
     fscanf(arqIn, "%lf", &figuras[id].hR);
+    fscanf(arqIn, "%lf", &figuras[id].xR);
+    fscanf(arqIn, "%lf", &figuras[id].yR);
     fscanf(arqIn, "%s", figuras[id].strokeCollorR);
     fscanf(arqIn, "%s", figuras[id].fillCollorR);
     figuras[id].tracoR = 0;
 
     printarRetangulo(arqOut, figuras[id]);
-
+    printarRetangulo(arqOut2, figuras[id]);
 }
 
-void lerTexto(FILE *arqIn, FILE *arqOut){
+void lerTexto(FILE *arqIn, FILE *arqOut, FILE *arqOut2){
     double x, y;
-    char text[30];
+    char text[128];
 
     fscanf(arqIn, "%lf", &x);
     fscanf(arqIn, "%lf", &y);
-    fscanf(arqIn, "%s", text);
+    fgets(text, 128, arqIn);
 
     printarTexto(arqOut, x, y, text);
+    printarTexto(arqOut2, x, y, text);
 }
 
 void lerQry(FILE *arqConsul, char q[]){
