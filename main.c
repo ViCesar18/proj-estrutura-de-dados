@@ -116,6 +116,7 @@ int main(int argc, char *argv[]){
             }
             else if(strcmp(q, "d?") == 0){
                 lerD(arqConsul, &j, &k);
+                verificarD(arqTexto, arqOut2, figuras[j], figuras[k]);
             }
             else if(strcmp(q, "bb") == 0){
                 lerBB(arqConsul, sufixo, cor);

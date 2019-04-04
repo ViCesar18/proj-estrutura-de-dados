@@ -17,7 +17,7 @@
 <circle cx="350.000000" cy="260.000000" r="35.000000" stroke="black" fill="white"/>
 
 <text x="150.000000" y="150.000000"> EVANDRO GUEY</text>
-
-<circle cx="230.000000" cy="230.000000" r="2.000000" stroke="green" fill="green"/>
+<line x1="200.000000" y1="230.000000" x2="350.000000" y2="260.000000" stroke="black"/>
+<text x="275.000000" y="245.000000">152.970585</text>
 
 </svg>

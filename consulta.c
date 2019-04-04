@@ -150,11 +150,11 @@ void verificarO(FILE *txt, FILE *svg2, Formas figura1, Formas figura2){
 
     if(figura1.f == 'c' && figura2.f == 'c'){
         if(figura1.rC + figura2.rC >= distEuclid(figura1.xC, figura1.yC, figura2.xC, figura2.yC)){
-            fprintf(txt, "o? %d %d\nSIM\n\n", figura1.idC, figura2.idC);
+            fprintf(txt, "o? %d %d\nSIM\n\n", figura1.id, figura2.id);
             colisao = true;
         }
         else{
-            fprintf(txt, "o? %d %d\nNAO\n\n", figura1.idC, figura2.idC);
+            fprintf(txt, "o? %d %d\nNAO\n\n", figura1.id, figura2.id);
             colisao = false;
         }
         retanguloEnvolveCirculo(svg2, figura1, figura2, colisao);
@@ -162,11 +162,11 @@ void verificarO(FILE *txt, FILE *svg2, Formas figura1, Formas figura2){
     else if(figura1.f == 'r' && figura2.f == 'r'){
         if(figura1.xR <=figura2.xR + figura2.wR && figura1.yR <= figura2.yR + figura2.hR
         && figura1.xR + figura1.wR >= figura2.xR && figura1.yR + figura1.hR >= figura2.yR){
-            fprintf(txt, "o? %d %d\nSIM\n\n", figura1.idR, figura2.idR);
+            fprintf(txt, "o? %d %d\nSIM\n\n", figura1.id, figura2.id);
             colisao = true;
         }
         else{
-            fprintf(txt, "o? %d %d\nNAO\n\n", figura1.idR, figura2.idR);
+            fprintf(txt, "o? %d %d\nNAO\n\n", figura1.id, figura2.id);
             colisao = false;
         }
         retanguloEnvolveRetangulo(svg2, figura1, figura2, colisao);
@@ -176,20 +176,20 @@ void verificarO(FILE *txt, FILE *svg2, Formas figura1, Formas figura2){
             aux = figura1;
             figura1 = figura2;
             figura2 = aux;
-            aux.idC = figura1.idC;
-            figura1.idC = figura2.idR;
-            figura2.idR = aux.idC;
+            aux.id = figura1.id;
+            figura1.id = figura2.id;
+            figura2.id = aux.id;
         }
 
         xProx = clamp(figura1.xC, figura2.xR, figura2.xR + figura2.wR);
         yProx = clamp(figura1.yC, figura2.yR, figura2.yR + figura2.hR);
 
         if(distEuclid(figura1.xC, figura1.yC, xProx, yProx) <= figura1.rC){
-            fprintf(txt, "o? %d %d\nSIM\n\n", figura1.idC, figura2.idR);
+            fprintf(txt, "o? %d %d\nSIM\n\n", figura1.id, figura2.id);
             colisao = true;
         }
         else{
-            fprintf(txt, "o? %d %d\nNAO\n\n", figura1.idC, figura2.idR);
+            fprintf(txt, "o? %d %d\nNAO\n\n", figura1.id, figura2.id);
             colisao = false;
         }
         retanguloEnvolveCR(svg2, figura1, figura2, colisao);
@@ -201,21 +201,71 @@ void verificarI(FILE *txt, FILE *svg2, Formas figura, double x, double y){
 
     ponto.xC = x;
     ponto.yC = y;
-    ponto.rC = 2;
+    ponto.rC = 3;
 
     if(figura.f == 'c'){
         if(figura.xC + figura.rC >= x && figura.yC + figura.rC >= y && figura.xC - figura.rC <= x
         && figura.yC - figura.rC <= y){
-            fprintf(txt, "i? %d %fl %fl\nINTERNO\n\n", figura.idC, x, y);
+            fprintf(txt, "i? %d %fl %fl\nINTERNO\n\n", figura.id, x, y);
             strcpy(ponto.strokeCollorC, "green");
             strcpy(ponto.fillCollorC, "green");
-            printarCirculo(svg2, ponto);
         }
         else{
-            fprintf(txt, "i? %d %fl %fl\nNAO INTERNO\n\n", figura.idC, x, y);
+            fprintf(txt, "i? %d %fl %fl\nNAO INTERNO\n\n", figura.id, x, y);
             strcpy(ponto.strokeCollorC, "red");
             strcpy(ponto.fillCollorC, "red");
-            printarCirculo(svg2, ponto);
         }
+        printarCirculo(svg2, ponto);
+        printarLinha(svg2, figura.xC, figura.yC, ponto.xC, ponto.yC, "black");
     }
+    else{
+        if(x >= figura.xR && y >= figura.yR && x <= figura.xR + figura.wR && y <= figura.yR + figura.hR){
+            fprintf(txt, "i? %d %fl %fl\nINTERNO\n\n", figura.id, x, y);
+            strcpy(ponto.strokeCollorC, "green");
+            strcpy(ponto.fillCollorC, "green");
+        }
+        else{
+            fprintf(txt, "i? %d %fl %fl\nNAO INTERNO\n\n", figura.id, x, y);
+            strcpy(ponto.strokeCollorC, "red");
+            strcpy(ponto.fillCollorC, "red");
+        }
+        printarCirculo(svg2, ponto);
+        printarLinha(svg2, figura.xR + figura.wR / 2, figura.yR + figura.hR / 2, ponto.xC, ponto.yC, "black");
+    }
+}
+
+void verificarD(FILE *txt, FILE *svg2, Formas figura1, Formas figura2){
+    double dist;
+    char dist2[10];
+    double xL, yL;
+
+    if(figura1.f == 'c' && figura2.f == 'c'){
+        dist = distEuclid(figura1.xC, figura1.yC, figura2.xC, figura2.yC);
+        printarLinha(svg2, figura1.xC, figura1.yC, figura2.xC, figura2.yC, "black");
+        xL = (figura1.xC + figura2.xC) / 2;
+        yL = (figura1.yC + figura2.yC) / 2;
+    }
+    else if(figura1.f == 'r' && figura2.f == 'r'){
+        dist = distEuclid(figura1.xR + figura1.wR / 2, figura1.yR + figura1.hR / 2, 
+        figura2.xR + figura2.wR / 2, figura2.yR + figura2.hR / 2);
+        printarLinha(svg2, figura1.xR + figura1.wR / 2, figura1.yR + figura1.hR / 2, figura2.xR + figura2.wR / 2, figura2.yR + figura2.hR / 2, "black");
+        xL = (figura1.xR + figura1.wR / 2 + figura2.xR + figura2.wR / 2) / 2;
+        yL = (figura1.yR + figura1.hR / 2 + figura2.yR + figura2.hR / 2) / 2;
+    }
+    else if(figura1.f == 'r' && figura2.f == 'c'){
+        dist = distEuclid(figura1.xR + figura1.wR / 2, figura1.yR + figura1.hR / 2, figura2.xC, figura2.yC);
+        printarLinha(svg2, figura1.xR + figura1.wR / 2, figura1.yR + figura1.hR / 2, figura2.xC, figura2.yC, "black");
+        xL = (figura1.xR + figura1.wR / 2 + figura2.xC) / 2;
+        yL = (figura1.yR + figura1.hR / 2 + figura2.yC) / 2;
+    }
+    else{
+        dist = distEuclid(figura1.xC, figura1.yC, figura2.xR + figura2.wR / 2, figura2.yR + figura2.hR / 2);
+        printarLinha(svg2, figura1.xC, figura1.yC, figura2.xR + figura2.wR / 2, figura2.yR + figura2.hR / 2, "black");
+        xL = (figura1.xC + figura2.xR + figura2.wR / 2) / 2;
+        yL = (figura1.yC + figura2.yR + figura2.hR / 2) / 2;
+    }
+
+    fprintf(txt, "d? %d %d\n%lf\n\n", figura1.id, figura2.id, dist);
+    sprintf(dist2, "%lf", dist);
+    printarTexto(svg2, xL, yL, dist2);
 }

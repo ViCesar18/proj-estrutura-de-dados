@@ -53,3 +53,8 @@ void printarTexto(FILE *arqOut, double x, double y, char text[]){
 
     fprintf(arqOut, "\n<text x=\"%lf\" y=\"%lf\">%s</text>\n", x, y, text);
 }
+
+void printarLinha(FILE *arqOut, double x1, double y1, double x2, double y2, char color[]){
+
+    fprintf(arqOut, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\"/>", x1, y1, x2, y2, color);
+}

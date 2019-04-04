@@ -10,6 +10,10 @@ double clamp(double xC, double min, double max);
 
 void verificarO(FILE *txt, FILE *svg2, Formas figura1, Formas figura2);
 
+void verificarI(FILE *txt, FILE *svg2, Formas figura, double x, double y);
+
+void verificarD(FILE *txt, FILE *svg2, Formas figura1, Formas figura2);
+
 void retanguloEnvolveCirculo(FILE *svg2, Formas figura1, Formas figura2, bool colisao);
 
 void retanguloEnvolveRetangulo(FILE *svg2, Formas figura1, Formas figura2, bool colisao);
