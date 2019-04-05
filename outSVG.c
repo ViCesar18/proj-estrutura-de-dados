@@ -18,6 +18,7 @@ void criarArqSaida(char **nameOut, char nameIn[]){
 void criarArqSaida2(char **nameOut, char nameIn[], char nameConsulta[]){
     int i = 0, j = 0;
 
+    criarArqSaida(nameOut, nameIn);
     *nameOut = (char *)malloc((strlen(nameIn) + strlen(nameConsulta)) * sizeof(char));
     while(nameIn[i] != '.'){
         (*nameOut)[i] = nameIn[i];
@@ -29,6 +30,33 @@ void criarArqSaida2(char **nameOut, char nameIn[], char nameConsulta[]){
     j++;
     while(nameConsulta[i] != '.'){
         (*nameOut)[j] = nameConsulta[i];
+        i++;
+        j++;
+    }
+}
+
+void criarArqSaida3(char **nameOut, char nameIn[], char nameConsulta[], char sufixo[]){
+    int i = 0, j = 0;
+
+    *nameOut = (char *)malloc((strlen(nameIn) + strlen(nameConsulta) + strlen(sufixo)) * sizeof(char));
+    while(nameIn[i] != '.'){
+        (*nameOut)[i] = nameIn[i];
+        i++;
+        j++;
+    }
+    strcat(*nameOut, "-");
+    i = 0;
+    j++;
+    while(nameConsulta[i] != '.'){
+        (*nameOut)[j] = nameConsulta[i];
+        i++;
+        j++;
+    }
+    strcat(*nameOut, "-");
+    i = 0;
+    j++;
+    while(sufixo[i] != '\0'){
+        (*nameOut)[j] = sufixo[i];
         i++;
         j++;
     }
@@ -56,5 +84,10 @@ void printarTexto(FILE *arqOut, double x, double y, char text[]){
 
 void printarLinha(FILE *arqOut, double x1, double y1, double x2, double y2, char color[]){
 
-    fprintf(arqOut, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\"/>", x1, y1, x2, y2, color);
+    fprintf(arqOut, "\n<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\"/>\n", x1, y1, x2, y2, color);
+}
+
+void printarElipse(FILE *arqOut, double xC, double yC, double rX, double rY, char cor[]){
+
+    fprintf(arqOut, "\n<ellipse cx=\"%lf\" cy=\"%lf\" rx=\"%lf\" ry=\"%lf\" fill=\"none\" stroke=\"%s\"/>\n", xC, yC, rX, rY, cor);
 }

@@ -8,13 +8,14 @@
 
 int main(int argc, char *argv[]){
     int nx = 1000;
-    char *pathIn = NULL, *nameIn = NULL, *arqGeo = NULL;
-    char *nameConsulta = NULL, *arqQry = NULL;
+    char *pathIn = NULL, *nameIn = NULL, *nameInT = NULL, *arqGeo = NULL;
+    char *nameConsulta = NULL, *nameConsultaT = NULL, *arqQry = NULL;
     char *pathOut = NULL, *nameOut = NULL, *arqSVG = NULL;
     char *nameTXT, *arqTXT;
     char *nameOut2, *arqSVG2;
+    char *nameOut3, *arqSVG3;
     char forma, q[3];
-    FILE *arqIn, *arqOut, *arqConsul, *arqTexto, *arqOut2;
+    FILE *arqIn = NULL, *arqOut = NULL, *arqConsul = NULL, *arqTexto = NULL, *arqOut2 = NULL, *arqOut3 = NULL;
 
     int j, k;
     double x, y;
@@ -24,6 +25,9 @@ int main(int argc, char *argv[]){
 
     /*Recebe os parametros da main (argv)*/
     receberParametros(argc, argv, &pathIn, &nameIn, &nameConsulta, &pathOut);
+
+    /*Trata o nome do arquivo de entrada se ele for um diretorio relativo*/
+    tratarNome(nameIn, &nameInT);
     
     /*Prepara o diretorio para abrir os arquivos de entrada*/
     //.geo
@@ -37,8 +41,10 @@ int main(int argc, char *argv[]){
         verificarArquivo(arqIn, nameIn);
     }
 
-    //.qry, .txt e .svg(2)
+    //.qry, .txt e .svg(2)(se existir)
     if(nameConsulta != NULL){
+        tratarNome(nameConsulta, &nameConsultaT);
+
         if(pathIn != NULL){
             alocarMemoria(nameConsulta, pathIn, &arqQry);
             arqConsul = fopen(arqQry, "r");
@@ -49,13 +55,13 @@ int main(int argc, char *argv[]){
             verificarArquivo(arqConsul, nameConsulta);
         }
 
-        criarArqSaida2(&nameTXT, nameIn, nameConsulta);
+        criarArqSaida2(&nameTXT, nameInT, nameConsultaT);
         strcat(nameTXT, ".txt");
         alocarMemoria(nameTXT, pathOut, &arqTXT);
         arqTexto = fopen(arqTXT, "w");
         verificarArquivo(arqTexto, arqTXT);
 
-        criarArqSaida2(&nameOut2, nameIn, nameConsulta);
+        criarArqSaida2(&nameOut2, nameInT, nameConsultaT);
         strcat(nameOut2, ".svg");
         alocarMemoria(nameOut2, pathOut, &arqSVG2);
         arqOut2 = fopen(arqSVG2, "w");
@@ -66,7 +72,7 @@ int main(int argc, char *argv[]){
 
     /*Prepara o diretorio para criar o arquivo de saida*/
     //.svg(1)
-    criarArqSaida(&nameOut, nameIn);
+    criarArqSaida(&nameOut, nameInT);
     strcat(nameOut, ".svg");
     alocarMemoria(nameOut, pathOut, &arqSVG);
     arqOut = fopen(arqSVG, "w");
@@ -99,6 +105,7 @@ int main(int argc, char *argv[]){
         }
     }
 
+    /*Le os dados de consulta(se existir)*/
     if(nameConsulta != NULL){
         while(1){
             lerQry(arqConsul, q);
@@ -120,12 +127,21 @@ int main(int argc, char *argv[]){
             }
             else if(strcmp(q, "bb") == 0){
                 lerBB(arqConsul, sufixo, cor);
+                criarArqSaida3(&nameOut3, nameInT, nameConsultaT, sufixo);
+                strcat(nameOut3, ".svg");
+                alocarMemoria(nameOut3, pathOut, &arqSVG3);
+                arqOut3 = fopen(arqSVG3, "w");
+                verificarArquivo(arqOut3, arqSVG3);
+                verificarBB(nx, arqOut3, figuras, cor);
+                fclose(arqOut3);
+                free(nameOut3);
+                free(arqSVG3);
             }
         }
     }
 
 
-    /*Finalizacao e fechamento dos arquivos*/
+    /*Finalizacao, libreracao de memoria e fechamento dos arquivos*/
     fputs("\n</svg>\n", arqOut);
     if(nameConsulta != NULL){
         fclose(arqConsul);
@@ -134,6 +150,7 @@ int main(int argc, char *argv[]){
         fclose(arqOut2);
 
         free(nameConsulta);
+        free(nameConsultaT);
         free(nameOut2);
         free(arqSVG2);
         free(nameTXT);
@@ -143,9 +160,9 @@ int main(int argc, char *argv[]){
     fclose(arqOut);
     fclose(arqIn);
  
-    /*Libera a memoria reservada para strings e vetores*/
     free(pathIn);
     free(nameIn);
+    free(nameInT);
     free(arqGeo);
     free(pathOut);
     free(nameOut);

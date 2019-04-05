@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "inSVG.h"
 #include "structs.h"
 #include "outSVG.h"
@@ -38,6 +39,36 @@ void receberParametros(int argc, char *argv[], char **pathIn, char **nameIn, cha
             strcpy(*pathOut, argv[i]);
         }
         i++;
+    }
+}
+
+void tratarNome(char nameIn[], char **nameInT){
+    int i = 0, j = 0, save;
+    bool valid = false, valid2 = false;
+
+    *nameInT = (char *)malloc(strlen(nameIn) * sizeof(char));
+
+    while(1){
+        if(nameIn[i] == '/'){
+            save = i;
+            valid = true;
+        }
+        else if(nameIn[i] == '.' && i != 0){
+            if(valid){
+                save++;
+                break;
+            }
+            else{
+                strcpy(*nameInT, nameIn);
+                return;
+            }
+        }
+        i++;
+    }
+    while(nameIn[save] != '\0'){
+        (*nameInT)[j] = nameIn[save];
+        j++;
+        save++;
     }
 }
 
@@ -81,7 +112,8 @@ void lerCirculo(FILE *arqIn, Formas figuras[], FILE *arqOut, FILE *arqOut2){
     fscanf(arqIn, "%s", figuras[id].fillCollorC);
 
     printarCirculo(arqOut, figuras[id]);
-    printarCirculo(arqOut2, figuras[id]);
+    if(arqOut2 != NULL)
+        printarCirculo(arqOut2, figuras[id]);
 }
 
 void lerRetangulo(FILE *arqIn, Formas figuras[], FILE *arqOut, FILE *arqOut2){
@@ -99,7 +131,8 @@ void lerRetangulo(FILE *arqIn, Formas figuras[], FILE *arqOut, FILE *arqOut2){
     figuras[id].tracoR = 0;
 
     printarRetangulo(arqOut, figuras[id]);
-    printarRetangulo(arqOut2, figuras[id]);
+    if(arqOut2 != NULL)
+        printarRetangulo(arqOut2, figuras[id]);
 }
 
 void lerTexto(FILE *arqIn, FILE *arqOut, FILE *arqOut2){
@@ -111,7 +144,8 @@ void lerTexto(FILE *arqIn, FILE *arqOut, FILE *arqOut2){
     fgets(text, 128, arqIn);
 
     printarTexto(arqOut, x, y, text);
-    printarTexto(arqOut2, x, y, text);
+    if(arqOut2 != NULL)
+        printarTexto(arqOut2, x, y, text);
 }
 
 void lerQry(FILE *arqConsul, char q[]){
