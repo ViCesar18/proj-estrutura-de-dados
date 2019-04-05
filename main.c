@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
 
     int j, k;
     double x, y;
-    char sufixo[30], cor[10];
+    char sufixo[32], cor[16];
 
     Formas *figuras;
 

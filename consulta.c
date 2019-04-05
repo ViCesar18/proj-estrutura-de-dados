@@ -83,8 +83,7 @@ void verificarI(FILE *txt, FILE *svg2, Formas figura, double x, double y){
     ponto.rC = 3;
 
     if(figura.f == 'c'){
-        if(figura.xC + figura.rC >= x && figura.yC + figura.rC >= y && figura.xC - figura.rC <= x
-        && figura.yC - figura.rC <= y){
+        if(distEuclid(figura.xC, figura.yC, x, y) <= figura.rC){
             fprintf(txt, "i? %d %lf %lf\nINTERNO\n\n", figura.id, x, y);
             strcpy(ponto.strokeCollorC, "green");
             strcpy(ponto.fillCollorC, "green");
@@ -115,7 +114,7 @@ void verificarI(FILE *txt, FILE *svg2, Formas figura, double x, double y){
 
 void verificarD(FILE *txt, FILE *svg2, Formas figura1, Formas figura2){
     double dist;
-    char dist2[10];
+    char dist2[32];
     double xL, yL;
 
     if(figura1.f == 'c' && figura2.f == 'c'){
