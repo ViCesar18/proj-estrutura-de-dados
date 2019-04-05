@@ -18,7 +18,6 @@ void criarArqSaida(char **nameOut, char nameIn[]){
 void criarArqSaida2(char **nameOut, char nameIn[], char nameConsulta[]){
     int i = 0, j = 0;
 
-    criarArqSaida(nameOut, nameIn);
     *nameOut = (char *)malloc((strlen(nameIn) + strlen(nameConsulta)) * sizeof(char));
     while(nameIn[i] != '.'){
         (*nameOut)[i] = nameIn[i];
