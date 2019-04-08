@@ -44,9 +44,15 @@ void receberParametros(int argc, char *argv[], char **pathIn, char **nameIn, cha
 
 void tratarNome(char nameIn[], char **nameInT){
     int i = 0, j = 0, save;
-    bool valid = false, valid2 = false;
+    bool valid = false;
 
     *nameInT = (char *)malloc(strlen(nameIn) * sizeof(char));
+    if(nameIn[0] == '.'){
+        if(nameIn[1] == '.')
+            i = 2;
+        else
+            i = 1;
+    }
 
     while(1){
         if(nameIn[i] == '/'){

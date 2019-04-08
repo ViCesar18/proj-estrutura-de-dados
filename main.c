@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
         arqIn = fopen(nameIn, "r");
         verificarArquivo(arqIn, nameIn);
     }
-
+    
     //.qry, .txt e .svg(2)(se existir)
     if(nameConsulta != NULL){
         tratarNome(nameConsulta, &nameConsultaT);
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]){
 
         fputs("<svg>\n", arqOut2);
     }
-
+    
     /*Prepara o diretorio para criar o arquivo de saida*/
     //.svg(1)
     criarArqSaida(&nameOut, nameInT);
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
 
     /*Cria o vetor de structs para armazenar as dados das formas*/
     figuras = (Formas *)malloc(nx * sizeof(Formas));
-
+    
     /*Le os dados das formas geometricas do arquivo de entrada*/
     while(1){
         if(feof(arqIn))
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]){
             lerTexto(arqIn, arqOut, arqOut2);
         }
     }
-
+    
     /*Le os dados de consulta(se existir)*/
     if(nameConsulta != NULL){
         while(1){
@@ -139,7 +139,6 @@ int main(int argc, char *argv[]){
             }
         }
     }
-
 
     /*Finalizacao, libreracao de memoria e fechamento dos arquivos*/
     fputs("\n</svg>\n", arqOut);

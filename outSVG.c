@@ -8,11 +8,11 @@ void criarArqSaida(char **nameOut, char nameIn[]){
     int i = 0;
 
     *nameOut = (char *)malloc(strlen(nameIn) * sizeof(char));
+
     while(nameIn[i] != '.'){
         (*nameOut)[i] = nameIn[i];
         i++;
     }
-
 }
 
 void criarArqSaida2(char **nameOut, char nameIn[], char nameConsulta[]){

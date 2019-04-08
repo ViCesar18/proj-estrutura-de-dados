@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include "structs.h"
 
+/*Nesse header encontra-se todas as funcoes relacionadas ao arquivo de consulta(.qry), aqui são feitas as verificacoes
+e os calculos matematicos*/
+
 /*Calcula a distancia euclidiana entre dois pontos*/
 double distEuclid(double x1, double y1, double x2, double y2);
 

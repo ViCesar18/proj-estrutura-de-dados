@@ -3,6 +3,8 @@
 
 #include "structs.h"
 
+/*Nesse header encontra-se todas as funcoes relacionadas a entrada/leitura de dados*/
+
 /*Verifica se o arquivo em questao foi aberto com sucesso, caso contrario, sai do programa*/
 void verificarArquivo(FILE *arq, char nome[]);
 

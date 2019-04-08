@@ -3,6 +3,8 @@
 
 #include "structs.h"
 
+/*Nesse header encontra-se todas as funcoes relacionadas a saida de dados*/
+
 /*Aloca memoria e recebe o nome do arquivo de saida em questao*/
 void criarArqSaida(char **nameOut, char nameIn[]);
 
