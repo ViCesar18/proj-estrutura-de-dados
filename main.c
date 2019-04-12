@@ -11,9 +11,9 @@ int main(int argc, char *argv[]){
     char *pathIn = NULL, *nameIn = NULL, *nameInT = NULL, *arqGeo = NULL;
     char *nameConsulta = NULL, *nameConsultaT = NULL, *arqQry = NULL;
     char *pathOut = NULL, *nameOut = NULL, *arqSVG = NULL;
-    char *nameTXT, *arqTXT;
-    char *nameOut2, *arqSVG2;
-    char *nameOut3, *arqSVG3;
+    char *nameTXT = NULL, *arqTXT = NULL;
+    char *nameOut2 = NULL, *arqSVG2 = NULL;
+    char *nameOut3 = NULL, *arqSVG3 = NULL;
     char forma, q[3];
     FILE *arqIn = NULL, *arqOut = NULL, *arqConsul = NULL, *arqTexto = NULL, *arqOut2 = NULL, *arqOut3 = NULL;
 

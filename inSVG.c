@@ -46,7 +46,7 @@ void tratarNome(char nameIn[], char **nameInT){
     int i = 0, j = 0, save;
     bool valid = false;
 
-    *nameInT = (char *)malloc(strlen(nameIn) * sizeof(char));
+    *nameInT = (char *)malloc((strlen(nameIn) + 1) * sizeof(char));
     if(nameIn[0] == '.'){
         if(nameIn[1] == '.')
             i = 2;
