@@ -12,4 +12,6 @@
 
 void verificarDQ(FILE *txt, FILE *svg2, Lista blocks, char metrica[], Form circulo);
 
+void verificarCBQ(FILE *txt, Lista blocks, Form circulo, char cstrk[]);
+
 #endif

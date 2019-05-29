@@ -1,0 +1,18 @@
+cbq 337.500000 0.000000 450.937500 lawngreen
+	Cor da borda da quadra alterada: b01.1
+	Cor da borda da quadra alterada: b01.2
+	Cor da borda da quadra alterada: b01.3
+	Cor da borda da quadra alterada: b01.4
+	Cor da borda da quadra alterada: b01.5
+	Cor da borda da quadra alterada: b02.1
+	Cor da borda da quadra alterada: b02.2
+	Cor da borda da quadra alterada: b02.3
+	Cor da borda da quadra alterada: b02.4
+	Cor da borda da quadra alterada: b02.5
+	Cor da borda da quadra alterada: b03.1
+	Cor da borda da quadra alterada: b03.2
+	Cor da borda da quadra alterada: b03.3
+	Cor da borda da quadra alterada: b03.4
+	Cor da borda da quadra alterada: b04.2
+	Cor da borda da quadra alterada: b04.3
+	Cor da borda da quadra alterada: b04.4

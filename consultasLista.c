@@ -30,3 +30,16 @@ void verificarDQ(FILE *txt, FILE *svg2, Lista blocks, char metrica[], Form circu
         }
     }
 }
+
+void verificarCBQ(FILE *txt, Lista blocks, Form circulo, char cstrk[]){
+    Block block;
+    
+    fprintf(txt, "cbq %lf %lf %lf %s\n", getFormX(circulo), getFormY(circulo), getFormR(circulo), cstrk);
+    for(int i = getFirst(blocks); i != getNulo(); i = getProx(blocks, i)){
+        block = getElementoByIndex(blocks, i);
+        if(quadInsideCirc(block, circulo, "L2")){
+            setBlockStrokeCollor(block, cstrk);
+            fprintf(txt, "\tCor da borda da quadra alterada: %s\n", getBlockCep(block));
+        }
+    }
+}

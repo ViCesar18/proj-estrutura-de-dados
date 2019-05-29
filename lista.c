@@ -35,6 +35,23 @@ Lista criarLista(int capacidade){
     return lista;
 }
 
+int getFirst(Lista listaAux){
+    ListaImp lista = (ListaImp) listaAux;
+
+    return lista->inicio;
+}
+
+int getNulo(){
+
+    return NULO;
+}
+
+int getProx(Lista listaAux, int i){
+    ListaImp lista = (ListaImp) listaAux;
+
+    return lista->node[i].prox;
+}
+
 int getLivre(Lista listaAux){
     ListaImp lista = (ListaImp) listaAux;
     int iLivre;

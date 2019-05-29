@@ -65,4 +65,6 @@ void lerBB(FILE *arqConsul, char sufixo[], char cor[]);
 
 void lerDQ(FILE *arqConsul, char L[], char id[], double *r);
 
+Elemento lerCBQ(FILE *arqConsul, char cstrk[]);
+
 #endif

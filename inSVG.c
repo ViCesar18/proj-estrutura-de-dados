@@ -240,3 +240,16 @@ void lerDQ(FILE *arqConsul, char L[], char id[], double *r){
     fscanf(arqConsul, "%s", id);
     fscanf(arqConsul, "%lf", r);
 }
+
+Elemento lerCBQ(FILE *arqConsul, char cstrk[]){
+    double x, y, r;
+
+    fscanf(arqConsul, "%lf", &x);
+    fscanf(arqConsul, "%lf", &y);
+    fscanf(arqConsul, "%lf", &r);
+    fscanf(arqConsul, "%s", cstrk);
+
+    Form circulo = criarCirculo("0", x, y, r, "black", "none", "1");
+
+    return circulo;
+}

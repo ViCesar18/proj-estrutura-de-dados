@@ -237,14 +237,33 @@ int main(int argc, char *argv[]){
             else if(!strcmp(command, "del")){
                 fscanf(arqConsul, "%s", id);
                 figura1 = getElementoByIdListas(blocks, hydrants, semaphores, radios, id, type1);
-                if(!strcmp(type1, "h"))
+                if(!strcmp(type1, "h")){
                     deletarElemento(hydrants, id);
-                else if(!strcmp(type1, "s"))
+                    x = getHydrantX(figura1);
+                    y = getHydrantY(figura1);
+                }
+                else if(!strcmp(type1, "s")){
                     deletarElemento(semaphores, id);
-                else if(!strcmp(type1, "rb"))
+                    x = getSemaphoreX(figura1);
+                    y = getSemaphoreY(figura1);
+                }
+                else if(!strcmp(type1, "rb")){
                     deletarElemento(radios, id);
-                else if(!strcmp(type1, "q"))
+                    x = getRadioX(figura1);
+                    y = getRadioY(figura1);
+                }
+                else if(!strcmp(type1, "q")){
                     deletarElemento(blocks, id);
+                    x = getBlockX(figura1);
+                    y = getBlockY(figura1);
+                }
+                fprintf(arqTexto, "del %s\n", id);
+                fprintf(arqTexto, "\tEquipamento Urbano Removido: %s (%lf %lf)\n", id, x, y);
+            }
+            else if(!strcmp(command, "cbq")){
+                figura1 = lerCBQ(arqConsul, cstrkQ);
+
+                verificarCBQ(arqTexto, blocks, figura1, cstrkQ);
             }
         }
     }

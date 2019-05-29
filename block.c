@@ -67,3 +67,9 @@ char *getBlockSw(Block b){
 
     return block->sw;
 }
+
+void setBlockStrokeCollor(Block b, char strokeCollor[]){
+    BlockImp block = (BlockImp) b;
+
+    strcpy(block->strokeCollor, strokeCollor);
+}

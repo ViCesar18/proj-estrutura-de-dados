@@ -12,6 +12,12 @@ typedef void *Lista;
 
 Lista criarLista(int capacidade);
 
+int getFirst(Lista listaAux);
+
+int getNulo();
+
+int getProx(Lista listaAux, int i);
+
 int getLivre(Lista listaAux);
 
 int getTam(Lista listaAux);
