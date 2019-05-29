@@ -226,13 +226,25 @@ int main(int argc, char *argv[]){
                     y = getSemaphoreY(figura1);
                     strcpy(id, getSemaphoreId(figura1));
                 }
-                else{
+                else if(!strcmp(type1, "rb")){
                     x = getRadioX(figura1);
                     y = getRadioY(figura1);
                     strcpy(id, getRadioId(figura1));
                 }
                 Form circulo = criarCirculo(id, x, y, r, "black", "none", "1");
                 verificarDQ(arqTexto, arqOut2, blocks, metrica, circulo);
+            }
+            else if(!strcmp(command, "del")){
+                fscanf(arqConsul, "%s", id);
+                figura1 = getElementoByIdListas(blocks, hydrants, semaphores, radios, id, type1);
+                if(!strcmp(type1, "h"))
+                    deletarElemento(hydrants, id);
+                else if(!strcmp(type1, "s"))
+                    deletarElemento(semaphores, id);
+                else if(!strcmp(type1, "rb"))
+                    deletarElemento(radios, id);
+                else if(!strcmp(type1, "q"))
+                    deletarElemento(blocks, id);
             }
         }
     }

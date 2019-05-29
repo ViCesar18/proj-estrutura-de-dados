@@ -28,6 +28,5 @@ void verificarDQ(FILE *txt, FILE *svg2, Lista blocks, char metrica[], Form circu
                 fprintf(txt, "\tQuadra Removida: %s\n", getBlockCep(block));
             }
         }
-        printarCirculo(svg2, circulo);
     }
 }
