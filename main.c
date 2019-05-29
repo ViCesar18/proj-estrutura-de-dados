@@ -233,6 +233,7 @@ int main(int argc, char *argv[]){
                 }
                 Form circulo = criarCirculo(id, x, y, r, "black", "none", "1");
                 verificarDQ(arqTexto, arqOut2, blocks, metrica, circulo);
+                fprintf(arqTexto, "\n");
             }
             else if(!strcmp(command, "del")){
                 fscanf(arqConsul, "%s", id);
@@ -259,11 +260,38 @@ int main(int argc, char *argv[]){
                 }
                 fprintf(arqTexto, "del %s\n", id);
                 fprintf(arqTexto, "\tEquipamento Urbano Removido: %s (%lf %lf)\n", id, x, y);
+                fprintf(arqTexto, "\n");
             }
             else if(!strcmp(command, "cbq")){
                 figura1 = lerCBQ(arqConsul, cstrkQ);
 
                 verificarCBQ(arqTexto, blocks, figura1, cstrkQ);
+                fprintf(arqTexto, "\n");
+            }
+            else if(!strcmp(command, "crd?")){
+                fscanf(arqConsul, "%s", id);
+
+                figura1 = getElementoByIdListas(blocks, hydrants, semaphores, radios, id, type1);
+                fprintf(arqTexto, "crd? %s\n", id);
+
+                if(figura1 != NULL){
+                    if(!strcmp(type1, "q")){
+                        fprintf(arqTexto, "\tQuadra %s: (%lf, %lf)\n", id, getBlockX(figura1), getBlockY(figura1));
+                    }
+                    else if(!strcmp(type1, "h")){
+                        fprintf(arqTexto, "\tHidrante %s: (%lf, %lf)\n", id, getHydrantX(figura1), getHydrantY(figura1));
+                    }
+                    else if(!strcmp(type1, "s")){
+                        fprintf(arqTexto, "\tSemáforo %s: (%lf, %lf)\n", id, getSemaphoreX(figura1), getSemaphoreY(figura1));
+                    }
+                    else if(!strcmp(type1, "rb")){
+                        fprintf(arqTexto, "\tRadio-Base %s: (%lf, %lf)\n", id, getRadioX(figura1), getRadioY(figura1));
+                    }
+                }
+                else{
+                    fprintf(arqTexto, "\tEquipamento Urbano não encontrado!\n");
+                }
+                fprintf(arqTexto, "\n");
             }
         }
     }

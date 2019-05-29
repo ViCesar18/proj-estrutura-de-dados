@@ -119,6 +119,7 @@ void deletarElemento(Lista listaAux, char id[]){
     lista->node[index].prox = lista->livre;
     lista->livre = index;
     lista->tam--;
+    free(lista->node[index].elemento);
 }
 
 Elemento getElementoByIndex(Lista listaAux, int i){
@@ -136,7 +137,7 @@ Elemento getElementoById(Lista listaAux, char id[], char type[]){
             return lista->node[i].elemento;
         }
     }
-    
+
     return NULL;
 }
 
