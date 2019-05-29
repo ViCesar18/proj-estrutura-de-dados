@@ -4,6 +4,7 @@
 
 typedef struct{
     Elemento elemento;
+    char type[4];
     int ant, prox;
 }NodeImp;
 
@@ -45,15 +46,15 @@ int getLivre(Lista listaAux){
     return iLivre;
 }
 
-void inserirElemento(Lista listaAux, Elemento elemento){
+void inserirElemento(Lista listaAux, Elemento elemento, char type[]){
     ListaImp lista = (ListaImp) listaAux;
     int iLivre = getLivre(listaAux);
-
     if(lista->tam <= lista->tamMax){
         if(lista->inicio == NULO){
             lista->node[iLivre].elemento = elemento;
             lista->node[iLivre].prox = NULO;
             lista->node[iLivre].ant = NULO;
+            strcpy(lista->node[iLivre].type, type);
             lista->inicio = 0;
             lista->fim = 0;
         }
@@ -61,6 +62,7 @@ void inserirElemento(Lista listaAux, Elemento elemento){
             lista->node[iLivre].elemento = elemento;
             lista->node[iLivre].prox = NULO;
             lista->node[iLivre].ant = lista->fim;
+            strcpy(lista->node[iLivre].type, type);
             lista->node[lista->fim].prox = iLivre;
             lista->fim = iLivre;
         }
@@ -93,11 +95,12 @@ Elemento getElementoByIndex(Lista listaAux, int i){
     return lista->node[i].elemento;
 }
 
-Elemento getElementoById(Lista listaAux, int id){
+Elemento getElementoById(Lista listaAux, int id, char type[]){
     ListaImp lista = (ListaImp) listaAux;
 
     for(int i = lista->inicio; i != NULO; i = lista->node[i].prox){
         if(getFormId(lista->node[i].elemento) == id){
+            strcpy(type, lista->node[i].type);
             return lista->node[i].elemento;
         }
     }
@@ -109,11 +112,23 @@ void imprimirLista(Lista listaAux, FILE *arqOut){
     ListaImp lista = (ListaImp) listaAux;
 
     for(int i = lista->inicio; i != NULO; i = lista->node[i].prox){
-        if(getFormType(lista->node[i].elemento) == 'c'){
+        if(!strcmp(lista->node[i].type, "c")){
             printarCirculo(arqOut, lista->node[i].elemento);
         }
-        else if(getFormType(lista->node[i].elemento) == 'r'){
+        else if(!strcmp(lista->node[i].type, "r")){
             printarRetangulo(arqOut, lista->node[i].elemento);
+        }
+        else if(!strcmp(lista->node[i].type, "q")){
+            printarQuadra(arqOut, lista->node[i].elemento);
+        }
+        else if(!strcmp(lista->node[i].type, "h")){
+            printarHidrante(arqOut, lista->node[i].elemento);
+        }
+        else if(!strcmp(lista->node[i].type, "s")){
+            printarSemaforo(arqOut, lista->node[i].elemento);
+        }
+        else if(!strcmp(lista->node[i].type, "rb")){
+            printarRadio(arqOut, lista->node[i].elemento);
         }
     }
 }
@@ -125,7 +140,7 @@ void imprimirBB(Lista listaAux, FILE *arq, char cor[]){
     char strokeCollorR[24], fillCollorR[24];
 
     for(int i = lista->inicio; i != NULO; i = lista->node[i].prox){
-        if(getFormType(lista->node[i].elemento) == 'c'){
+        if(!strcmp(lista->node[i].type, "c")){
             printarCirculo(arq, lista->node[i].elemento);
             x = getFormX(lista->node[i].elemento) - getFormR(lista->node[i].elemento);
             y = getFormY(lista->node[i].elemento) - getFormR(lista->node[i].elemento);
@@ -133,10 +148,10 @@ void imprimirBB(Lista listaAux, FILE *arq, char cor[]){
             h = 2 * getFormR(lista->node[i].elemento);
             strcpy(strokeCollorR, cor);
             strcpy(fillCollorR, "none");
-            Form retangulo = criarRect(0, x, y, w, h, strokeCollorR, fillCollorR, 0);
+            Form retangulo = criarRect(0, x, y, w, h, strokeCollorR, fillCollorR, 0, "1");
             printarRetangulo(arq, retangulo);
         }
-        else if(getFormType(lista->node[i].elemento) == 'r'){
+        else if(!strcmp(lista->node[i].type, "r")){
             printarRetangulo(arq, lista->node[i].elemento);
             x = getFormX(lista->node[i].elemento) + getFormW(lista->node[i].elemento) / 2;
             y = getFormY(lista->node[i].elemento) + getFormH(lista->node[i].elemento) / 2;

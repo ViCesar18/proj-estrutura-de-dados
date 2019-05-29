@@ -85,20 +85,16 @@ void alocarMemoria(char nome[], char dir[], char **arq){
 
 }
 
-int lerNX(FILE *arq){
-    int nx;
+void lerNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr){
 
-    fscanf(arq, "%d", &nx);
-
-    return nx;
+    fscanf(arq, "%d", nx);
+    fscanf(arq, "%d", nq);
+    fscanf(arq, "%d", nh);
+    fscanf(arq, "%d", ns);
+    fscanf(arq, "%d", nr);
 }
 
-void lerFormaGeometrica(FILE *arq, char *forma){
-
-    fscanf(arq, "%c", forma);
-}
-
-void lerCirculo(FILE *arqIn, Lista figuras, FILE *arqOut, FILE *arqOut2){
+void lerCirculo(FILE *arqIn, Lista figuras, char cw[]){
     int id;
     double r, x, y;
     char strokeCollor[24], fillCollor[24];
@@ -110,16 +106,12 @@ void lerCirculo(FILE *arqIn, Lista figuras, FILE *arqOut, FILE *arqOut2){
     fscanf(arqIn, "%s", strokeCollor);
     fscanf(arqIn, "%s", fillCollor);
 
-    Form circulo = criarCirculo(id, x, y, r, strokeCollor, fillCollor);
+    Form circulo = criarCirculo(id, x, y, r, strokeCollor, fillCollor, cw);
 
-    inserirElemento(figuras, circulo);
-
-    /*printarCirculo(arqOut, circulo);
-    if(arqOut2 != NULL)
-        printarCirculo(arqOut2, stFiguras);*/
+    inserirElemento(figuras, circulo, "c");
 }
 
-void lerRetangulo(FILE *arqIn, Lista figuras, FILE *arqOut, FILE *arqOut2){
+void lerRetangulo(FILE *arqIn, Lista figuras, char rw[]){
     int id;
     double x, y, w, h;
     char strokeCollor[24], fillCollor[24];
@@ -132,13 +124,76 @@ void lerRetangulo(FILE *arqIn, Lista figuras, FILE *arqOut, FILE *arqOut2){
     fscanf(arqIn, "%s", strokeCollor);
     fscanf(arqIn, "%s", fillCollor);
 
-    Form rect = criarRect(id, x, y, w, h, strokeCollor, fillCollor, 0);
+    Form rect = criarRect(id, x, y, w, h, strokeCollor, fillCollor, 0, rw);
 
-    inserirElemento(figuras, rect);
+    inserirElemento(figuras, rect, "r");
+}
 
-    /*printarRetangulo(arqOut, figuras[id]);
-    if(arqOut2 != NULL)
-        printarRetangulo(arqOut2, figuras[id]);*/
+void lerQuadra(FILE *arqIn, Lista blocks, char fillCollor[], char strokeCollor[], char sw[]){
+    char cep[64];
+    double x, y, w, h;
+
+    fscanf(arqIn, "%s", cep);
+    fscanf(arqIn, "%lf", &x);
+    fscanf(arqIn, "%lf", &y);
+    fscanf(arqIn, "%lf", &w);
+    fscanf(arqIn, "%lf", &h);
+
+    Block block = criarBlock(cep, x, y, w, h, strokeCollor, fillCollor, sw);
+
+    inserirElemento(blocks, block, "q");
+}
+
+void lerHidrante(FILE *arqIn, Lista hydrants, char fillCollor[], char strokeCollor[], char sw[]){
+    char id[32];
+    double x, y;
+
+    fscanf(arqIn, "%s", id);
+    fscanf(arqIn, "%lf", &x);
+    fscanf(arqIn, "%lf", &y);
+
+    Hydrant hydrant = criarHydrant(id, x, y, strokeCollor, fillCollor, sw);
+
+    inserirElemento(hydrants, hydrant, "h");
+}
+
+void lerSemaforo(FILE *arqIn, Lista semaphores, char fillCollor[], char strokeCollor[], char sw[]){
+    char id[32];
+    double x, y;
+
+    fscanf(arqIn, "%s", id);
+    fscanf(arqIn, "%lf", &x);
+    fscanf(arqIn, "%lf", &y);
+
+    Semaphore semaphore = criarSemaphore(id, x, y, strokeCollor, fillCollor, sw);
+
+    inserirElemento(semaphores, semaphore, "s");
+}
+
+void lerRadio(FILE *arqIn, Lista radios, char fillCollor[], char strokeCollor[], char sw[]){
+    char id[32];
+    double x, y;
+
+    fscanf(arqIn, "%s", id);
+    fscanf(arqIn, "%lf", &x);
+    fscanf(arqIn, "%lf", &y);
+
+    Radio radio = criarRadio(id, x, y, strokeCollor, fillCollor, sw);
+
+    inserirElemento(radios, radio, "rb");
+}
+
+void alterarCor(FILE *arqIn, char fillCollor[], char strokeCollor[], char sw[]){
+
+    fscanf(arqIn, "%s", fillCollor);
+    fscanf(arqIn, "%s", strokeCollor);
+    fscanf(arqIn, "%s", sw);
+}
+
+void alterarEspessura(FILE *arqIn, char cw[], char rw[]){
+
+    fscanf(arqIn, "%s", cw);
+    fscanf(arqIn, "%s", rw);
 }
 
 void lerTexto(FILE *arqIn, FILE *arqOut, FILE *arqOut2){
@@ -149,9 +204,9 @@ void lerTexto(FILE *arqIn, FILE *arqOut, FILE *arqOut2){
     fscanf(arqIn, "%lf", &y);
     fgets(text, 128, arqIn);
 
-    printarTexto(arqOut, x, y, text);
+    printarTexto(arqOut, x, y, text, "black");
     if(arqOut2 != NULL)
-        printarTexto(arqOut2, x, y, text);
+        printarTexto(arqOut2, x, y, text, "black");
 }
 
 void lerQry(FILE *arqConsul, char q[]){

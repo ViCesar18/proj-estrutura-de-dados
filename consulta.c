@@ -16,14 +16,12 @@ double clamp(double pComp, double pMin, double pMax){
         return pComp;
 }
 
-void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2){
+void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2, char type1[], char type2[]){
     double a, xProx, yProx;
     bool colisao;
 
     int id1 = getFormId(figura1);
     int id2 = getFormId(figura2);
-    char type1 = getFormType(figura1);
-    char type2 = getFormType(figura2);
     double r1 = getFormR(figura1);
     double r2 = getFormR(figura2);
     double x1 = getFormX(figura1);
@@ -35,22 +33,7 @@ void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2){
     double h1 = getFormH(figura1);
     double h2 = getFormH(figura2);
 
-    /*printf("id1 = %d\n", id1);
-    printf("id2 = %d\n", id2);
-    printf("type1 = %c\n", type1);
-    printf("type2 = %c\n", type2);
-    printf("r1 = %lf\n", r1);
-    printf("r2 = %lf\n", r2);
-    printf("x1 = %lf\n", x1);
-    printf("x2 = %lf\n", x2);
-    printf("y1 = %lf\n", y1);
-    printf("y2 = %lf\n", y2);
-    printf("h1 = %lf\n", h1);
-    printf("h2 = %lf\n", h2);
-    printf("w1 = %lf\n", w1);
-    printf("w2 = %lf\n", w2);*/
-
-    if(type1 == 'c' && type2 == 'c'){
+    if(!strcmp(type1, "c") && !strcmp(type2, "c")){
         if(r1 + r2 >= distEuclid(x1, y1, x2, y2)){
             fprintf(txt, "o? %d %d\nSIM\n\n", id1, id2);
             colisao = true;
@@ -61,7 +44,7 @@ void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2){
         }
         retanguloEnvolveCirculo(svg2, figura1, figura2, colisao);
     }
-    else if(type1 == 'r' && type2 == 'r'){
+    else if(!strcmp(type1, "r") && !strcmp(type2, "r")){
         if(x1 <= x2 + w2 && y1 <= y2 + h2 && x1 + w1 >= x2 && y1 + h1 >= y2){
             fprintf(txt, "o? %d %d\nSIM\n\n", id1, id2);
             colisao = true;
@@ -72,11 +55,8 @@ void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2){
         }
         retanguloEnvolveRetangulo(svg2, figura1, figura2, colisao);
     }
-    else if(type1 == 'c' && type2 == 'r' || type1 == 'r' && type2 == 'c'){
-        if(type1 == 'r' && type2 == 'c'){
-            char auxT = type1;
-            type1 = type2;
-            type2 = auxT;
+    else if(!strcmp(type1, "c") && !strcmp(type2, "r") || !strcmp(type1, "r") && !strcmp(type2, "c")){
+        if(!strcmp(type1, "r") && !strcmp(type2, "c")){
             double auxX = x1;
             x1 = x2;
             x2 = auxX;
@@ -109,21 +89,20 @@ void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2){
     }
 }
 
-void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y){
+void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y, char typeF[]){
     double xP = x;
     double yP = y;
     double rP = 3;
     char strokeCollorP[24], fillCollorP[24];
 
     int idF = getFormId(figura);
-    char typeF = getFormType(figura);
     double xF = getFormX(figura);
     double yF = getFormY(figura);
     double rF = getFormR(figura);
     double wF = getFormW(figura);
     double hF = getFormH(figura);
 
-    if(typeF == 'c'){
+    if(!strcmp(typeF, "c")){
         if(distEuclid(xF, yF, x, y) <= rF){
             fprintf(txt, "i? %d %lf %lf\nINTERNO\n\n", idF, x, y);
             strcpy(strokeCollorP, "green");
@@ -134,7 +113,7 @@ void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y){
             strcpy(strokeCollorP, "red");
             strcpy(fillCollorP, "red");
         }
-        Form ponto = criarCirculo(0, xP, yP, rP, strokeCollorP, fillCollorP);
+        Form ponto = criarCirculo(0, xP, yP, rP, strokeCollorP, fillCollorP, "1");
         printarCirculo(svg2, ponto);
         printarLinha(svg2, xF, yF, xP, yP, "black");
     }
@@ -150,21 +129,19 @@ void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y){
             strcpy(fillCollorP, "red");
         }
 
-        Form ponto = criarCirculo(0, xP, yP, rP, strokeCollorP, fillCollorP);
+        Form ponto = criarCirculo(0, xP, yP, rP, strokeCollorP, fillCollorP, "1");
         printarCirculo(svg2, ponto);
         printarLinha(svg2, xF + wF / 2, yF + hF / 2, xP, yP, "black");
     }
 }
 
-void verificarD(FILE *txt, FILE *svg2, Form figura1, Form figura2){
+void verificarD(FILE *txt, FILE *svg2, Form figura1, Form figura2, char type1[], char type2[]){
     double dist;
     char dist2[32];
     double xL, yL;
 
     int id1 = getFormId(figura1);
     int id2 = getFormId(figura2);
-    char type1 = getFormType(figura1);
-    char type2 = getFormType(figura2);
     double x1 = getFormX(figura1);
     double x2 = getFormX(figura2);
     double y1 = getFormY(figura1);
@@ -176,19 +153,19 @@ void verificarD(FILE *txt, FILE *svg2, Form figura1, Form figura2){
     double h1 = getFormH(figura1);
     double h2 = getFormH(figura2);
 
-    if(type1 == 'c' && type2 == 'c'){
+    if(!strcmp(type1, "c") && !strcmp(type2, "c")){
         dist = distEuclid(x1, y1, x2, y2);
         printarLinha(svg2, x1, y1, x2, y2, "black");
         xL = (x1 + x2) / 2;
         yL = (y1 + y2) / 2;
     }
-    else if(type1 == 'r' && type2 == 'r'){
+    else if(!strcmp(type1, "r") && !strcmp(type2, "r")){
         dist = distEuclid(x1 + w1 / 2, y1 + h1 / 2, x2 + w2 / 2, y2 + h2 / 2);
         printarLinha(svg2, x1 + w1 / 2, y1 + h1 / 2, x2 + w2 / 2, y2 + h2 / 2, "black");
         xL = (x1 + w1 / 2 + x2 + w2 / 2) / 2;
         yL = (y1 + h1 / 2 + y2 + h2 / 2) / 2;
     }
-    else if(type1 == 'r' && type2 == 'c'){
+    else if(!strcmp(type1, "r") && !strcmp(type2, "c")){
         dist = distEuclid(x1 + w1 / 2, y1 + h1 / 2, x2, y2);
         printarLinha(svg2, x1 + w1 / 2, y1 + h1 / 2, x2, y2, "black");
         xL = (x1 + w1 / 2 + x2) / 2;
@@ -203,7 +180,7 @@ void verificarD(FILE *txt, FILE *svg2, Form figura1, Form figura2){
 
     fprintf(txt, "d? %d %d\n%lf\n\n", id1, id2, dist);
     sprintf(dist2, "%lf", dist);
-    printarTexto(svg2, xL, yL, dist2);
+    printarTexto(svg2, xL, yL, dist2, "black");
 }
 
 void verificarBB(int nx, FILE *svg3, Lista figuras, char cor[]){
@@ -264,7 +241,7 @@ void retanguloEnvolveCirculo(FILE *svg2, Form figura1, Form figura2, bool colisa
     else
         strokeR = 5;
 
-    Form retangulo = criarRect(0, xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR);
+    Form retangulo = criarRect(0, xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
 
     printarRetangulo(svg2, retangulo);
 }
@@ -321,7 +298,7 @@ void retanguloEnvolveRetangulo(FILE *svg2, Form figura1, Form figura2, bool coli
     else
         strokeR = 5;
 
-    Form retangulo = criarRect(0, xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR);
+    Form retangulo = criarRect(0, xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
 
     printarRetangulo(svg2, retangulo);
 }
@@ -371,7 +348,7 @@ void retanguloEnvolveCR(FILE *svg2, Form figura1, Form figura2, bool colisao){
     else
         strokeR = 5;
 
-    Form retangulo = criarRect(0, xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR);
+    Form retangulo = criarRect(0, xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
 
     printarRetangulo(svg2, retangulo);
 }

@@ -14,13 +14,13 @@ Lista criarLista(int capacidade);
 
 int getLivre(Lista listaAux);
 
-void inserirElemento(Lista listaAux, Elemento elemento);
+void inserirElemento(Lista listaAux, Elemento elemento, char type[]);
 
 void deletarElemento(Lista listaAux, int index);
 
 Elemento getElementoByIndex(Lista ListaAux, int i);
 
-Elemento getElementoById(Lista ListaAux, int id);
+Elemento getElementoById(Lista ListaAux, int id, char type[]);
 
 void imprimirLista(Lista listaAux, FILE *arqOut);
 

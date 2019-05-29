@@ -19,13 +19,13 @@ double distEuclid(double x1, double y1, double x2, double y2);
 double clamp(double xC, double min, double max);
 
 /*Verifica se uma figura (c ou r) esta colidindo com outra (c ou r)*/
-void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2);
+void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2, char type1[], char type2[]);
 
 /*Verifica se um ponto (x,y) esta dentro ou fora de uma figura (c ou r)*/
-void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y);
+void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y, char typeF[]);
 
 /*Determina a distancia entre o centro de massa de duas figuras e desenha uma linha entre elas*/
-void verificarD(FILE *txt, FILE *svg2, Form figura1, Form figura2);
+void verificarD(FILE *txt, FILE *svg2, Form figura1, Form figura2, char type1[], char type2[]);
 
 /*Desenha um quadrado em volta de todos os circulos e uma elipse dentro de todos os retangulos desenhados no svg(bounding box)*/
 void verificarBB(int nx, FILE *svg3, Lista figuras, char cor[]);

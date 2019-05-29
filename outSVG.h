@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "forms.h"
+#include "block.h"
+#include "hydrant.h"
+#include "semaphore.h"
+#include "radio.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a saida de dados*/
 
@@ -24,12 +28,20 @@ void printarCirculo(FILE *arqOut, Form circulo);
 void printarRetangulo(FILE *arqOut, Form rect);
 
 /*Recebe como parametros as informacoes para desenhar um texto em um arquivo SVG*/
-void printarTexto(FILE *arqOut, double x, double y, char text[]);
+void printarTexto(FILE *arqOut, double x, double y, char text[], char fillCollor[]);
 
 /*Recebe como parametros as informacoes para desenhar uma linha em um arquivo SVG*/
 void printarLinha(FILE *arqOut, double x1, double y1, double x2, double y2, char color[]);
 
 /*Recebe como parametros as informacoes para desenhar uma elipse em um arquivo SVG*/
 void printarElipse(FILE *arqOut, double xC, double yC, double rX, double rY, char cor[]);
+
+void printarQuadra(FILE *arqOut, Block block);
+
+void printarHidrante(FILE *arqOut, Hydrant hydrant);
+
+void printarSemaforo(FILE *arqOut, Semaphore semaphore);
+
+void printarRadio(FILE *arqOut, Radio radio);
 
 #endif

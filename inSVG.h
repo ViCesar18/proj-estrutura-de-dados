@@ -8,6 +8,10 @@
 #include "outSVG.h"
 #include "lista.h"
 #include "forms.h"
+#include "block.h"
+#include "hydrant.h"
+#include "semaphore.h"
+#include "radio.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a entrada/leitura de dados*/
 
@@ -24,16 +28,25 @@ void tratarNome(char nameIn[], char **nameInT);
 void alocarMemoria(char nome[], char dir[], char **arq);
 
 /*Le o valor de NX do arquivo de entrada .geo*/
-int lerNX(FILE *arq);
-
-/*Le o parametro do arquivo de entrada .geo para definir a forma geometrica a ser desenhada*/
-void lerFormaGeometrica(FILE *arq, char *forma);
+void lerNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr);
 
 /*Le as informacoes de circulo do arquivo .geo e armazena na struct*/
-void lerCirculo(FILE *arqIn, Lista figuras, FILE *arqOut, FILE *arqOut2);
+void lerCirculo(FILE *arqIn, Lista figuras, char cw[]);
 
 /*Le as informacoes de retangulo do arquivo .geo e armazena na struct*/
-void lerRetangulo(FILE *arqIn, Lista figuras, FILE *arqOut, FILE *arqOut2);
+void lerRetangulo(FILE *arqIn, Lista figuras, char rw[]);
+
+void lerQuadra(FILE *arqIn, Lista blocks, char strokeCollor[], char fillCollor[], char sw[]);
+
+void lerHidrante(FILE *arqIn, Lista hydrants, char fillCollor[], char strokeCollor[], char sw[]);
+
+void lerSemaforo(FILE *arqIn, Lista semaphores, char fillCollor[], char strokeCollor[], char sw[]);
+
+void lerRadio(FILE *arqIn, Lista radios, char fillCollor[], char strokeCollor[], char sw[]);
+
+void alterarCor(FILE *arqIn, char fillCollor[], char strokeCollor[], char sw[]);
+
+void alterarEspessura(FILE *arqIn, char cw[], char rw[]);
 
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
 void lerTexto(FILE *arqIn, FILE *arqOut, FILE *arqOut2);

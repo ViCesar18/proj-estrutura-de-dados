@@ -8,23 +8,36 @@
 #include "forms.h"
 
 int main(int argc, char *argv[]){
-    int nx = 1000;
+    int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000;
     char *pathIn = NULL, *nameIn = NULL, *nameInT = NULL, *arqGeo = NULL;
     char *nameConsulta = NULL, *nameConsultaT = NULL, *arqQry = NULL;
     char *pathOut = NULL, *nameOut = NULL, *arqSVG = NULL;
     char *nameTXT = NULL, *arqTXT = NULL;
     char *nameOut2 = NULL, *arqSVG2 = NULL;
     char *nameOut3 = NULL, *arqSVG3 = NULL;
-    char forma, q[3];
+    char command[12], q[3];
     FILE *arqIn = NULL, *arqOut = NULL, *arqConsul = NULL, *arqTexto = NULL, *arqOut2 = NULL, *arqOut3 = NULL;
 
     int j, k;
     double x, y;
     char sufixo[32], cor[24];
 
-    Lista figuras;
-    Form figura1;
-    Form figura2;
+    char cfillQ[24], cstrkQ[24], cfillH[24], cstrkH[24], cfillS[24], cstrkS[24], cfillR[24], cstrkR[24];
+    char swQ[12], swH[12], swS[12], swR[12];
+    char cw[12] = {"1"}, rw[12] = {"1"};
+
+    strcpy(cfillQ, "orange");
+    strcpy(cstrkQ, "black");
+    strcpy(cfillH, "red");
+    strcpy(cstrkH, "yellow");
+    strcpy(cfillS, "green");
+    strcpy(cstrkS, "red");
+    strcpy(cfillR, "gray");
+    strcpy(cstrkR, "black");
+
+    Lista figuras, blocks, hydrants, semaphores, radios;
+    Form figura1, figura2;
+    char type1[4], type2[4];
 
     /*Recebe os parametros da main (argv)*/
     receberParametros(argc, argv, &pathIn, &nameIn, &nameConsulta, &pathOut);
@@ -88,41 +101,74 @@ int main(int argc, char *argv[]){
         if(feof(arqIn))
             break;
 
-        lerFormaGeometrica(arqIn, &forma);
+        fscanf(arqIn, "%s", command);
         
-        if(forma == 'n'){
-            forma = getc(arqIn);
-            if(forma == 'x'){
-                nx = lerNX(arqIn);
-                break;
-            }
+        if(!strcmp(command, "nx")){
+            lerNX(arqIn, &nx, &nq, &nh, &ns, &nr);
+            break;
         }
     }
 
     rewind(arqIn);
 
-    /*Cria a lista que contem as figuras*/
+    /*Cria as listas*/
     figuras = criarLista(nx);
+    blocks = criarLista(nq);
+    hydrants = criarLista(nh);
+    semaphores = criarLista(ns);
+    radios = criarLista(nr);
     
     /*Le os dados das formas geometricas do arquivo de entrada*/
     while(1){
         if(feof(arqIn))
             break;
 
-        lerFormaGeometrica(arqIn, &forma);
+        fscanf(arqIn, "%s", command);
 
-        if(forma == 'c'){
-            lerCirculo(arqIn, figuras, arqOut, arqOut2);
+        if(!strcmp(command, "c")){
+            lerCirculo(arqIn, figuras, cw);
         }
-        else if(forma == 'r'){
-            lerRetangulo(arqIn, figuras, arqOut, arqOut2);
+        else if(!strcmp(command, "r")){
+            lerRetangulo(arqIn, figuras, rw);
         }
-        else if(forma == 't'){
+        else if(!strcmp(command, "t")){
             lerTexto(arqIn, arqOut, arqOut2);
+        }
+        else if(!strcmp(command, "q")){
+            lerQuadra(arqIn, blocks, cfillQ, cstrkQ, swQ);
+        }
+        else if(!strcmp(command, "h")){
+            lerHidrante(arqIn, hydrants, cfillH, cstrkH, swH);
+        }
+        else if(!strcmp(command, "s")){
+            lerSemaforo(arqIn, semaphores, cfillS, cstrkS, swS);
+        }
+        else if(!strcmp(command, "rb")){
+            lerRadio(arqIn, radios, cfillR, cstrkR, swR);
+        }
+        else if(!strcmp(command, "cq")){
+            alterarCor(arqIn, cfillQ, cstrkQ, swQ);
+        }
+        else if(!strcmp(command, "ch")){
+            alterarCor(arqIn, cfillH, cstrkH, swH);
+        }
+        else if(!strcmp(command, "cr")){
+            alterarCor(arqIn, cfillR, cstrkR, swR);
+        }
+        else if(!strcmp(command, "cs")){
+            alterarCor(arqIn, cfillS, cstrkS, swS);
+        }
+        else if(!strcmp(command, "sw")){
+            alterarEspessura(arqIn, cw, rw);
         }
     }
     
     imprimirLista(figuras, arqOut);
+    imprimirLista(blocks, arqOut);
+    imprimirLista(hydrants, arqOut);
+    imprimirLista(semaphores, arqOut);
+    imprimirLista(radios, arqOut);
+
     if(arqOut2 != NULL)
         imprimirLista(figuras, arqOut2);
     
@@ -136,20 +182,20 @@ int main(int argc, char *argv[]){
 
             if(strcmp(q, "o?") == 0){
                 lerO(arqConsul, &j, &k);
-                figura1 = getElementoById(figuras, j);
-                figura2 = getElementoById(figuras, k);
-                verificarO(arqTexto, arqOut2, figura1, figura2);
+                figura1 = getElementoById(figuras, j, type1);
+                figura2 = getElementoById(figuras, k, type2);
+                verificarO(arqTexto, arqOut2, figura1, figura2, type1, type2);
             }
             else if(strcmp(q, "i?") == 0){
                 lerI(arqConsul, &j, &x, &y);
-                figura1 = getElementoById(figuras, j);
-                verificarI(arqTexto, arqOut2, figura1, x, y);
+                figura1 = getElementoById(figuras, j, type1);
+                verificarI(arqTexto, arqOut2, figura1, x, y, type1);
             }
             else if(strcmp(q, "d?") == 0){
                 lerD(arqConsul, &j, &k);
-                figura1 = getElementoById(figuras, j);
-                figura2 = getElementoById(figuras, k);
-                verificarD(arqTexto, arqOut2, figura1, figura2);
+                figura1 = getElementoById(figuras, j, type1);
+                figura2 = getElementoById(figuras, k, type2);
+                verificarD(arqTexto, arqOut2, figura1, figura2, type1, type2);
             }
             else if(strcmp(q, "bb") == 0){
                 lerBB(arqConsul, sufixo, cor);

@@ -2,37 +2,36 @@
 
 typedef struct stForm{
     int id, stroke;
-    char type;
     double x, y, r, w, h;
-    char strokeCollor[24], fillCollor[24];
+    char strokeCollor[24], fillCollor[24], sw[12];
 }*FormImp;
 
-Form criarCirculo(int id, double x, double y, double r, char strokeCollor[], char fillCollor[]){
+Form criarCirculo(int id, double x, double y, double r, char strokeCollor[], char fillCollor[], char sw[]){
     FormImp circulo = (FormImp)malloc(sizeof(struct stForm));
 
     circulo->id = id;
-    circulo->type = 'c';
     circulo->x = x;
     circulo->y = y;
     circulo->r = r;
     strcpy(circulo->strokeCollor, strokeCollor);
     strcpy(circulo->fillCollor, fillCollor);
+    strcpy(circulo->sw, sw);
 
     return circulo;
 }
 
-Form criarRect(int id, double x, double y, double w, double h, char strokeCollor[], char fillCollor[], int stroke){
+Form criarRect(int id, double x, double y, double w, double h, char strokeCollor[], char fillCollor[], int stroke, char sw[]){
     FormImp rect = (FormImp)malloc(sizeof(struct stForm));
 
     rect->id = id;
     rect->stroke = stroke;
-    rect->type = 'r';
     rect->x = x;
     rect->y = y;
     rect->w = w;
     rect->h = h;
     strcpy(rect->strokeCollor, strokeCollor);
     strcpy(rect->fillCollor, fillCollor);
+    strcpy(rect->sw, sw);
 
     return rect;
 }
@@ -47,12 +46,6 @@ int getFormStroke(Form f){
     FormImp form = (FormImp) f;
 
     return form->stroke;
-}
-
-char getFormType(Form f){
-    FormImp form = (FormImp) f;
-
-    return form->type;
 }
 
 double getFormX(Form f){
@@ -95,4 +88,10 @@ char *getFormFillCollor(Form f){
     FormImp form = (FormImp) f;
 
     return form->fillCollor;
+}
+
+char *getFormSw(Form f){
+    FormImp form = (FormImp) f;
+
+    return form->sw;
 }

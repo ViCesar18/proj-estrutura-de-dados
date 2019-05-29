@@ -7,15 +7,13 @@
 
 typedef void *Form;
 
-Form criarCirculo(int id, double x, double y, double r, char strokeCollor[], char fillCollor[]);
+Form criarCirculo(int id, double x, double y, double r, char strokeCollor[], char fillCollor[], char sw[]);
 
-Form criarRect(int id, double x, double y, double w, double h, char strokeCollor[], char fillCollor[], int stroke);
+Form criarRect(int id, double x, double y, double w, double h, char strokeCollor[], char fillCollor[], int stroke, char sw[]);
 
 int getFormId(Form f);
 
 int getFormStroke(Form f);
-
-char getFormType(Form f);
 
 double getFormX(Form f);
 
@@ -30,5 +28,7 @@ double getFormH(Form f);
 char *getFormStrokeCollor(Form f);
 
 char *getFormFillCollor(Form f);
+
+char *getFormSw(Form f);
 
 #endif
