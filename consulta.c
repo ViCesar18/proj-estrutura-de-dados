@@ -1,9 +1,13 @@
 #include "consulta.h"
 
 double distEuclid(double x1, double y1, double x2, double y2){
-    double dist;
 
     return sqrt(pow((x1 - x2), 2) + pow((y1 - y2), 2));
+}
+
+double ManhattanDist(double x1, double y1, double x2, double y2){
+
+    return fabs(x1 - x2) + fabs(y1 - y2);
 }
 
 double clamp(double pComp, double pMin, double pMax){
@@ -20,8 +24,10 @@ void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2, char type1[],
     double a, xProx, yProx;
     bool colisao;
 
-    int id1 = getFormId(figura1);
-    int id2 = getFormId(figura2);
+    char id1[32], id2[32];
+
+    strcpy(id1, getFormId(figura1));
+    strcpy(id2, getFormId(figura2));
     double r1 = getFormR(figura1);
     double r2 = getFormR(figura2);
     double x1 = getFormX(figura1);
@@ -35,22 +41,22 @@ void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2, char type1[],
 
     if(!strcmp(type1, "c") && !strcmp(type2, "c")){
         if(r1 + r2 >= distEuclid(x1, y1, x2, y2)){
-            fprintf(txt, "o? %d %d\nSIM\n\n", id1, id2);
+            fprintf(txt, "o? %s %s\nSIM\n\n", id1, id2);
             colisao = true;
         }
         else{
-            fprintf(txt, "o? %d %d\nNAO\n\n", id1, id2);
+            fprintf(txt, "o? %s %s\nNAO\n\n", id1, id2);
             colisao = false;
         }
         retanguloEnvolveCirculo(svg2, figura1, figura2, colisao);
     }
     else if(!strcmp(type1, "r") && !strcmp(type2, "r")){
         if(x1 <= x2 + w2 && y1 <= y2 + h2 && x1 + w1 >= x2 && y1 + h1 >= y2){
-            fprintf(txt, "o? %d %d\nSIM\n\n", id1, id2);
+            fprintf(txt, "o? %s %s\nSIM\n\n", id1, id2);
             colisao = true;
         }
         else{
-            fprintf(txt, "o? %d %d\nNAO\n\n", id1, id2);
+            fprintf(txt, "o? %s %s\nNAO\n\n", id1, id2);
             colisao = false;
         }
         retanguloEnvolveRetangulo(svg2, figura1, figura2, colisao);
@@ -78,14 +84,43 @@ void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2, char type1[],
         yProx = clamp(y1, y2, y2 + h2);
 
         if(distEuclid(x1, y1, xProx, yProx) <= r1){
-            fprintf(txt, "o? %d %d\nSIM\n\n", id1, id2);
+            fprintf(txt, "o? %s %s\nSIM\n\n", id1, id2);
             colisao = true;
         }
         else{
-            fprintf(txt, "o? %d %d\nNAO\n\n", id1, id2);
+            fprintf(txt, "o? %s %s\nNAO\n\n", id1, id2);
             colisao = false;
         }
         retanguloEnvolveCR(svg2, figura1, figura2, colisao);
+    }
+}
+
+bool pontoInsideFigura(double x, double y, Elemento elemento, char type[], char met[]){
+    if(!strcmp(type, "c")){
+        if(!strcmp(met, "L2")){
+            if(distEuclid(getFormX(elemento), getFormY(elemento), x, y) <= getFormR(elemento))
+                return true;
+            else
+                return false;
+        }
+        else if(!strcmp(met, "L1")){
+            if(ManhattanDist(getFormX(elemento), getFormY(elemento), x, y) <= getFormR(elemento))
+                return true;
+            else
+                return false;
+        }
+    }
+    else if(!strcmp(type, "r")){
+        if(x >= getFormX(elemento) && y >= getFormY(elemento) && x <= getFormX(elemento) + getFormW(elemento) && y <= getFormY(elemento) + getFormH(elemento))
+            return true;
+        else
+            return false;
+    }
+    else if(!strcmp(type, "b")){
+        if(x >= getBlockX(elemento) && y >= getBlockY(elemento) && x <= getBlockX(elemento) + getBlockW(elemento) && y <= getBlockY(elemento) + getBlockH(elemento))
+            return true;
+        else
+            return false;
     }
 }
 
@@ -93,9 +128,9 @@ void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y, char typ
     double xP = x;
     double yP = y;
     double rP = 3;
-    char strokeCollorP[24], fillCollorP[24];
+    char strokeCollorP[24], fillCollorP[24], idF[32];
 
-    int idF = getFormId(figura);
+    strcpy(idF, getFormId(figura));
     double xF = getFormX(figura);
     double yF = getFormY(figura);
     double rF = getFormR(figura);
@@ -103,33 +138,33 @@ void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y, char typ
     double hF = getFormH(figura);
 
     if(!strcmp(typeF, "c")){
-        if(distEuclid(xF, yF, x, y) <= rF){
-            fprintf(txt, "i? %d %lf %lf\nINTERNO\n\n", idF, x, y);
+        if(pontoInsideFigura(x, y, figura, "c", "L2")){
+            fprintf(txt, "i? %s %lf %lf\nINTERNO\n\n", idF, x, y);
             strcpy(strokeCollorP, "green");
             strcpy(fillCollorP, "green");
         }
         else{
-            fprintf(txt, "i? %d %lf %lf\nNAO INTERNO\n\n", idF, x, y);
+            fprintf(txt, "i? %s %lf %lf\nNAO INTERNO\n\n", idF, x, y);
             strcpy(strokeCollorP, "red");
             strcpy(fillCollorP, "red");
         }
-        Form ponto = criarCirculo(0, xP, yP, rP, strokeCollorP, fillCollorP, "1");
+        Form ponto = criarCirculo("0", xP, yP, rP, strokeCollorP, fillCollorP, "1");
         printarCirculo(svg2, ponto);
         printarLinha(svg2, xF, yF, xP, yP, "black");
     }
     else{
-        if(x >= xF && y >= yF && x <= xF + wF && y <= yF + hF){
-            fprintf(txt, "i? %d %lf %lf\nINTERNO\n\n", idF, x, y);
+        if(pontoInsideFigura(x, y, figura, "r", "L2")){
+            fprintf(txt, "i? %s %lf %lf\nINTERNO\n\n", idF, x, y);
             strcpy(strokeCollorP, "green");
             strcpy(fillCollorP, "green");
         }
         else{
-            fprintf(txt, "i? %d %lf %lf\nNAO INTERNO\n\n", idF, x, y);
+            fprintf(txt, "i? %s %lf %lf\nNAO INTERNO\n\n", idF, x, y);
             strcpy(strokeCollorP, "red");
             strcpy(fillCollorP, "red");
         }
 
-        Form ponto = criarCirculo(0, xP, yP, rP, strokeCollorP, fillCollorP, "1");
+        Form ponto = criarCirculo("0", xP, yP, rP, strokeCollorP, fillCollorP, "1");
         printarCirculo(svg2, ponto);
         printarLinha(svg2, xF + wF / 2, yF + hF / 2, xP, yP, "black");
     }
@@ -137,11 +172,11 @@ void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y, char typ
 
 void verificarD(FILE *txt, FILE *svg2, Form figura1, Form figura2, char type1[], char type2[]){
     double dist;
-    char dist2[32];
+    char distText[32], id1[32], id2[32];
     double xL, yL;
 
-    int id1 = getFormId(figura1);
-    int id2 = getFormId(figura2);
+    strcpy(id1, getFormId(figura1));
+    strcpy(id2, getFormId(figura2));
     double x1 = getFormX(figura1);
     double x2 = getFormX(figura2);
     double y1 = getFormY(figura1);
@@ -178,9 +213,9 @@ void verificarD(FILE *txt, FILE *svg2, Form figura1, Form figura2, char type1[],
         yL = (y1 + y2 + h2 / 2) / 2;
     }
 
-    fprintf(txt, "d? %d %d\n%lf\n\n", id1, id2, dist);
-    sprintf(dist2, "%lf", dist);
-    printarTexto(svg2, xL, yL, dist2, "black");
+    fprintf(txt, "d? %s %s\n%lf\n\n", id1, id2, dist);
+    sprintf(distText, "%lf", dist);
+    printarTexto(svg2, xL, yL, distText, "black");
 }
 
 void verificarBB(int nx, FILE *svg3, Lista figuras, char cor[]){
@@ -241,7 +276,7 @@ void retanguloEnvolveCirculo(FILE *svg2, Form figura1, Form figura2, bool colisa
     else
         strokeR = 5;
 
-    Form retangulo = criarRect(0, xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
+    Form retangulo = criarRect("0", xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
 
     printarRetangulo(svg2, retangulo);
 }
@@ -298,7 +333,7 @@ void retanguloEnvolveRetangulo(FILE *svg2, Form figura1, Form figura2, bool coli
     else
         strokeR = 5;
 
-    Form retangulo = criarRect(0, xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
+    Form retangulo = criarRect("0", xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
 
     printarRetangulo(svg2, retangulo);
 }
@@ -348,7 +383,20 @@ void retanguloEnvolveCR(FILE *svg2, Form figura1, Form figura2, bool colisao){
     else
         strokeR = 5;
 
-    Form retangulo = criarRect(0, xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
+    Form retangulo = criarRect("0", xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
 
     printarRetangulo(svg2, retangulo);
+}
+
+bool quadInsideCirc(Block block, Form circulo, char met[]){
+    double x = getBlockX(block);
+    double y = getBlockY(block);
+    double w = getBlockW(block);
+    double h = getBlockH(block);
+
+    if(pontoInsideFigura(x, y, circulo, "c", met) && pontoInsideFigura(x + w, y, circulo, "c", met) && 
+    pontoInsideFigura(x, y + h, circulo, "c", met) && pontoInsideFigura(x + w, y + h, circulo, "c", met))
+        return true;
+    else
+        return false;
 }

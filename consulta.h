@@ -15,11 +15,15 @@ e os calculos matematicos*/
 /*Calcula a distancia euclidiana entre dois pontos*/
 double distEuclid(double x1, double y1, double x2, double y2);
 
+double ManhattanDist(double x1, double y1, double x2, double y2);
+
 /*Determina a coordenada(x ou y), pertencente a um certo intervalo, mais proxima de uma coordenada(x ou y)*/
 double clamp(double xC, double min, double max);
 
 /*Verifica se uma figura (c ou r) esta colidindo com outra (c ou r)*/
 void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2, char type1[], char type2[]);
+
+bool pontoInsideFigura(double x, double y, Elemento elemento, char type[], char met[]);
 
 /*Verifica se um ponto (x,y) esta dentro ou fora de uma figura (c ou r)*/
 void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y, char typeF[]);
@@ -38,5 +42,7 @@ void retanguloEnvolveRetangulo(FILE *svg2, Form figura1, Form figura2, bool coli
 
 /*Desenha um retangulo que envolve um circulo e um retangulo(continuo em caso de colisao, tracejado caso contrario)*/
 void retanguloEnvolveCR(FILE *svg2, Form figura1, Form figura2, bool colisao);
+
+bool quadInsideCirc(Block block, Form circulo, char met[]);
 
 #endif

@@ -1,15 +1,16 @@
 #include "forms.h"
 
 typedef struct stForm{
-    int id, stroke;
+    char id[32];
+    int stroke;
     double x, y, r, w, h;
     char strokeCollor[24], fillCollor[24], sw[12];
 }*FormImp;
 
-Form criarCirculo(int id, double x, double y, double r, char strokeCollor[], char fillCollor[], char sw[]){
+Form criarCirculo(char id[], double x, double y, double r, char strokeCollor[], char fillCollor[], char sw[]){
     FormImp circulo = (FormImp)malloc(sizeof(struct stForm));
 
-    circulo->id = id;
+    strcpy(circulo->id, id);
     circulo->x = x;
     circulo->y = y;
     circulo->r = r;
@@ -20,10 +21,10 @@ Form criarCirculo(int id, double x, double y, double r, char strokeCollor[], cha
     return circulo;
 }
 
-Form criarRect(int id, double x, double y, double w, double h, char strokeCollor[], char fillCollor[], int stroke, char sw[]){
+Form criarRect(char id[], double x, double y, double w, double h, char strokeCollor[], char fillCollor[], int stroke, char sw[]){
     FormImp rect = (FormImp)malloc(sizeof(struct stForm));
 
-    rect->id = id;
+    strcpy(rect->id, id);
     rect->stroke = stroke;
     rect->x = x;
     rect->y = y;
@@ -36,7 +37,7 @@ Form criarRect(int id, double x, double y, double w, double h, char strokeCollor
     return rect;
 }
 
-int getFormId(Form f){
+char  *getFormId(Form f){
     FormImp form = (FormImp) f;
 
     return form->id;

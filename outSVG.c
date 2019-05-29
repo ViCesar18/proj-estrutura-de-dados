@@ -102,9 +102,9 @@ void printarHidrante(FILE *arqOut, Hydrant hydrant){
 
 void printarSemaforo(FILE *arqOut, Semaphore semaphore){
     fprintf(arqOut, "\n<rect x=\"%lf\" y=\"%lf\" width=\"10\" height=\"10\" stroke=\"%s\" fill=\"%s\" stroke-width=\"%s\"/>\n", 
-    getSemaphoreX(semaphore), getSemaphoreY(semaphore), getSemaphoreStrokeCollor(semaphore), getSemaphoreFillCollor(semaphore), getSemaphoreSw(semaphore));
+    getSemaphoreX(semaphore) - 5, getSemaphoreY(semaphore) - 5, getSemaphoreStrokeCollor(semaphore), getSemaphoreFillCollor(semaphore), getSemaphoreSw(semaphore));
 
-    printarTexto(arqOut, getSemaphoreX(semaphore) + 2, getSemaphoreY(semaphore) + 9, "S", getSemaphoreStrokeCollor(semaphore));
+    printarTexto(arqOut, getSemaphoreX(semaphore) - 3.5, getSemaphoreY(semaphore) + 4, "S", getSemaphoreStrokeCollor(semaphore));
 }
 
 void printarRadio(FILE *arqOut, Radio radio){

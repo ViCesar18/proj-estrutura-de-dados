@@ -6,6 +6,7 @@
 #include "consulta.h"
 #include "lista.h"
 #include "forms.h"
+#include "consultasLista.h"
 
 int main(int argc, char *argv[]){
     int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000;
@@ -15,12 +16,15 @@ int main(int argc, char *argv[]){
     char *nameTXT = NULL, *arqTXT = NULL;
     char *nameOut2 = NULL, *arqSVG2 = NULL;
     char *nameOut3 = NULL, *arqSVG3 = NULL;
-    char command[12], q[3];
+    char command[12];
     FILE *arqIn = NULL, *arqOut = NULL, *arqConsul = NULL, *arqTexto = NULL, *arqOut2 = NULL, *arqOut3 = NULL;
 
-    int j, k;
+    char j[32], k[32];
     double x, y;
     char sufixo[32], cor[24];
+
+    char metrica[4], id[32];
+    double r;
 
     char cfillQ[24], cstrkQ[24], cfillH[24], cstrkH[24], cfillS[24], cstrkS[24], cfillR[24], cstrkR[24];
     char swQ[12], swH[12], swS[12], swR[12];
@@ -175,29 +179,29 @@ int main(int argc, char *argv[]){
     /*Le os dados de consulta(se existir)*/
     if(nameConsulta != NULL){
         while(1){
-            lerQry(arqConsul, q);
+            fscanf(arqConsul, "%s", command);
 
             if(feof(arqConsul))
                 break;
 
-            if(strcmp(q, "o?") == 0){
-                lerO(arqConsul, &j, &k);
+            if(!strcmp(command, "o?")){
+                lerO(arqConsul, j, k);
                 figura1 = getElementoById(figuras, j, type1);
                 figura2 = getElementoById(figuras, k, type2);
                 verificarO(arqTexto, arqOut2, figura1, figura2, type1, type2);
             }
-            else if(strcmp(q, "i?") == 0){
-                lerI(arqConsul, &j, &x, &y);
+            else if(!strcmp(command, "i?")){
+                lerI(arqConsul, j, &x, &y);
                 figura1 = getElementoById(figuras, j, type1);
                 verificarI(arqTexto, arqOut2, figura1, x, y, type1);
             }
-            else if(strcmp(q, "d?") == 0){
-                lerD(arqConsul, &j, &k);
+            else if(!strcmp(command, "d?")){
+                lerD(arqConsul, j, k);
                 figura1 = getElementoById(figuras, j, type1);
                 figura2 = getElementoById(figuras, k, type2);
                 verificarD(arqTexto, arqOut2, figura1, figura2, type1, type2);
             }
-            else if(strcmp(q, "bb") == 0){
+            else if(!strcmp(command, "bb")){
                 lerBB(arqConsul, sufixo, cor);
                 criarArqSaida3(&nameOut3, nameInT, nameConsultaT, sufixo);
                 strcat(nameOut3, ".svg");
@@ -209,7 +213,34 @@ int main(int argc, char *argv[]){
                 free(nameOut3);
                 free(arqSVG3);
             }
+            else if(!strcmp(command, "dq")){
+                lerDQ(arqConsul, metrica, id, &r);
+                figura1 = getElementoByIdListas(blocks, hydrants, semaphores, radios, id, type1);
+                if(!strcmp(type1, "h")){
+                    x = getHydrantX(figura1);
+                    y = getHydrantY(figura1);
+                    strcpy(id, getHydrantId(figura1));
+                }
+                else if(!strcmp(type1, "s")){
+                    x = getSemaphoreX(figura1);
+                    y = getSemaphoreY(figura1);
+                    strcpy(id, getSemaphoreId(figura1));
+                }
+                else{
+                    x = getRadioX(figura1);
+                    y = getRadioY(figura1);
+                    strcpy(id, getRadioId(figura1));
+                }
+                Form circulo = criarCirculo(id, x, y, r, "black", "none", "1");
+                verificarDQ(arqTexto, arqOut2, blocks, metrica, circulo);
+            }
         }
+    }
+    if(arqOut2 != NULL){
+        imprimirLista(blocks, arqOut2);
+        imprimirLista(hydrants, arqOut2);
+        imprimirLista(semaphores, arqOut2);
+        imprimirLista(radios, arqOut2);
     }
 
     /*Finalizacao, libreracao de memoria e fechamento dos arquivos*/

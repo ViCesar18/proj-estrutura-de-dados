@@ -1,7 +1,7 @@
 #include "block.h"
 
 typedef struct stBlock{
-    char cep[64], strokeCollor[24], fillCollor[24], sw[12];
+    char cep[32], strokeCollor[24], fillCollor[24], sw[12];
     double x, y, w, h;
 }*BlockImp;
 

@@ -46,6 +46,12 @@ int getLivre(Lista listaAux){
     return iLivre;
 }
 
+int getTam(Lista listaAux){
+    ListaImp lista = (ListaImp) listaAux;
+
+    return lista->tam;
+}
+
 void inserirElemento(Lista listaAux, Elemento elemento, char type[]){
     ListaImp lista = (ListaImp) listaAux;
     int iLivre = getLivre(listaAux);
@@ -70,15 +76,23 @@ void inserirElemento(Lista listaAux, Elemento elemento, char type[]){
     }
 }
 
-void deletarElemento(Lista listaAux, int index){
+void deletarElemento(Lista listaAux, char id[]){
     ListaImp lista = (ListaImp) listaAux;
+    int index;
 
-    if(index == 0){
-        lista->inicio = lista->node[lista->inicio].prox;
+    for(int i = lista->inicio; i != NULO; i = lista->node[i].prox){
+        if(!strcmp(getBlockCep(lista->node[i].elemento), id)){
+            index = i;
+            break;
+        }
+    }
+
+    if(index == lista->inicio){
+        lista->inicio = lista->node[index].prox;
         lista->node[lista->node[index].prox].ant = NULO;
     }
-    else if(index == lista->tam - 1){
-        lista->fim = lista->node[lista->fim].ant;
+    else if(lista->node[index].prox == NULO){
+        lista->fim = lista->node[index].ant;
         lista->node[lista->fim].prox = NULO;
     }
     else{
@@ -87,6 +101,7 @@ void deletarElemento(Lista listaAux, int index){
     }
     lista->node[index].prox = lista->livre;
     lista->livre = index;
+    lista->tam--;
 }
 
 Elemento getElementoByIndex(Lista listaAux, int i){
@@ -95,17 +110,31 @@ Elemento getElementoByIndex(Lista listaAux, int i){
     return lista->node[i].elemento;
 }
 
-Elemento getElementoById(Lista listaAux, int id, char type[]){
+Elemento getElementoById(Lista listaAux, char id[], char type[]){
     ListaImp lista = (ListaImp) listaAux;
 
     for(int i = lista->inicio; i != NULO; i = lista->node[i].prox){
-        if(getFormId(lista->node[i].elemento) == id){
+        if(!strcmp(getFormId(lista->node[i].elemento), id)){
             strcpy(type, lista->node[i].type);
             return lista->node[i].elemento;
         }
     }
     
     return NULL;
+}
+
+Elemento getElementoByIdListas(Lista lista1, Lista lista2, Lista lista3, Lista lista4, char id[], char type[]){
+    Elemento elemento;
+
+    elemento = getElementoById(lista1, id, type);
+    if(elemento == NULL)
+        elemento = getElementoById(lista2, id, type);
+    if(elemento == NULL)
+        elemento = getElementoById(lista3, id, type);
+    if(elemento == NULL)
+        elemento = getElementoById(lista4, id, type);
+
+    return elemento;
 }
 
 void imprimirLista(Lista listaAux, FILE *arqOut){
@@ -148,7 +177,7 @@ void imprimirBB(Lista listaAux, FILE *arq, char cor[]){
             h = 2 * getFormR(lista->node[i].elemento);
             strcpy(strokeCollorR, cor);
             strcpy(fillCollorR, "none");
-            Form retangulo = criarRect(0, x, y, w, h, strokeCollorR, fillCollorR, 0, "1");
+            Form retangulo = criarRect("0", x, y, w, h, strokeCollorR, fillCollorR, 0, "1");
             printarRetangulo(arq, retangulo);
         }
         else if(!strcmp(lista->node[i].type, "r")){

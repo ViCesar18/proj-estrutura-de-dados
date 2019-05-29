@@ -51,19 +51,18 @@ void alterarEspessura(FILE *arqIn, char cw[], char rw[]);
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
 void lerTexto(FILE *arqIn, FILE *arqOut, FILE *arqOut2);
 
-/*Le qual o comando de consulta do arquivo qry*/
-void lerQry(FILE *arqConsul, char q[]);
-
 /*Le os parametros de consulta do comando "o?"*/
-void lerO(FILE *arqConsul, int *j, int *k);
+void lerO(FILE *arqConsul, char j[], char k[]);
 
 /*Le os parametros de consulta do comando "i?"*/
-void lerI(FILE *arqConsul, int *j, double *x, double *y);
+void lerI(FILE *arqConsul, char j[], double *x, double *y);
 
 /*Le os parametros de consulta do comando "d?"*/
-void lerD(FILE *arqConsul, int *j, int *k);
+void lerD(FILE *arqConsul, char j[], char k[]);
 
 /*Le os parametros de consulta do comando "bb"*/
 void lerBB(FILE *arqConsul, char sufixo[], char cor[]);
+
+void lerDQ(FILE *arqConsul, char L[], char id[], double *r);
 
 #endif

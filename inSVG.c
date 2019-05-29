@@ -95,11 +95,11 @@ void lerNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr){
 }
 
 void lerCirculo(FILE *arqIn, Lista figuras, char cw[]){
-    int id;
+    char id[32];
     double r, x, y;
     char strokeCollor[24], fillCollor[24];
 
-    fscanf(arqIn, "%d", &id);
+    fscanf(arqIn, "%s", id);
     fscanf(arqIn, "%lf", &r);
     fscanf(arqIn, "%lf", &x);
     fscanf(arqIn, "%lf", &y);
@@ -112,11 +112,11 @@ void lerCirculo(FILE *arqIn, Lista figuras, char cw[]){
 }
 
 void lerRetangulo(FILE *arqIn, Lista figuras, char rw[]){
-    int id;
+    char id[32];
     double x, y, w, h;
     char strokeCollor[24], fillCollor[24];
 
-    fscanf(arqIn, "%d", &id);
+    fscanf(arqIn, "%s", id);
     fscanf(arqIn, "%lf", &w);
     fscanf(arqIn, "%lf", &h);
     fscanf(arqIn, "%lf", &x);
@@ -209,32 +209,34 @@ void lerTexto(FILE *arqIn, FILE *arqOut, FILE *arqOut2){
         printarTexto(arqOut2, x, y, text, "black");
 }
 
-void lerQry(FILE *arqConsul, char q[]){
-    
-    fscanf(arqConsul, "%s", q);
+void lerO(FILE *arqConsul, char j[], char k[]){
+
+    fscanf(arqConsul, "%s", j);
+    fscanf(arqConsul, "%s", k);
 }
 
-void lerO(FILE *arqConsul, int *j, int *k){
+void lerI(FILE *arqConsul, char j[], double *x, double *y){
 
-    fscanf(arqConsul, "%d", j);
-    fscanf(arqConsul, "%d", k);
-}
-
-void lerI(FILE *arqConsul, int *j, double *x, double *y){
-
-    fscanf(arqConsul, "%d", j);
+    fscanf(arqConsul, "%s", j);
     fscanf(arqConsul, "%lf", x);
     fscanf(arqConsul, "%lf", y);
 }
 
-void lerD(FILE *arqConsul, int *j, int *k){
+void lerD(FILE *arqConsul, char j[], char k[]){
 
-    fscanf(arqConsul, "%d", j);
-    fscanf(arqConsul, "%d", k);
+    fscanf(arqConsul, "%s", j);
+    fscanf(arqConsul, "%s", k);
 }
 
 void lerBB(FILE *arqConsul, char sufixo[], char cor[]){
 
     fscanf(arqConsul, "%s", sufixo);
     fscanf(arqConsul, "%s", cor);
+}
+
+void lerDQ(FILE *arqConsul, char L[], char id[], double *r){
+
+    fscanf(arqConsul, "%s", L);
+    fscanf(arqConsul, "%s", id);
+    fscanf(arqConsul, "%lf", r);
 }
