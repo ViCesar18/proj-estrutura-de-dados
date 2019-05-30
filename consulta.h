@@ -15,6 +15,7 @@ e os calculos matematicos*/
 /*Calcula a distancia euclidiana entre dois pontos*/
 double distEuclid(double x1, double y1, double x2, double y2);
 
+/*Calcula a distancia de Manhattan entre dois pontos*/
 double ManhattanDist(double x1, double y1, double x2, double y2);
 
 /*Determina a coordenada(x ou y), pertencente a um certo intervalo, mais proxima de uma coordenada(x ou y)*/
@@ -23,6 +24,7 @@ double clamp(double xC, double min, double max);
 /*Verifica se uma figura (c ou r) esta colidindo com outra (c ou r)*/
 void verificarO(FILE *txt, FILE *svg2, Form figura1, Form figura2, char type1[], char type2[]);
 
+/*Verifica se um ponto esta dentro de um circulo, retangulo ou quadra*/
 bool pontoInsideFigura(double x, double y, Elemento elemento, char type[], char met[]);
 
 /*Verifica se um ponto (x,y) esta dentro ou fora de uma figura (c ou r)*/
@@ -43,8 +45,10 @@ void retanguloEnvolveRetangulo(FILE *svg2, Form figura1, Form figura2, bool coli
 /*Desenha um retangulo que envolve um circulo e um retangulo(continuo em caso de colisao, tracejado caso contrario)*/
 void retanguloEnvolveCR(FILE *svg2, Form figura1, Form figura2, bool colisao);
 
+/*Retorna true se a quadra esta inteiramente dentro do circulo dependendo da metrica (L1 ou L2), false caso contrario*/
 bool quadInsideCirc(Block block, Form circulo, char met[]);
 
+/*Retorna true se uma quadra esta inteiramente dentro de um retangulo, false caso contrario*/
 bool quadInsideRect(Block block, Form retangulo);
 
 #endif

@@ -116,7 +116,7 @@ bool pontoInsideFigura(double x, double y, Elemento elemento, char type[], char 
         else
             return false;
     }
-    else if(!strcmp(type, "b")){
+    else if(!strcmp(type, "q")){
         if(x >= getBlockX(elemento) && y >= getBlockY(elemento) && x <= getBlockX(elemento) + getBlockW(elemento) && y <= getBlockY(elemento) + getBlockH(elemento))
             return true;
         else

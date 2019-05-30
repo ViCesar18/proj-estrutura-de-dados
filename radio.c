@@ -65,3 +65,9 @@ void setRadioY(Radio r, double y){
 
     radio->y = y;
 }
+
+void freeRadio(Radio r){
+    RadioImp radio = (RadioImp) r;
+
+    free(radio);
+}

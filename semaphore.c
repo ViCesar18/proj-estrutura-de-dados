@@ -65,3 +65,9 @@ void setSemaphoreY(Semaphore s, double y){
 
     semaphore->y = y;
 }
+
+void freeSemaphore(Semaphore s){
+    SemaphoreImp semaphore = (SemaphoreImp) s;
+
+    free(semaphore);
+}

@@ -96,3 +96,9 @@ char *getFormSw(Form f){
 
     return form->sw;
 }
+
+void freeForm(Form f){
+    FormImp form = (FormImp) f;
+
+    free(form);
+}

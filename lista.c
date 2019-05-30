@@ -208,3 +208,27 @@ void imprimirBB(Lista listaAux, FILE *arq, char cor[]){
         }
     }
 }
+
+void desalocarLista (Lista listaAux, void (*freeElemento)(Elemento elemento)){
+    ListaImp lista = (ListaImp) listaAux;
+
+    if (lista->inicio == NULO){
+        free (lista->node);
+        free (lista);
+        return;
+    }
+
+    int i = lista->inicio;
+    while (1){
+        if (lista->node[i].prox == NULO){
+            freeElemento (lista->node[i].elemento);
+            free (lista->node);
+            free (lista);
+            break;
+        }
+        else {
+            i = lista->node[i].prox;
+            freeElemento (lista->node[lista->node[i].ant].elemento);
+        }
+    }
+}

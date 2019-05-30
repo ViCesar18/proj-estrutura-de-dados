@@ -333,7 +333,12 @@ int main(int argc, char *argv[]){
     free(pathOut);
     free(nameOut);
     free(arqSVG);
-    free(figuras);
+
+    desalocarLista(figuras, freeForm);
+    desalocarLista(blocks, freeBlock);
+    desalocarLista(hydrants, freeHydrant);
+    desalocarLista(semaphores, freeSemaphore);
+    desalocarLista(radios, freeRadio);
 
     return 0;
 }

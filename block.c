@@ -85,3 +85,9 @@ void setBlockStrokeCollor(Block b, char strokeCollor[]){
 
     strcpy(block->strokeCollor, strokeCollor);
 }
+
+void freeBlock(Block b){
+    BlockImp block = (BlockImp) b;
+
+    free(block);   
+}
