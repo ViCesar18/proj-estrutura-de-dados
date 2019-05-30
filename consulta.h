@@ -45,4 +45,6 @@ void retanguloEnvolveCR(FILE *svg2, Form figura1, Form figura2, bool colisao);
 
 bool quadInsideCirc(Block block, Form circulo, char met[]);
 
+bool quadInsideRect(Block block, Form retangulo);
+
 #endif

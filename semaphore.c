@@ -53,3 +53,15 @@ char *getSemaphoreSw(Semaphore s){
 
     return semaphore->sw;
 }
+
+void setSemaphoreX(Semaphore s, double x){
+    SemaphoreImp semaphore = (SemaphoreImp) s;
+
+    semaphore->x = x;
+}
+
+void setSemaphoreY(Semaphore s, double y){
+    SemaphoreImp semaphore = (SemaphoreImp) s;
+
+    semaphore->y = y;
+}

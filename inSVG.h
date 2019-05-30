@@ -67,4 +67,6 @@ void lerDQ(FILE *arqConsul, char L[], char id[], double *r);
 
 Elemento lerCBQ(FILE *arqConsul, char cstrk[]);
 
+Elemento lerTRNS(FILE *arqConsul, double *dx, double *dy);
+
 #endif

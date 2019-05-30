@@ -14,4 +14,6 @@ void verificarDQ(FILE *txt, FILE *svg2, Lista blocks, char metrica[], Form circu
 
 void verificarCBQ(FILE *txt, Lista blocks, Form circulo, char cstrk[]);
 
+void verificarTRNS(FILE *txt, Lista blocks, Lista hydrants, Lista semaphores, Lista radios, Form retangulo, double dx, double dy, FILE *svg2);
+
 #endif

@@ -53,3 +53,15 @@ char *getHydrantSw(Hydrant h){
 
     return hydrant->sw;
 }
+
+void setHydrantX(Hydrant h, double x){
+    HydrantImp hydrant = (HydrantImp) h;
+
+    hydrant->x = x;
+}
+
+void setHydrantY(Hydrant h, double y){
+    HydrantImp hydrant = (HydrantImp) h;
+
+    hydrant->y = y;
+}

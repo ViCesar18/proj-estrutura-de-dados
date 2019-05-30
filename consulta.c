@@ -400,3 +400,16 @@ bool quadInsideCirc(Block block, Form circulo, char met[]){
     else
         return false;
 }
+
+bool quadInsideRect(Block block, Form retangulo){
+    double x = getBlockX(block);
+    double y = getBlockY(block);
+    double w = getBlockW(block);
+    double h = getBlockH(block);
+
+    if(pontoInsideFigura(x, y, retangulo, "r", "L2") && pontoInsideFigura(x + w, y, retangulo, "r", "L2") && 
+    pontoInsideFigura(x, y + h, retangulo, "r", "L2") && pontoInsideFigura(x + w, y + h, retangulo, "r", "L2"))
+        return true;
+    else
+        return false;
+}

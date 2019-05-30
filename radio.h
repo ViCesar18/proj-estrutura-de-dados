@@ -21,4 +21,8 @@ char *getRadioFillCollor(Radio r);
 
 char *getRadioSw(Radio r);
 
+void setRadioX(Radio r, double x);
+
+void setRadioY(Radio r, double y);
+
 #endif

@@ -293,6 +293,11 @@ int main(int argc, char *argv[]){
                 }
                 fprintf(arqTexto, "\n");
             }
+            else if(!strcmp(command, "trns")){
+                Form retangulo = lerTRNS(arqConsul, &x, &y);
+
+                verificarTRNS(arqTexto, blocks, hydrants, semaphores, radios, retangulo, x, y, arqOut2);
+            }
         }
     }
     if(arqOut2 != NULL){

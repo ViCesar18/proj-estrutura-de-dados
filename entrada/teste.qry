@@ -1,13 +1,2 @@
-crd? b02.368
-crd? b02.3
-crd? hnb04.4
-crd? rbb05.1
-crd? sfb04.3
-del b02.3
-del hnb04.4
-del rbb05.1
-del sfb04.3
-crd? b02.3
-crd? hnb04.4
-crd? rbb05.1
-crd? sfb04.3
+cbq 400.781250 237.500000 126.562500 lavenderblush
+trns 210.937500 0.000000 379.687500 475.000000 168.750000 59.375000

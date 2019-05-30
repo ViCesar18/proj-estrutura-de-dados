@@ -21,4 +21,8 @@ char *getSemaphoreFillCollor(Semaphore s);
 
 char *getSemaphoreSw(Semaphore s);
 
+void setSemaphoreX(Semaphore s, double x);
+
+void setSemaphoreY(Semaphore s, double y);
+
 #endif

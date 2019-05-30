@@ -21,4 +21,8 @@ char *getHydrantFillCollor(Hydrant h);
 
 char *getHydrantSw(Hydrant h);
 
+void setHydrantX(Hydrant h, double x);
+
+void setHydrantY(Hydrant h, double y);
+
 #endif

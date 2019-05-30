@@ -25,6 +25,10 @@ char *getBlockFillCollor(Block b);
 
 char *getBlockSw(Block b);
 
+void setBlockX(Block b, double x);
+
+void setBlockY(Block b, double y);
+
 void setBlockStrokeCollor(Block b, char strokeCollor[]);
 
 #endif

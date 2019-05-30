@@ -68,6 +68,18 @@ char *getBlockSw(Block b){
     return block->sw;
 }
 
+void setBlockX(Block b, double x){
+    BlockImp block = (BlockImp) b;
+
+    block->x = x;
+}
+
+void setBlockY(Block b, double y){
+    BlockImp block = (BlockImp) b;
+
+    block->y = y;
+}
+
 void setBlockStrokeCollor(Block b, char strokeCollor[]){
     BlockImp block = (BlockImp) b;
 

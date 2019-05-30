@@ -53,3 +53,15 @@ char *getRadioSw(Radio r){
 
     return radio->sw;
 }
+
+void setRadioX(Radio r, double x){
+    RadioImp radio = (RadioImp) r;
+
+    radio->x = x;
+}
+
+void setRadioY(Radio r, double y){
+    RadioImp radio = (RadioImp) r;
+
+    radio->y = y;
+}

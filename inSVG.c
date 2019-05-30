@@ -253,3 +253,18 @@ Elemento lerCBQ(FILE *arqConsul, char cstrk[]){
 
     return circulo;
 }
+
+Elemento lerTRNS(FILE *arqConsul, double *dx, double *dy){
+    double x, y, w, h;
+
+    fscanf(arqConsul, "%lf", &x);
+    fscanf(arqConsul, "%lf", &y);
+    fscanf(arqConsul, "%lf", &w);
+    fscanf(arqConsul, "%lf", &h);
+    fscanf(arqConsul, "%lf", dx);
+    fscanf(arqConsul, "%lf", dy);
+
+    Form retangulo = criarRect("0", x, y, w, h, "black", "none", "0", "1");
+
+    return retangulo;
+}
