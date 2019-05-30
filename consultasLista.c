@@ -7,9 +7,12 @@ void verificarDQ(FILE *txt, FILE *svg2, Lista blocks, char metrica[], Form circu
     Form anel2 = criarCirculo("0", getFormX(circulo), getFormY(circulo), 13, "lightgreen", "none", "5");
 
     fprintf(txt, "dq %s %lf\n", metrica, getFormR(circulo));
-    fprintf(txt, "\tEquipamento Urbado: %s (%lf %lf)\n", getFormId(circulo), getFormX(circulo), getFormY(circulo));
+    fprintf(txt, "\tEquipamento Urbano: %s (%lf %lf)\n", getFormId(circulo), getFormX(circulo), getFormY(circulo));
     printarCirculo(svg2, anel1);
     printarCirculo(svg2, anel2);
+
+    free(anel1);
+    free(anel2);
 
     if(!strcmp(metrica, "L1")){
         for(int i = 0; i < tam; i++){
@@ -81,6 +84,4 @@ void verificarTRNS(FILE *txt, Lista blocks, Lista hydrants, Lista semaphores, Li
             setHydrantY(radio, getRadioY(radio) + dy);
         }
     }
-
-    printarRetangulo(svg2, retangulo);
 }

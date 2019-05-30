@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "outSVG.h"
-#include "forms.h"
+#include "./Objetos/forms.h"
 #include "lista.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas ao arquivo de consulta(.qry), aqui são feitas as verificacoes

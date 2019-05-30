@@ -38,6 +38,9 @@ Lista criarLista(int capacidade){
 int getFirst(Lista listaAux){
     ListaImp lista = (ListaImp) listaAux;
 
+    if(!lista->tam)
+        return NULO;
+
     return lista->inicio;
 }
 
@@ -50,6 +53,12 @@ int getProx(Lista listaAux, int i){
     ListaImp lista = (ListaImp) listaAux;
 
     return lista->node[i].prox;
+}
+
+int getPrevious(Lista listaAux, int i){
+    ListaImp lista = (ListaImp) listaAux;
+
+    return lista->node[i].ant;
 }
 
 int getLivre(Lista listaAux){
@@ -69,10 +78,19 @@ int getTam(Lista listaAux){
     return lista->tam;
 }
 
+int getLast(Lista listaAux){
+    ListaImp lista = (ListaImp) listaAux;
+
+    if(!lista->tam)
+        return NULO;
+
+    return lista->fim;
+}
+
 void inserirElemento(Lista listaAux, Elemento elemento, char type[]){
     ListaImp lista = (ListaImp) listaAux;
     int iLivre = getLivre(listaAux);
-    if(lista->tam <= lista->tamMax){
+    if(lista->tam + 1 <= lista->tamMax){
         if(lista->inicio == NULO){
             lista->node[iLivre].elemento = elemento;
             lista->node[iLivre].prox = NULO;
@@ -89,6 +107,48 @@ void inserirElemento(Lista listaAux, Elemento elemento, char type[]){
             lista->node[lista->fim].prox = iLivre;
             lista->fim = iLivre;
         }
+        lista->tam++;
+    }
+}
+
+void insertBefore(Lista listaAux, Elemento elemento, int index){
+    ListaImp lista = (ListaImp) listaAux;
+    int livre = getLivre(lista);
+
+    if(livre == NULO){
+        return;
+    }
+
+    if(lista->tam + 1 <= lista->tamMax){
+        if(lista->node[index].ant == NULO){
+            lista->inicio = livre;
+        }
+        lista->node[livre].prox = index;
+        lista->node[livre].ant = lista->node[index].ant;
+        lista->node[livre].elemento = elemento;
+        lista->node[index].ant = livre;
+        lista->node[lista->node[index].ant].prox = livre;
+        lista->tam++;
+    }
+}
+
+void insertAfter(Lista listaAux, Elemento elemento, int index){
+    ListaImp lista = (ListaImp) listaAux;
+    int livre = getLivre(lista);
+
+    if(livre == NULO){
+        return;
+    }
+
+    if(lista->tam + 1 <= lista->tamMax){
+        if(lista->node[index].prox == NULO){
+            lista->fim = livre;
+        }
+        lista->node[livre].prox = lista->node[index].prox;
+        lista->node[livre].ant = index;
+        lista->node[livre].elemento = elemento;
+        lista->node[index].prox = livre;
+        lista->node[lista->node[index].prox].ant = livre;
         lista->tam++;
     }
 }
@@ -197,6 +257,7 @@ void imprimirBB(Lista listaAux, FILE *arq, char cor[]){
             strcpy(fillCollorR, "none");
             Form retangulo = criarRect("0", x, y, w, h, strokeCollorR, fillCollorR, 0, "1");
             printarRetangulo(arq, retangulo);
+            free(retangulo);
         }
         else if(!strcmp(lista->node[i].type, "r")){
             printarRetangulo(arq, lista->node[i].elemento);

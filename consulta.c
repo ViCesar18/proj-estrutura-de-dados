@@ -151,6 +151,7 @@ void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y, char typ
         Form ponto = criarCirculo("0", xP, yP, rP, strokeCollorP, fillCollorP, "1");
         printarCirculo(svg2, ponto);
         printarLinha(svg2, xF, yF, xP, yP, "black");
+        free(ponto);
     }
     else{
         if(pontoInsideFigura(x, y, figura, "r", "L2")){
@@ -167,6 +168,7 @@ void verificarI(FILE *txt, FILE *svg2, Form figura, double x, double y, char typ
         Form ponto = criarCirculo("0", xP, yP, rP, strokeCollorP, fillCollorP, "1");
         printarCirculo(svg2, ponto);
         printarLinha(svg2, xF + wF / 2, yF + hF / 2, xP, yP, "black");
+        free(ponto);
     }
 }
 
@@ -279,6 +281,7 @@ void retanguloEnvolveCirculo(FILE *svg2, Form figura1, Form figura2, bool colisa
     Form retangulo = criarRect("0", xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
 
     printarRetangulo(svg2, retangulo);
+    free(retangulo);
 }
 
 void retanguloEnvolveRetangulo(FILE *svg2, Form figura1, Form figura2, bool colisao){
@@ -336,6 +339,7 @@ void retanguloEnvolveRetangulo(FILE *svg2, Form figura1, Form figura2, bool coli
     Form retangulo = criarRect("0", xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
 
     printarRetangulo(svg2, retangulo);
+    free(retangulo);
 }
 
 void retanguloEnvolveCR(FILE *svg2, Form figura1, Form figura2, bool colisao){
@@ -386,6 +390,7 @@ void retanguloEnvolveCR(FILE *svg2, Form figura1, Form figura2, bool colisao){
     Form retangulo = criarRect("0", xR, yR, wR, hR, strokeCollorR, fillCollorR, strokeR, "1");
 
     printarRetangulo(svg2, retangulo);
+    free(retangulo);
 }
 
 bool quadInsideCirc(Block block, Form circulo, char met[]){

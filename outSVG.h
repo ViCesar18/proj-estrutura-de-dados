@@ -4,11 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "forms.h"
-#include "block.h"
-#include "hydrant.h"
-#include "semaphore.h"
-#include "radio.h"
+#include "./Objetos/forms.h"
+#include "./Objetos/block.h"
+#include "./Objetos/hydrant.h"
+#include "./Objetos/semaphore.h"
+#include "./Objetos/radio.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a saida de dados*/
 

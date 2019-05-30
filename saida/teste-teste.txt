@@ -1,3 +1,0 @@
-cbq 400.781250 237.500000 126.562500 lavenderblush
-	Cor da borda da quadra alterada: b03.3
-

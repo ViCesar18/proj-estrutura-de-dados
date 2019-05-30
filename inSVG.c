@@ -264,7 +264,7 @@ Elemento lerTRNS(FILE *arqConsul, double *dx, double *dy){
     fscanf(arqConsul, "%lf", dx);
     fscanf(arqConsul, "%lf", dy);
 
-    Form retangulo = criarRect("0", x, y, w, h, "black", "none", "0", "1");
+    Form retangulo = criarRect("0", x, y, w, h, "black", "none", 0, "1");
 
     return retangulo;
 }

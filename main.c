@@ -5,7 +5,7 @@
 #include "outSVG.h"
 #include "consulta.h"
 #include "lista.h"
-#include "forms.h"
+#include "Objetos/forms.h"
 #include "consultasLista.h"
 
 int main(int argc, char *argv[]){
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]){
     double r;
 
     char cfillQ[24], cstrkQ[24], cfillH[24], cstrkH[24], cfillS[24], cstrkS[24], cfillR[24], cstrkR[24];
-    char swQ[12], swH[12], swS[12], swR[12];
+    char swQ[12] = {"1"}, swH[12] = {"1"}, swS[12] = {"1"}, swR[12] = {"1"};
     char cw[12] = {"1"}, rw[12] = {"1"};
 
     strcpy(cfillQ, "orange");
@@ -234,6 +234,7 @@ int main(int argc, char *argv[]){
                 Form circulo = criarCirculo(id, x, y, r, "black", "none", "1");
                 verificarDQ(arqTexto, arqOut2, blocks, metrica, circulo);
                 fprintf(arqTexto, "\n");
+                free(circulo);
             }
             else if(!strcmp(command, "del")){
                 fscanf(arqConsul, "%s", id);
@@ -267,6 +268,8 @@ int main(int argc, char *argv[]){
 
                 verificarCBQ(arqTexto, blocks, figura1, cstrkQ);
                 fprintf(arqTexto, "\n");
+
+                free(figura1);
             }
             else if(!strcmp(command, "crd?")){
                 fscanf(arqConsul, "%s", id);
@@ -297,6 +300,7 @@ int main(int argc, char *argv[]){
                 Form retangulo = lerTRNS(arqConsul, &x, &y);
 
                 verificarTRNS(arqTexto, blocks, hydrants, semaphores, radios, retangulo, x, y, arqOut2);
+                free(retangulo);
             }
         }
     }
@@ -325,7 +329,7 @@ int main(int argc, char *argv[]){
     }
     fclose(arqOut);
     fclose(arqIn);
- 
+    
     free(pathIn);
     free(nameIn);
     free(nameInT);
@@ -334,6 +338,7 @@ int main(int argc, char *argv[]){
     free(nameOut);
     free(arqSVG);
 
+    /*Liberação da memória das listas*/
     desalocarLista(figuras, freeForm);
     desalocarLista(blocks, freeBlock);
     desalocarLista(hydrants, freeHydrant);

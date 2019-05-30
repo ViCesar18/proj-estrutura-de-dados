@@ -8,7 +8,7 @@ typedef void *Lista;
 #include <stdlib.h>
 #include <stdbool.h>
 #include "outSVG.h"
-#include "forms.h"
+#include "./Objetos/forms.h"
 
 /*Cria e aloca memoria para uma lista duplamente encadeada estatica*/
 Lista criarLista(int capacidade);
@@ -19,8 +19,11 @@ int getFirst(Lista listaAux);
 /*Retorna a constante NULO que contem o int definido para ser o NULL da lista*/
 int getNulo();
 
-/*Retorna o elemento seguinte do index i*/
+/*Retorna o elemento seguinte ao index i*/
 int getProx(Lista listaAux, int i);
+
+/*Retorna o elemento anterior ao index i*/
+int getPrevious(Lista listaAux, int i);
 
 /*Retorna a proxima posicao livre*/
 int getLivre(Lista listaAux);
@@ -28,8 +31,17 @@ int getLivre(Lista listaAux);
 /*Retorna o tamanho atual da lista*/
 int getTam(Lista listaAux);
 
+/*Retorna o fim da lista*/
+int getLast(Lista listaAux);
+
 /*Insere um elemento na lista*/
 void inserirElemento(Lista listaAux, Elemento elemento, char type[]);
+
+/*Insere um elemento antes do elemento na posicao "index"*/
+void insertBefore(Lista listaAux, Elemento elemento, int index);
+
+/*Insere um elemento depois do elemento na posicao "index"*/
+void insertAfter(Lista listaAux, Elemento elemento, int index);
 
 /*Deleta um elemento da lista filtrando pelo id*/
 void deletarElemento(Lista listaAux, char id[]);
