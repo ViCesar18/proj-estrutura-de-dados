@@ -1,0 +1,11 @@
+# Ignora a pasta "entrada"
+entrada/
+
+# Ignora a pasta "saida"
+saida/
+
+#Ignora o arquivo compilado
+siguel
+
+#Ignora os arquivos do vscode
+.vscode/
