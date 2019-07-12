@@ -1,11 +1,11 @@
 #include "block.h"
 
 typedef struct stBlock{
-    char cep[32], strokeCollor[24], fillCollor[24], sw[12];
+    char cep[32], strokeColor[24], fillColor[24], sw[12];
     double x, y, w, h;
 }*BlockImp;
 
-Block criarBlock(char cep[], double x, double y, double w, double h, char strokeCollor[], char fillCollor[], char sw[]){
+Block createBlock(char cep[], double x, double y, double w, double h, char strokeColor[], char fillColor[], char sw[]){
     BlockImp block = (BlockImp)malloc(sizeof(struct stBlock));
 
     strcpy(block->cep, cep);
@@ -13,8 +13,8 @@ Block criarBlock(char cep[], double x, double y, double w, double h, char stroke
     block->y = y;
     block->w = w;
     block->h = h;
-    strcpy(block->strokeCollor, strokeCollor);
-    strcpy(block->fillCollor, fillCollor);
+    strcpy(block->strokeColor, strokeColor);
+    strcpy(block->fillColor, fillColor);
     strcpy(block->sw, sw);
 
     return block;
@@ -50,16 +50,16 @@ double getBlockH(Block b){
     return block->h;
 }
 
-char *getBlockStrokeCollor(Block b){
+char *getBlockStrokeColor(Block b){
     BlockImp block = (BlockImp) b;
 
-    return block->strokeCollor;
+    return block->strokeColor;
 }
 
-char *getBlockFillCollor(Block b){
+char *getBlockFillColor(Block b){
     BlockImp block = (BlockImp) b;
 
-    return block->fillCollor;
+    return block->fillColor;
 }
 
 char *getBlockSw(Block b){
@@ -80,10 +80,10 @@ void setBlockY(Block b, double y){
     block->y = y;
 }
 
-void setBlockStrokeCollor(Block b, char strokeCollor[]){
+void setBlockStrokeColor(Block b, char strokeColor[]){
     BlockImp block = (BlockImp) b;
 
-    strcpy(block->strokeCollor, strokeCollor);
+    strcpy(block->strokeColor, strokeColor);
 }
 
 void freeBlock(Block b){

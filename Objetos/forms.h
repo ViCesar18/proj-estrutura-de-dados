@@ -8,10 +8,10 @@
 typedef void *Form;
 
 /*Coloca os dados de circulo em uma estrutura e retorna a estrutura*/
-Form criarCirculo(char id[], double x, double y, double r, char strokeCollor[], char fillCollor[], char sw[]);
+Form createCircle(char id[], double x, double y, double r, char strokeColor[], char fillColor[], char sw[]);
 
 /*Coloca os dados de retangulo em uma estrutura e retorna a estrutura*/
-Form criarRect(char id[], double x, double y, double w, double h, char strokeCollor[], char fillCollor[], int stroke, char sw[]);
+Form createRect(char id[], double x, double y, double w, double h, char strokeColor[], char fillColor[], int stroke, char sw[]);
 
 /*Getters e setters para a forma*/
 char *getFormId(Form f);
@@ -28,9 +28,9 @@ double getFormW(Form f);
 
 double getFormH(Form f);
 
-char *getFormStrokeCollor(Form f);
+char *getFormStrokeColor(Form f);
 
-char *getFormFillCollor(Form f);
+char *getFormFillColor(Form f);
 
 char *getFormSw(Form f);
 /*Fim getters e setters*/

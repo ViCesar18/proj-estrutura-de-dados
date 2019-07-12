@@ -8,7 +8,7 @@
 typedef void *Hydrant;
 
 /*Coloca os dados de hidrante em uma estrutura e retorna a estrutura*/
-Hydrant criarHydrant(char id[], double x, double y, char strokeCollor[], char fillCollor[], char sw[]);
+Hydrant createHydrant(char id[], double x, double y, char strokeColor[], char fillColor[], char sw[]);
 
 /*Getters e setters para o hidrante*/
 char *getHydrantId(Hydrant h);
@@ -17,9 +17,9 @@ double getHydrantX(Hydrant h);
 
 double getHydrantY(Hydrant h);
 
-char *getHydrantStrokeCollor(Hydrant h);
+char *getHydrantStrokeColor(Hydrant h);
 
-char *getHydrantFillCollor(Hydrant h);
+char *getHydrantFillColor(Hydrant h);
 
 char *getHydrantSw(Hydrant h);
 

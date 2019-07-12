@@ -4,32 +4,31 @@
 #include "inSVG.h"
 #include "outSVG.h"
 #include "consulta.h"
-#include "lista.h"
+#include "list.h"
 #include "Objetos/forms.h"
 #include "consultasLista.h"
 
 int main(int argc, char *argv[]){
-    int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000;
-    char *pathIn = NULL, *nameIn = NULL, *nameInT = NULL, *arqGeo = NULL;
-    char *nameConsulta = NULL, *nameConsultaT = NULL, *arqQry = NULL;
-    char *pathOut = NULL, *nameOut = NULL, *arqSVG = NULL;
-    char *nameTXT = NULL, *arqTXT = NULL;
-    char *nameOut2 = NULL, *arqSVG2 = NULL;
-    char *nameOut3 = NULL, *arqSVG3 = NULL;
-    char command[12];
-    FILE *arqIn = NULL, *arqOut = NULL, *arqConsul = NULL, *arqTexto = NULL, *arqOut2 = NULL, *arqOut3 = NULL;
+    int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000;  //Número máximo padrão das formas
+    char *pathIn = NULL;    //Diretório de entrada
+    char *nameIn = NULL, *nameInT = NULL, *arqIn = NULL;   //Dados para o arquivo de entrada (.geo)
+    char *nameQuery = NULL, *nameQueryT = NULL, *arqQry = NULL; //Dados para o arquivo de entrada (.qry)
+    char *pathOut = NULL;   //Diretório de saída
+    char *nameOut = NULL, *arqOut = NULL;   //Dados para o arquivo de saída (.svg)
+    char *nameOutQ = NULL, *arqOutQ = NULL; //Dados para o segundo arquivo de saida (.svg com .qry aplicado)
+    char *nameTxt = NULL, *arqTxt = NULL;   //Dados para o arquivo de saída (.txt)
+    char *nameOutBB = NULL, *arqOutBB = NULL; //Dados para o terceiro arquivo de saida (.svg com o bb aplicado)
+    FILE *arqGeo = NULL, *arqQuery = NULL, *arqSvg = NULL, *arqSvgQ = NULL, *arqText = NULL, *arqSvgBB = NULL; //Arquivos
 
-    char j[32], k[32];
-    double x, y;
-    char sufixo[32], cor[24];
+    char command[8];   //Armazena o comando lido do arquivo .qry
+    char sufixo[32], cor[32], id1[32], id2[32], metric[4];  //Armazena os parâmetros do arquivo .qry (string)
+    double x, y, r;        //Armazena os parâmetros do arquivo .qry (coordenadas)
 
-    char metrica[4], id[32];
-    double r;
+    char cfillQ[24], cstrkQ[24], cfillH[24], cstrkH[24], cfillS[24], cstrkS[24], cfillR[24], cstrkR[24];    //Cores para quadras, hidrântes, semáforos e torres de rádio
+    char swQ[12] = {"1"}, swH[12] = {"1"}, swS[12] = {"1"}, swR[12] = {"1"};    //Espessura de borda de quadras, hidrântes, semáforos e torres de rádio
+    char cw[12] = {"1"}, rw[12] = {"1"};    //Espessura de borda de círculos e retângulos
 
-    char cfillQ[24], cstrkQ[24], cfillH[24], cstrkH[24], cfillS[24], cstrkS[24], cfillR[24], cstrkR[24];
-    char swQ[12] = {"1"}, swH[12] = {"1"}, swS[12] = {"1"}, swR[12] = {"1"};
-    char cw[12] = {"1"}, rw[12] = {"1"};
-
+    //Seta cores padrões para os objetos urbanos
     strcpy(cfillQ, "orange");
     strcpy(cstrkQ, "black");
     strcpy(cfillH, "red");
@@ -39,311 +38,327 @@ int main(int argc, char *argv[]){
     strcpy(cfillR, "gray");
     strcpy(cstrkR, "black");
 
-    Lista figuras, blocks, hydrants, semaphores, radios;
-    Form figura1, figura2;
-    char type1[4], type2[4];
+    List figures, blocks, hydrants, tLights, rTowers;    //Listas de cada objeto urbano
+    Form figure1, figure2;  //Armazena uma forma
+    char type1[4], type2[4];    //Armazena o tipo do objeto urbano em questão
 
     /*Recebe os parametros da main (argv)*/
-    receberParametros(argc, argv, &pathIn, &nameIn, &nameConsulta, &pathOut);
+    receiveParameters(argc, argv, &pathIn, &nameIn, &nameQuery, &pathOut);
 
     /*Trata o nome do arquivo de entrada se ele for um diretorio relativo*/
-    tratarNome(nameIn, &nameInT);
+    treatFileName(nameIn, &nameInT);
     
     /*Prepara o diretorio para abrir os arquivos de entrada*/
     //.geo
     if(pathIn != NULL){
-        alocarMemoria(nameIn, pathIn, &arqGeo);
-        arqIn = fopen(arqGeo, "r");
-        verificarArquivo(arqIn, arqGeo);
+        allocateFileMamory(nameIn, pathIn, &arqIn);
+        arqGeo = fopen(arqIn, "r");
+        checkFile(arqGeo, arqIn);
     }
     else{
-        arqIn = fopen(nameIn, "r");
-        verificarArquivo(arqIn, nameIn);
+        arqGeo = fopen(nameIn, "r");
+        checkFile(arqGeo, nameIn);
     }
     
     //.qry, .txt e .svg(2)(se existir)
-    if(nameConsulta != NULL){
-        tratarNome(nameConsulta, &nameConsultaT);
+    if(nameQuery != NULL){
+        treatFileName(nameQuery, &nameQueryT);
 
         if(pathIn != NULL){
-            alocarMemoria(nameConsulta, pathIn, &arqQry);
-            arqConsul = fopen(arqQry, "r");
-            verificarArquivo(arqConsul, arqQry);
+            allocateFileMamory(nameQuery, pathIn, &arqQry);
+            arqQuery = fopen(arqQry, "r");
+            checkFile(arqQuery, arqQry);
         }
         else{
-            arqConsul = fopen(nameConsulta, "r");
-            verificarArquivo(arqConsul, nameConsulta);
+            arqQuery = fopen(nameQuery, "r");
+            checkFile(arqQuery, nameQuery);
         }
-
-        criarArqSaida2(&nameTXT, nameInT, nameConsultaT);
-        strcat(nameTXT, ".txt");
-        alocarMemoria(nameTXT, pathOut, &arqTXT);
-        arqTexto = fopen(arqTXT, "w");
-        verificarArquivo(arqTexto, arqTXT);
-
-        criarArqSaida2(&nameOut2, nameInT, nameConsultaT);
-        strcat(nameOut2, ".svg");
-        alocarMemoria(nameOut2, pathOut, &arqSVG2);
-        arqOut2 = fopen(arqSVG2, "w");
-        verificarArquivo(arqOut2, arqSVG2);
-
-        fputs("<svg>\n", arqOut2);
     }
     
     /*Prepara o diretorio para criar o arquivo de saida*/
     //.svg(1)
-    criarArqSaida(&nameOut, nameInT);
+    createOutputFileName(&nameOut, nameInT);
     strcat(nameOut, ".svg");
-    alocarMemoria(nameOut, pathOut, &arqSVG);
-    arqOut = fopen(arqSVG, "w");
-    verificarArquivo(arqOut, arqSVG);
+    allocateFileMamory(nameOut, pathOut, &arqOut);
+    arqSvg = fopen(arqOut, "w");
+    checkFile(arqSvg, arqOut);
 
-    fputs("<svg>\n", arqOut);
+    fputs("<svg>\n", arqSvg);
+
+    //.txt e .svg(2)
+    if(nameQuery != NULL){
+        createOutputQryFileName(&nameTxt, nameInT, nameQueryT);
+        strcat(nameTxt, ".txt");
+        allocateFileMamory(nameTxt, pathOut, &arqTxt);
+        arqText = fopen(arqTxt, "w");
+        checkFile(arqText, arqTxt);
+
+        createOutputQryFileName(&nameOutQ, nameInT, nameQueryT);
+        strcat(nameOutQ, ".svg");
+        allocateFileMamory(nameOutQ, pathOut, &arqOutQ);
+        arqSvgQ = fopen(arqOutQ, "w");
+        checkFile(arqSvgQ, arqOutQ);
+
+        fputs("<svg>\n", arqSvgQ);
+    }
 
     /*Procura o NX*/
     while(1){
-        if(feof(arqIn))
+        if(feof(arqGeo))
             break;
 
-        fscanf(arqIn, "%s", command);
+        fscanf(arqGeo, "%s", command);
         
         if(!strcmp(command, "nx")){
-            lerNX(arqIn, &nx, &nq, &nh, &ns, &nr);
+            scanNX(arqGeo, &nx, &nq, &nh, &ns, &nr);
             break;
         }
     }
 
-    rewind(arqIn);
+    /*Retorna ao início do arquivo .geo*/
+    rewind(arqGeo);
 
     /*Cria as listas*/
-    figuras = criarLista(nx);
-    blocks = criarLista(nq);
-    hydrants = criarLista(nh);
-    semaphores = criarLista(ns);
-    radios = criarLista(nr);
+    figures = createList(nx);
+    blocks = createList(nq);
+    hydrants = createList(nh);
+    tLights = createList(ns);
+    rTowers = createList(nr);
     
-    /*Le os dados das formas geometricas do arquivo de entrada*/
+    /*Le os dados das formas do arquivo de entrada*/
     while(1){
-        if(feof(arqIn))
+        if(feof(arqGeo))
             break;
 
-        fscanf(arqIn, "%s", command);
+        fscanf(arqGeo, "%s", command);
 
         if(!strcmp(command, "c")){
-            lerCirculo(arqIn, figuras, cw);
+            scanCircle(arqGeo, figures, cw);
         }
         else if(!strcmp(command, "r")){
-            lerRetangulo(arqIn, figuras, rw);
+            scanRect(arqGeo, figures, rw);
         }
         else if(!strcmp(command, "t")){
-            lerTexto(arqIn, arqOut, arqOut2);
+            scanText(arqGeo, arqSvg, arqSvgQ);
         }
         else if(!strcmp(command, "q")){
-            lerQuadra(arqIn, blocks, cfillQ, cstrkQ, swQ);
+            scanBlock(arqGeo, blocks, cfillQ, cstrkQ, swQ);
         }
         else if(!strcmp(command, "h")){
-            lerHidrante(arqIn, hydrants, cfillH, cstrkH, swH);
+            scanHydrant(arqGeo, hydrants, cfillH, cstrkH, swH);
         }
         else if(!strcmp(command, "s")){
-            lerSemaforo(arqIn, semaphores, cfillS, cstrkS, swS);
+            scanTrafficLight(arqGeo, tLights, cfillS, cstrkS, swS);
         }
         else if(!strcmp(command, "rb")){
-            lerRadio(arqIn, radios, cfillR, cstrkR, swR);
+            scanRadioTower(arqGeo, rTowers, cfillR, cstrkR, swR);
         }
         else if(!strcmp(command, "cq")){
-            alterarCor(arqIn, cfillQ, cstrkQ, swQ);
+            changeColor(arqGeo, cfillQ, cstrkQ, swQ);
         }
         else if(!strcmp(command, "ch")){
-            alterarCor(arqIn, cfillH, cstrkH, swH);
+            changeColor(arqGeo, cfillH, cstrkH, swH);
         }
         else if(!strcmp(command, "cr")){
-            alterarCor(arqIn, cfillR, cstrkR, swR);
+            changeColor(arqGeo, cfillR, cstrkR, swR);
         }
         else if(!strcmp(command, "cs")){
-            alterarCor(arqIn, cfillS, cstrkS, swS);
+            changeColor(arqGeo, cfillS, cstrkS, swS);
         }
         else if(!strcmp(command, "sw")){
-            alterarEspessura(arqIn, cw, rw);
+            changeThickness(arqGeo, cw, rw);
         }
     }
     
-    imprimirLista(figuras, arqOut);
-    imprimirLista(blocks, arqOut);
-    imprimirLista(hydrants, arqOut);
-    imprimirLista(semaphores, arqOut);
-    imprimirLista(radios, arqOut);
+    /*Imprime todo o conteudo das listas no arquivo .svg(1)*/
+    printList(figures, arqSvg);
+    printList(blocks, arqSvg);
+    printList(hydrants, arqSvg);
+    printList(tLights, arqSvg);
+    printList(rTowers, arqSvg);
 
-    if(arqOut2 != NULL)
-        imprimirLista(figuras, arqOut2);
+    /*Imprime os figuras no arquivo .svg(2) (se existir)*/
+    if(arqSvgQ != NULL)
+        printList(figures, arqSvgQ);
     
     /*Le os dados de consulta(se existir)*/
-    if(nameConsulta != NULL){
+    if(nameQuery != NULL){
         while(1){
-            fscanf(arqConsul, "%s", command);
+            fscanf(arqQuery, "%s", command);
 
-            if(feof(arqConsul))
+            if(feof(arqQuery))
                 break;
 
             if(!strcmp(command, "o?")){
-                lerO(arqConsul, j, k);
-                figura1 = getElementoById(figuras, j, type1);
-                figura2 = getElementoById(figuras, k, type2);
-                verificarO(arqTexto, arqOut2, figura1, figura2, type1, type2);
+                scanO(arqQuery, id1, id2);
+                figure1 = getElementById(figures, id1, type1);
+                figure2 = getElementById(figures, id2, type2);
+                treatO(arqText, arqSvgQ, figure1, figure2, type1, type2);
             }
             else if(!strcmp(command, "i?")){
-                lerI(arqConsul, j, &x, &y);
-                figura1 = getElementoById(figuras, j, type1);
-                verificarI(arqTexto, arqOut2, figura1, x, y, type1);
+                scanI(arqQuery, id1, &x, &y);
+                figure1 = getElementById(figures, id1, type1);
+                treatI(arqText, arqSvgQ, figure1, x, y, type1);
             }
             else if(!strcmp(command, "d?")){
-                lerD(arqConsul, j, k);
-                figura1 = getElementoById(figuras, j, type1);
-                figura2 = getElementoById(figuras, k, type2);
-                verificarD(arqTexto, arqOut2, figura1, figura2, type1, type2);
+                scanD(arqQuery, id1, id2);
+                figure1 = getElementById(figures, id1, type1);
+                figure2 = getElementById(figures, id2, type2);
+                treatD(arqText, arqSvgQ, figure1, figure2, type1, type2);
             }
             else if(!strcmp(command, "bb")){
-                lerBB(arqConsul, sufixo, cor);
-                criarArqSaida3(&nameOut3, nameInT, nameConsultaT, sufixo);
-                strcat(nameOut3, ".svg");
-                alocarMemoria(nameOut3, pathOut, &arqSVG3);
-                arqOut3 = fopen(arqSVG3, "w");
-                verificarArquivo(arqOut3, arqSVG3);
-                verificarBB(nx, arqOut3, figuras, cor);
-                fclose(arqOut3);
-                free(nameOut3);
-                free(arqSVG3);
+                scanBB(arqQuery, sufixo, cor);
+                createOutputBBFileName(&nameOutBB, nameInT, nameQueryT, sufixo);
+                strcat(nameOutBB, ".svg");
+                allocateFileMamory(nameOutBB, pathOut, &arqOutBB);
+                arqSvgBB = fopen(arqOutBB, "w");
+                checkFile(arqSvgBB, arqOutBB);
+                treatBB(arqSvgBB, figures, cor);
+                fclose(arqSvgBB);
+                free(nameOutBB);
+                free(arqOutBB);
             }
             else if(!strcmp(command, "dq")){
-                lerDQ(arqConsul, metrica, id, &r);
-                figura1 = getElementoByIdListas(blocks, hydrants, semaphores, radios, id, type1);
+                scanDQ(arqQuery, metric, id1, &r);
+                figure1 = getElementByIdInLists(blocks, hydrants, tLights, rTowers, id1, type1);
                 if(!strcmp(type1, "h")){
-                    x = getHydrantX(figura1);
-                    y = getHydrantY(figura1);
-                    strcpy(id, getHydrantId(figura1));
+                    x = getHydrantX(figure1);
+                    y = getHydrantY(figure1);
+                    strcpy(id1, getHydrantId(figure1));
                 }
                 else if(!strcmp(type1, "s")){
-                    x = getSemaphoreX(figura1);
-                    y = getSemaphoreY(figura1);
-                    strcpy(id, getSemaphoreId(figura1));
+                    x = getTrafficLightX(figure1);
+                    y = getTrafficLightY(figure1);
+                    strcpy(id1, getTrafficLightId(figure1));
                 }
                 else if(!strcmp(type1, "rb")){
-                    x = getRadioX(figura1);
-                    y = getRadioY(figura1);
-                    strcpy(id, getRadioId(figura1));
+                    x = getRadioTowerX(figure1);
+                    y = getRadioTowerY(figure1);
+                    strcpy(id1, getRadioTowerId(figure1));
                 }
-                Form circulo = criarCirculo(id, x, y, r, "black", "none", "1");
-                verificarDQ(arqTexto, arqOut2, blocks, metrica, circulo);
-                fprintf(arqTexto, "\n");
-                free(circulo);
+                Form circle = createCircle(id1, x, y, r, "black", "none", "1");
+                treatDQ(arqText, arqSvgQ, blocks, metric, circle);
+                fprintf(arqText, "\n");
+                free(circle);
             }
             else if(!strcmp(command, "del")){
-                fscanf(arqConsul, "%s", id);
-                figura1 = getElementoByIdListas(blocks, hydrants, semaphores, radios, id, type1);
+                fscanf(arqQuery, "%s", id1);
+                figure1 = getElementByIdInLists(blocks, hydrants, tLights, rTowers, id1, type1);
                 if(!strcmp(type1, "h")){
-                    deletarElemento(hydrants, id);
-                    x = getHydrantX(figura1);
-                    y = getHydrantY(figura1);
+                    deleteElement(hydrants, id1);
+                    x = getHydrantX(figure1);
+                    y = getHydrantY(figure1);
                 }
                 else if(!strcmp(type1, "s")){
-                    deletarElemento(semaphores, id);
-                    x = getSemaphoreX(figura1);
-                    y = getSemaphoreY(figura1);
+                    deleteElement(tLights, id1);
+                    x = getTrafficLightX(figure1);
+                    y = getTrafficLightY(figure1);
                 }
                 else if(!strcmp(type1, "rb")){
-                    deletarElemento(radios, id);
-                    x = getRadioX(figura1);
-                    y = getRadioY(figura1);
+                    deleteElement(rTowers, id1);
+                    x = getRadioTowerX(figure1);
+                    y = getRadioTowerY(figure1);
                 }
                 else if(!strcmp(type1, "q")){
-                    deletarElemento(blocks, id);
-                    x = getBlockX(figura1);
-                    y = getBlockY(figura1);
+                    deleteElement(blocks, id1);
+                    x = getBlockX(figure1);
+                    y = getBlockY(figure1);
                 }
-                fprintf(arqTexto, "del %s\n", id);
-                fprintf(arqTexto, "\tEquipamento Urbano Removido: %s (%lf %lf)\n", id, x, y);
-                fprintf(arqTexto, "\n");
+                fprintf(arqText, "del %s\n", id1);
+                fprintf(arqText, "\tEquipamento Urbano Removido: %s (%lf %lf)\n", id1, x, y);
+                fprintf(arqText, "\n");
             }
             else if(!strcmp(command, "cbq")){
-                figura1 = lerCBQ(arqConsul, cstrkQ);
+                figure1 = scanCBQ(arqQuery, cstrkQ);
 
-                verificarCBQ(arqTexto, blocks, figura1, cstrkQ);
-                fprintf(arqTexto, "\n");
+                treatCBQ(arqText, blocks, figure1, cstrkQ);
+                fprintf(arqText, "\n");
 
-                free(figura1);
+                free(figure1);
             }
             else if(!strcmp(command, "crd?")){
-                fscanf(arqConsul, "%s", id);
+                fscanf(arqQuery, "%s", id1);
 
-                figura1 = getElementoByIdListas(blocks, hydrants, semaphores, radios, id, type1);
-                fprintf(arqTexto, "crd? %s\n", id);
+                figure1 = getElementByIdInLists(blocks, hydrants, tLights, rTowers, id1, type1);
+                fprintf(arqText, "crd? %s\n", id1);
 
-                if(figura1 != NULL){
+                if(figure1 != NULL){
                     if(!strcmp(type1, "q")){
-                        fprintf(arqTexto, "\tQuadra %s: (%lf, %lf)\n", id, getBlockX(figura1), getBlockY(figura1));
+                        fprintf(arqText, "\tQuadra %s: (%lf, %lf)\n", id1, getBlockX(figure1), getBlockY(figure1));
                     }
                     else if(!strcmp(type1, "h")){
-                        fprintf(arqTexto, "\tHidrante %s: (%lf, %lf)\n", id, getHydrantX(figura1), getHydrantY(figura1));
+                        fprintf(arqText, "\tHidrante %s: (%lf, %lf)\n", id1, getHydrantX(figure1), getHydrantY(figure1));
                     }
                     else if(!strcmp(type1, "s")){
-                        fprintf(arqTexto, "\tSemáforo %s: (%lf, %lf)\n", id, getSemaphoreX(figura1), getSemaphoreY(figura1));
+                        fprintf(arqText, "\tSemáforo %s: (%lf, %lf)\n", id1, getTrafficLightX(figure1), getTrafficLightY(figure1));
                     }
                     else if(!strcmp(type1, "rb")){
-                        fprintf(arqTexto, "\tRadio-Base %s: (%lf, %lf)\n", id, getRadioX(figura1), getRadioY(figura1));
+                        fprintf(arqText, "\tRadio-Base %s: (%lf, %lf)\n", id1, getRadioTowerX(figure1), getRadioTowerY(figure1));
                     }
                 }
                 else{
-                    fprintf(arqTexto, "\tEquipamento Urbano não encontrado!\n");
+                    fprintf(arqText, "\tEquipamento Urbano não encontrado!\n");
                 }
-                fprintf(arqTexto, "\n");
+                fprintf(arqText, "\n");
             }
             else if(!strcmp(command, "trns")){
-                Form retangulo = lerTRNS(arqConsul, &x, &y);
+                Form rect = scanTRNS(arqQuery, &x, &y);
 
-                verificarTRNS(arqTexto, blocks, hydrants, semaphores, radios, retangulo, x, y, arqOut2);
-                free(retangulo);
+                treatTRNS(arqText, blocks, hydrants, tLights, rTowers, rect, x, y, arqSvgQ);
+                free(rect);
             }
         }
     }
-    if(arqOut2 != NULL){
-        imprimirLista(blocks, arqOut2);
-        imprimirLista(hydrants, arqOut2);
-        imprimirLista(semaphores, arqOut2);
-        imprimirLista(radios, arqOut2);
-    }
-
-    /*Finalizacao, libreracao de memoria e fechamento dos arquivos*/
-    fputs("\n</svg>\n", arqOut);
-    if(nameConsulta != NULL){
-        fclose(arqConsul);
-        fclose(arqTexto);
-        fputs("\n</svg>\n", arqOut2);
-        fclose(arqOut2);
-
-        free(nameConsulta);
-        free(nameConsultaT);
-        free(nameOut2);
-        free(arqSVG2);
-        free(nameTXT);
-        free(arqTXT);
-        free(arqQry);
-    }
-    fclose(arqOut);
-    fclose(arqIn);
     
+    /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
+    if(arqSvgQ != NULL){
+        printList(blocks, arqSvgQ);
+        printList(hydrants, arqSvgQ);
+        printList(tLights, arqSvgQ);
+        printList(rTowers, arqSvgQ);
+    }
+
+    /*Finalização, libreracao de memoria e fechamento dos arquivos*/
+    fputs("\n</svg>\n", arqSvg);
+
+    //Fecha os arquivos .geo e .svg(1)
+    fclose(arqSvg);
+    fclose(arqGeo);
+
+    //Fecha os arquivos relacionados ao arquivo .qry (se existir)
+    if(nameQuery != NULL){
+        fclose(arqQuery);
+        fclose(arqText);
+        fputs("\n</svg>\n", arqSvgQ);
+        fclose(arqSvgQ);
+    }
+    
+    //Liberação da memória relacionada aos arquivos .geo e .svg(1)
     free(pathIn);
     free(nameIn);
     free(nameInT);
-    free(arqGeo);
+    free(arqIn);
     free(pathOut);
     free(nameOut);
-    free(arqSVG);
+    free(arqOut);
 
-    /*Liberação da memória das listas*/
-    desalocarLista(figuras, freeForm);
-    desalocarLista(blocks, freeBlock);
-    desalocarLista(hydrants, freeHydrant);
-    desalocarLista(semaphores, freeSemaphore);
-    desalocarLista(radios, freeRadio);
+    //Liberação da memória relacionada ao arquivo .qry (se existir)
+    if(nameQuery != NULL){
+        free(nameQuery);
+        free(nameQueryT);
+        free(nameOutQ);
+        free(arqOutQ);
+        free(nameTxt);
+        free(arqTxt);
+        free(arqQry);
+    }
+
+    //Liberação da memória das listas
+    deallocateList(figures, freeForm);
+    deallocateList(blocks, freeBlock);
+    deallocateList(hydrants, freeHydrant);
+    deallocateList(tLights, freeTrafficLight);
+    deallocateList(rTowers, freeRadioTower);
 
     return 0;
 }

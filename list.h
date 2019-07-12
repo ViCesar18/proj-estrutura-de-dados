@@ -1,8 +1,8 @@
-#ifndef LISTA__H
-#define LISTA__H
+#ifndef LIST__H
+#define LIST__H
 
-typedef void *Elemento;
-typedef void *Lista;
+typedef void *Element;
+typedef void *List;
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,57 +11,57 @@ typedef void *Lista;
 #include "./Objetos/forms.h"
 
 /*Cria e aloca memoria para uma lista duplamente encadeada estatica*/
-Lista criarLista(int capacidade);
+List createList(int capacity);
 
 /*Retorna o inicio da lista*/
-int getFirst(Lista listaAux);
+int getFirst(List listAux);
 
 /*Retorna a constante NULO que contem o int definido para ser o NULL da lista*/
 int getNulo();
 
 /*Retorna o elemento seguinte ao index i*/
-int getProx(Lista listaAux, int i);
+int getNext(List listAux, int i);
 
 /*Retorna o elemento anterior ao index i*/
-int getPrevious(Lista listaAux, int i);
+int getPrevious(List listAux, int i);
 
 /*Retorna a proxima posicao livre*/
-int getLivre(Lista listaAux);
+int getFree(List listAux);
 
 /*Retorna o tamanho atual da lista*/
-int getTam(Lista listaAux);
+int getSize(List listAux);
 
 /*Retorna o fim da lista*/
-int getLast(Lista listaAux);
+int getLast(List listAux);
 
 /*Insere um elemento na lista*/
-void inserirElemento(Lista listaAux, Elemento elemento, char type[]);
+void insertElement(List listAux, Element element, char type[]);
 
 /*Insere um elemento antes do elemento na posicao "index"*/
-void insertBefore(Lista listaAux, Elemento elemento, int index);
+void insertBefore(List listAux, Element element, int index);
 
 /*Insere um elemento depois do elemento na posicao "index"*/
-void insertAfter(Lista listaAux, Elemento elemento, int index);
+void insertAfter(List listAux, Element element, int index);
 
 /*Deleta um elemento da lista filtrando pelo id*/
-void deletarElemento(Lista listaAux, char id[]);
+void deleteElement(List listAux, char id[]);
 
 /*Retorna o elemento da lista cujo index é i*/
-Elemento getElementoByIndex(Lista ListaAux, int i);
+Element getElementByIndex(List ListaAux, int i);
 
 /*Retorna o elemento da lista cujo id é igual ao id passado como parametro*/
-Elemento getElementoById(Lista ListaAux, char id[], char type[]);
+Element getElementById(List ListaAux, char id[], char type[]);
 
 /*Retorna o elemento pertencente a uma das quatro listas passadas como parametro cujo o id é igual ao passado como parametro*/
-Elemento getElementoByIdListas(Lista lista1, Lista lista2, Lista lista3, Lista lista4, char id[], char type[]);
+Element getElementByIdInLists(List lista1, List lista2, List lista3, List lista4, char id[], char type[]);
 
 /*Imprime os elementos da lista no arquivo SVG passado como parametro*/
-void imprimirLista(Lista listaAux, FILE *arqOut);
+void printList(List listAux, FILE *arqOut);
 
 /*Imprime os elementos da lista e suas bounding box correspondentes no arquivo SVG passado como parametro*/
-void imprimirBB(Lista listaAux, FILE *arq, char cor[]);
+void printBB(List listAux, FILE *arq, char color[]);
 
 /*Desaloca uma lista*/
-void desalocarLista (Lista listaAux, void (*freeElemento)(Elemento elemento));
+void deallocateList (List listAux, void (*freeElemento)(Element element));
 
 #endif

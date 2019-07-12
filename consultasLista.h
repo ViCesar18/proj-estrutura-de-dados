@@ -6,17 +6,17 @@
 #include <stdbool.h>
 #include "consulta.h"
 #include "outSVG.h"
-#include "lista.h"
+#include "list.h"
 #include "./Objetos/forms.h"
 #include "./Objetos/block.h"
 
 /*Remove todas as quadras que estiverem inteiramente dentro do circulo dependendo da metrica (L1 ou L2)*/
-void verificarDQ(FILE *txt, FILE *svg2, Lista blocks, char metrica[], Form circulo);
+void treatDQ(FILE *arqTxt, FILE *arqSvgQ, List blocks, char metric[], Form circle);
 
 /*Muda a cor da borda de todas as quadras que estiverem inteiramente dentro do circulo*/
-void verificarCBQ(FILE *txt, Lista blocks, Form circulo, char cstrk[]);
+void treatCBQ(FILE *arqTxt, List blocks, Form circle, char cstrk[]);
 
 /*Move todos os equipamentos urbanos que estão inteiramente dentro do retangulo em dx no eixo X e dy no eixo Y*/
-void verificarTRNS(FILE *txt, Lista blocks, Lista hydrants, Lista semaphores, Lista radios, Form retangulo, double dx, double dy, FILE *svg2);
+void treatTRNS(FILE *arqTxt, List blocks, List hydrants, List tLights, List rTowers, Form rect, double dx, double dy, FILE *arqSvgQ);
 
 #endif

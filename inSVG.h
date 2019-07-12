@@ -6,76 +6,76 @@
 #include <string.h>
 #include <stdbool.h>
 #include "outSVG.h"
-#include "lista.h"
+#include "list.h"
 #include "./Objetos/forms.h"
 #include "./Objetos/block.h"
 #include "./Objetos/hydrant.h"
-#include "./Objetos/semaphore.h"
-#include "./Objetos/radio.h"
+#include "./Objetos/traffic_light.h"
+#include "./Objetos/radio_tower.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a entrada/leitura de dados*/
 
 /*Verifica se o arquivo em questao foi aberto com sucesso, caso contrario, sai do programa*/
-void verificarArquivo(FILE *arq, char nome[]);
+void checkFile(FILE *arq, char fname[]);
 
-/*Funcao que recebe os parametros digitados do terminal*/
-void receberParametros(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **pathOut);
+/*Função que recebe os parâmetros digitados do terminal*/
+void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **pathOut);
 
 /*Trata o nome do arquivo geo/qry caso ele seja passado como parametro junto com um diretorio relativo*/
-void tratarNome(char nameIn[], char **nameInT);
+void treatFileName(char nameIn[], char **nameInT);
 
 /*aloca memoria e cria os diretorios, tambem verifica se a '/' foi ou nao inserida*/
-void alocarMemoria(char nome[], char dir[], char **arq);
+void allocateFileMamory(char fname[], char path[], char **arq);
 
 /*Le os valores de NX do arquivo de entrada .geo*/
-void lerNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr);
+void scanNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr);
 
 /*Le as informacoes de circulo do arquivo .geo e armazena na lista figuras*/
-void lerCirculo(FILE *arqIn, Lista figuras, char cw[]);
+void scanCircle(FILE *arqIn, List figures, char cw[]);
 
 /*Le as informacoes de retangulo do arquivo .geo e armazena na lista figuras*/
-void lerRetangulo(FILE *arqIn, Lista figuras, char rw[]);
+void scanRect(FILE *arqIn, List figures, char rw[]);
 
 /*Le as informacoes de quadra do arquivo .geo e armazena na lista blocks*/
-void lerQuadra(FILE *arqIn, Lista blocks, char strokeCollor[], char fillCollor[], char sw[]);
+void scanBlock(FILE *arqIn, List blocks, char strokeColor[], char fillColor[], char sw[]);
 
 /*Le as informacoes de hidrante do arquivo .geo e armazena na lista hydrants*/
-void lerHidrante(FILE *arqIn, Lista hydrants, char fillCollor[], char strokeCollor[], char sw[]);
+void scanHydrant(FILE *arqIn, List hydrants, char fillColor[], char strokeColor[], char sw[]);
 
-/*Le as informacoes de semaforo do arquivo .geo e armazena na lista semaphores*/
-void lerSemaforo(FILE *arqIn, Lista semaphores, char fillCollor[], char strokeCollor[], char sw[]);
+/*Le as informacoes de semaforo do arquivo .geo e armazena na lista tLights*/
+void scanTrafficLight(FILE *arqIn, List tLights, char fillColor[], char strokeColor[], char sw[]);
 
 /*Le as informacoes de radio-base do arquivo .geo e armazena na lista radios*/
-void lerRadio(FILE *arqIn, Lista radios, char fillCollor[], char strokeCollor[], char sw[]);
+void scanRadioTower(FILE *arqIn, List rTowers, char fillColor[], char strokeColor[], char sw[]);
 
 /*Muda a cor de todos os elementos que vierem abaixo do comando ch do arquivo .geo*/
-void alterarCor(FILE *arqIn, char fillCollor[], char strokeCollor[], char sw[]);
+void changeColor(FILE *arqIn, char fillColor[], char strokeColor[], char sw[]);
 
 /*Muda a espessura de todos os circulos e retangulos que vierem abaixo do comando sw do arquivo .geo*/
-void alterarEspessura(FILE *arqIn, char cw[], char rw[]);
+void changeThickness(FILE *arqIn, char cw[], char rw[]);
 
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
-void lerTexto(FILE *arqIn, FILE *arqOut, FILE *arqOut2);
+void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2);
 
 /*Le os parametros de consulta do comando "o?"*/
-void lerO(FILE *arqConsul, char j[], char k[]);
+void scanO(FILE *arqQuery, char j[], char k[]);
 
 /*Le os parametros de consulta do comando "i?"*/
-void lerI(FILE *arqConsul, char j[], double *x, double *y);
+void scanI(FILE *arqQuery, char j[], double *x, double *y);
 
 /*Le os parametros de consulta do comando "d?"*/
-void lerD(FILE *arqConsul, char j[], char k[]);
+void scanD(FILE *arqQuery, char j[], char k[]);
 
 /*Le os parametros de consulta do comando "bb"*/
-void lerBB(FILE *arqConsul, char sufixo[], char cor[]);
+void scanBB(FILE *arqQuery, char suffix[], char color[]);
 
 /*Le os parametros de consulta do comando "dq"*/
-void lerDQ(FILE *arqConsul, char L[], char id[], double *r);
+void scanDQ(FILE *arqQuery, char metric[], char id[], double *r);
 
 /*Le os parametros de consulta do comando "cbq" e retorna um circulo com os parametros passados*/
-Elemento lerCBQ(FILE *arqConsul, char cstrk[]);
+Element scanCBQ(FILE *arqQuery, char cstrk[]);
 
 /*Le os parametros de consulta do comando "trns" e retorna um retangulo com os parametros passados*/
-Elemento lerTRNS(FILE *arqConsul, double *dx, double *dy);
+Element scanTRNS(FILE *arqQuery, double *dx, double *dy);
 
 #endif

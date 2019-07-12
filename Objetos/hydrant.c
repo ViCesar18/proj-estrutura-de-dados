@@ -1,18 +1,18 @@
 #include "hydrant.h"
 
 typedef struct stHydrant{
-    char id[32], strokeCollor[24], fillCollor[24], sw[12];
+    char id[32], strokeColor[24], fillColor[24], sw[12];
     double x, y;
 }*HydrantImp;
 
-Hydrant criarHydrant(char id[], double x, double y, char strokeCollor[], char fillCollor[], char sw[]){
+Hydrant createHydrant(char id[], double x, double y, char strokeColor[], char fillColor[], char sw[]){
     HydrantImp hydrant = (HydrantImp) malloc(sizeof(struct stHydrant));
 
     strcpy(hydrant->id, id);
     hydrant->x = x;
     hydrant->y = y;
-    strcpy(hydrant->strokeCollor, strokeCollor);
-    strcpy(hydrant->fillCollor, fillCollor);
+    strcpy(hydrant->strokeColor, strokeColor);
+    strcpy(hydrant->fillColor, fillColor);
     strcpy(hydrant->sw, sw);
 
     return hydrant;
@@ -36,16 +36,16 @@ double getHydrantY(Hydrant h){
     return hydrant->y;
 }
 
-char *getHydrantStrokeCollor(Hydrant h){
+char *getHydrantStrokeColor(Hydrant h){
     HydrantImp hydrant = (HydrantImp) h;
 
-    return hydrant->strokeCollor;
+    return hydrant->strokeColor;
 }
 
-char *getHydrantFillCollor(Hydrant h){
+char *getHydrantFillColor(Hydrant h){
     HydrantImp hydrant = (HydrantImp) h;
 
-    return hydrant->fillCollor;
+    return hydrant->fillColor;
 }
 
 char *getHydrantSw(Hydrant h){

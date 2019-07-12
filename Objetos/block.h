@@ -8,7 +8,7 @@
 typedef void *Block;
 
 /*Coloca os dados de quadra em uma estrutura e retorna a estrutura*/
-Block criarBlock(char cep[], double x, double y, double w, double h, char strokeCollor[], char fillCollor[], char sw[]);
+Block createBlock(char cep[], double x, double y, double w, double h, char strokeColor[], char fillColor[], char sw[]);
 
 /*Getters e setters para a quadra*/
 char *getBlockCep(Block b);
@@ -21,9 +21,9 @@ double getBlockW(Block b);
 
 double getBlockH(Block b);
 
-char *getBlockStrokeCollor(Block b);
+char *getBlockStrokeColor(Block b);
 
-char *getBlockFillCollor(Block b);
+char *getBlockFillColor(Block b);
 
 char *getBlockSw(Block b);
 
@@ -31,7 +31,7 @@ void setBlockX(Block b, double x);
 
 void setBlockY(Block b, double y);
 
-void setBlockStrokeCollor(Block b, char strokeCollor[]);
+void setBlockStrokeColor(Block b, char strokeColor[]);
 /*Fim getters e setters*/
 
 /*Libera memoria de uma quadra*/
