@@ -87,6 +87,12 @@ int getLast(List listAux){
     return list->end;
 }
 
+char *getType(List listAux, int i){
+    ListImp list = (ListImp) list;
+
+    return list->node[i].type;
+}
+
 void insertElement(List listAux, Element element, char type[]){
     ListImp list = (ListImp) listAux;
     int iFree = getFree(listAux);
@@ -250,36 +256,6 @@ void printBuildingList(List blocksAux, List buildingsAux, FILE *arqOut){
         block = getElementById(blocks, getBuildingCep(buildings->node[i].element), type);
         
         printBuilding(arqOut, buildings->node[i].element, block);
-    }
-}
-
-void printBB(List listAux, FILE *arq, char color[]){
-    ListImp list = (ListImp) listAux;
-
-    double x, y, w, h, rx, ry;
-    char strokeColorR[24], fillColorR[24];
-
-    for(int i = list->start; i != NULO; i = list->node[i].next){
-        if(!strcmp(list->node[i].type, "c")){
-            printCircle(arq, list->node[i].element);
-            x = getFormX(list->node[i].element) - getFormR(list->node[i].element);
-            y = getFormY(list->node[i].element) - getFormR(list->node[i].element);
-            w = 2 * getFormR(list->node[i].element);
-            h = 2 * getFormR(list->node[i].element);
-            strcpy(strokeColorR, color);
-            strcpy(fillColorR, "none");
-            Form retangulo = createRect("0", x, y, w, h, strokeColorR, fillColorR, 0, "1");
-            printRect(arq, retangulo);
-            free(retangulo);
-        }
-        else if(!strcmp(list->node[i].type, "r")){
-            printRect(arq, list->node[i].element);
-            x = getFormX(list->node[i].element) + getFormW(list->node[i].element) / 2;
-            y = getFormY(list->node[i].element) + getFormH(list->node[i].element) / 2;
-            rx = getFormW(list->node[i].element) / 2;
-            ry = getFormH(list->node[i].element) / 2;
-            printEllipse(arq, x, y, rx, ry, color);
-        }
     }
 }
 

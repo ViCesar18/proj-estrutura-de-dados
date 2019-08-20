@@ -35,6 +35,8 @@ int getSize(List listAux);
 /*Retorna o fim da lista*/
 int getLast(List listAux);
 
+char *getType(List listAux, int i);
+
 /*Insere um elemento na lista*/
 void insertElement(List listAux, Element element, char type[]);
 
