@@ -240,6 +240,19 @@ void printList(List listAux, FILE *arqOut){
     }
 }
 
+void printBuildingList(List blocksAux, List buildingsAux, FILE *arqOut){
+    ListImp buildings = (ListImp) buildingsAux;
+    ListImp blocks = (ListImp) blocksAux;
+    Block block;
+    char type[4];
+
+    for(int i = buildings->start; i != NULO; i = buildings->node[i].next){
+        block = getElementById(blocks, getBuildingCep(buildings->node[i].element), type);
+        
+        printBuilding(arqOut, buildings->node[i].element, block);
+    }
+}
+
 void printBB(List listAux, FILE *arq, char color[]){
     ListImp list = (ListImp) listAux;
 

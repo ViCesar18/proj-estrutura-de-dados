@@ -85,13 +85,15 @@ void allocateFileMamory(char fname[], char path[], char **arq){
 
 }
 
-void scanNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr){
+void scanNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr, int *np, int *nm){
 
     fscanf(arq, "%d", nx);
     fscanf(arq, "%d", nq);
     fscanf(arq, "%d", nh);
     fscanf(arq, "%d", ns);
     fscanf(arq, "%d", nr);
+    fscanf(arq, "%d", np);
+    fscanf(arq, "%d", nm);
 }
 
 void scanCircle(FILE *arqIn, List figures, char cw[]){
@@ -194,6 +196,24 @@ void changeThickness(FILE *arqIn, char cw[], char rw[]){
 
     fscanf(arqIn, "%s", cw);
     fscanf(arqIn, "%s", rw);
+}
+
+void scanBuilding(FILE *arqIn, List buildings){
+    char cep[32], face[2];
+    int num;
+    double faceSize, depth, margin;
+
+    fscanf(arqIn, "%s", cep);
+    fscanf(arqIn, "%s", face);
+    fscanf(arqIn, "%d", &num);
+    fscanf(arqIn, "%lf", &faceSize);
+    fscanf(arqIn, "%lf", &depth);
+    fscanf(arqIn, "%lf", &margin);
+
+    Building building = createBuilding(cep, face, num, faceSize, depth, margin);
+
+    insertElement(buildings, building, "bl");
+
 }
 
 void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2){

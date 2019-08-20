@@ -9,6 +9,7 @@ typedef void *List;
 #include <stdbool.h>
 #include "outSVG.h"
 #include "./Objetos/forms.h"
+#include "./Objetos/building.h"
 
 /*Cria e aloca memoria para uma lista duplamente encadeada estatica*/
 List createList(int capacity);
@@ -57,6 +58,8 @@ Element getElementByIdInLists(List lista1, List lista2, List lista3, List lista4
 
 /*Imprime os elementos da lista no arquivo SVG passado como parametro*/
 void printList(List listAux, FILE *arqOut);
+
+void printBuildingList(List blocksAux, List buildingsAux, FILE *arqOut);
 
 /*Imprime os elementos da lista e suas bounding box correspondentes no arquivo SVG passado como parametro*/
 void printBB(List listAux, FILE *arq, char color[]);

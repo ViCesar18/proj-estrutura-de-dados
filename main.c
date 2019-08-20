@@ -9,7 +9,7 @@
 #include "Objetos/forms.h"
 
 int main(int argc, char *argv[]){
-    int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000;  //Número máximo padrão das formas
+    int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000, np = 1000, nm = 1000;  //Número máximo padrão das formas
     char *pathIn = NULL;    //Diretório de entrada
     char *nameIn = NULL, *nameInT = NULL, *arqIn = NULL;   //Dados para o arquivo de entrada (.geo)
     char *nameQuery = NULL, *nameQueryT = NULL, *arqQry = NULL; //Dados para o arquivo de entrada (.qry)
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
     strcpy(cfillR, "gray");
     strcpy(cstrkR, "black");
 
-    List figures, blocks, hydrants, tLights, rTowers;    //Listas de cada objeto urbano
+    List figures, blocks, hydrants, tLights, rTowers, buildings;    //Listas de cada objeto urbano
     Form figure1, figure2;  //Armazena uma forma
     char type1[4], type2[4];    //Armazena o tipo do objeto urbano em questão
 
@@ -110,7 +110,7 @@ int main(int argc, char *argv[]){
         fscanf(arqGeo, "%s", command);
         
         if(!strcmp(command, "nx")){
-            scanNX(arqGeo, &nx, &nq, &nh, &ns, &nr);
+            scanNX(arqGeo, &nx, &nq, &nh, &ns, &nr, &np, &nm);
             break;
         }
     }
@@ -124,6 +124,8 @@ int main(int argc, char *argv[]){
     hydrants = createList(nh);
     tLights = createList(ns);
     rTowers = createList(nr);
+    buildings = createList(np);
+
     
     /*Le os dados das formas do arquivo de entrada*/
     while(1){
@@ -168,6 +170,9 @@ int main(int argc, char *argv[]){
         else if(!strcmp(command, "sw")){
             changeThickness(arqGeo, cw, rw);
         }
+        else if(!strcmp(command, "prd")){
+            scanBuilding(arqGeo, buildings);
+        }
     }
     
     /*Imprime todo o conteudo das listas no arquivo .svg(1)*/
@@ -176,6 +181,7 @@ int main(int argc, char *argv[]){
     printList(hydrants, arqSvg);
     printList(tLights, arqSvg);
     printList(rTowers, arqSvg);
+    printBuildingList(blocks, buildings, arqSvg);
 
     /*Imprime os figuras no arquivo .svg(2) (se existir)*/
     if(arqSvgQ != NULL)

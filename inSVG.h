@@ -12,6 +12,7 @@
 #include "./Objetos/hydrant.h"
 #include "./Objetos/traffic_light.h"
 #include "./Objetos/radio_tower.h"
+#include "./Objetos/building.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a entrada/leitura de dados*/
 
@@ -28,7 +29,7 @@ void treatFileName(char nameIn[], char **nameInT);
 void allocateFileMamory(char fname[], char path[], char **arq);
 
 /*Le os valores de NX do arquivo de entrada .geo*/
-void scanNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr);
+void scanNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr, int *np, int *nm);
 
 /*Le as informacoes de circulo do arquivo .geo e armazena na lista figuras*/
 void scanCircle(FILE *arqIn, List figures, char cw[]);
@@ -53,6 +54,9 @@ void changeColor(FILE *arqIn, char fillColor[], char strokeColor[], char sw[]);
 
 /*Muda a espessura de todos os circulos e retangulos que vierem abaixo do comando sw do arquivo .geo*/
 void changeThickness(FILE *arqIn, char cw[], char rw[]);
+
+/*Le as informacoes de predio do arquivo .geo e armazena na lista buildings*/
+void scanBuilding(FILE *arqIn, List buildings);
 
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
 void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2);

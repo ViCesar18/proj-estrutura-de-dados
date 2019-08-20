@@ -113,3 +113,41 @@ void printRadioTower(FILE *arqOut, RadioTower rTower){
 
     printText(arqOut, getRadioTowerX(rTower) - 7.5, getRadioTowerY(rTower) + 4, "RB", getRadioTowerStrokeColor(rTower));
 }
+
+void printBuilding(FILE *arqOut, Building building, Block block){
+    Form rect;
+    char face[2];
+    strcpy(face, getBuildingFace(building));
+    int num = getBuildingNum(building);
+    double faceSize = getBuildingFaceSize(building), depth = getBuildingDepth(building), margin = getBuildingMargin(building);
+    double xB = getBlockX(block), yB = getBlockY(block), wB = getBlockW(block), hB = getBlockH(block);
+    double x, y, w, h;
+
+    if(!strcmp(face, "N")){
+        x = xB + num - faceSize / 2;
+        y = yB + hB - margin - depth;
+        w = faceSize;
+        h = depth;
+    }
+    else if(!strcmp(face, "S")){
+        x = xB + num - faceSize / 2;
+        y = yB + margin;
+        w = faceSize;
+        h = depth;
+    }
+    else if(!strcmp(face, "O")){
+        x = xB + margin;
+        y = yB + num - faceSize / 2;
+        w = depth;
+        h = faceSize;
+    }
+    else if(!strcmp(face, "L")){
+        x = xB + wB - margin - depth;
+        y = yB + num - faceSize / 2;
+        w = depth;
+        h = faceSize;
+    }
+
+    rect = createRect("", x, y, w, h, "black", "white", 0, "1");
+    printRect(arqOut, rect);
+}
