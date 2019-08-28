@@ -63,9 +63,6 @@ void printList(List listAux, FILE *arqOut);
 
 void printBuildingList(List blocksAux, List buildingsAux, FILE *arqOut);
 
-/*Imprime os elementos da lista e suas bounding box correspondentes no arquivo SVG passado como parametro*/
-void printBB(List listAux, FILE *arq, char color[]);
-
 /*Desaloca uma lista*/
 void deallocateList (List listAux, void (*freeElemento)(Element element));
 

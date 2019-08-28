@@ -56,7 +56,7 @@ double getBuildingMargin(Building b){
 }
 
 void freeBuilding(Building b){
-    BuildingImp block = (BuildingImp) b;
+    BuildingImp building = (BuildingImp) b;
 
-    free(block);   
+    free(building);   
 }

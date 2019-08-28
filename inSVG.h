@@ -13,6 +13,7 @@
 #include "./Objetos/traffic_light.h"
 #include "./Objetos/radio_tower.h"
 #include "./Objetos/building.h"
+#include "./Objetos/wall.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a entrada/leitura de dados*/
 
@@ -58,6 +59,8 @@ void changeThickness(FILE *arqIn, char cw[], char rw[]);
 /*Le as informacoes de predio do arquivo .geo e armazena na lista buildings*/
 void scanBuilding(FILE *arqIn, List buildings);
 
+void scanWall(FILE *arqIn, List walls);
+
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
 void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2);
 
@@ -81,5 +84,7 @@ Element scanCBQ(FILE *arqQuery, char cstrk[]);
 
 /*Le os parametros de consulta do comando "trns" e retorna um retangulo com os parametros passados*/
 Element scanTRNS(FILE *arqQuery, double *dx, double *dy);
+
+void scanFI(FILE *arqQuery, double *x, double *y, int *n, double *r);
 
 #endif

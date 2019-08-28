@@ -84,3 +84,40 @@ void treatTRNS(FILE *arqTxt, List blocks, List hydrants, List tLights, List rTow
         }
     }
 }
+
+int cmpDoubles(const void *a, const void *b){
+    double arg1 = * (const double *)a;
+    double arg2 = * (const double *)b;
+
+    if(arg1 < arg2) return -1;
+    if(arg1 > arg2) return 1;
+    return 0;
+}
+
+void treatFI(FILE *arqTxt, double x, double y, int ns, double r, List tLights, List hydrants){
+    double dist;
+    TrafficLight tLight;
+    double *tLightDists = (double *) malloc(getSize(tLights) * sizeof(double));
+    int cont = 0;
+    
+    for(int i = getFirst(tLights); i != getNulo(); i = getNext(tLights, i)){
+        tLight = getElementByIndex(tLights, i);
+        tLightDists[cont] = distEuclid(x, y, getTrafficLightX(tLight), getTrafficLightY(tLight));
+        cont++;
+    }
+
+    printf("Desordenado:\n");
+    for(int i = 0; i < getSize(tLights); i++){
+        printf("%lf\n", tLightDists[i]);
+        printf("\n");
+    }
+
+    heap_sort(tLightDists, getSize(tLights) - 1, ns);
+
+    printf("Ordenado:\n");
+    for(int i = 0; i < getSize(tLights); i++){
+        printf("%lf\n", tLightDists[i]);
+        printf("\n");
+    }
+
+}

@@ -152,6 +152,11 @@ void printBuilding(FILE *arqOut, Building building, Block block){
     printRect(arqOut, rect);
 }
 
+void printWall(FILE *arqOut, Wall wall){
+    
+    printLine(arqOut, getWallX1(wall), getWallY1(wall), getWallX2(wall), getWallY2(wall), "black");
+}
+
 void printBB(List figures, FILE *arq, char color[]){
 
     double x, y, w, h, rx, ry;

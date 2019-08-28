@@ -24,7 +24,7 @@ double getBuildingDepth(Building b);
 double getBuildingMargin(Building b);
 /*Fim getters e setters*/
 
-/*Libera memoria de uma quadra*/
-void freeBlock(Building b);
+/*Libera memoria de um predio*/
+void freeBuilding(Building b);
 
 #endif

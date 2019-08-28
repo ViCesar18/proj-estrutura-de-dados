@@ -11,6 +11,7 @@
 #include "./Objetos/traffic_light.h"
 #include "./Objetos/radio_tower.h"
 #include "./Objetos/building.h"
+#include "./Objetos/wall.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a saida de dados*/
 
@@ -47,5 +48,10 @@ void printTrafficLight(FILE *arqOut, TrafficLight tLight);
 void printRadioTower(FILE *arqOut, RadioTower rTower);
 
 void printBuilding(FILE *arqOut, Building building, Block block);
+
+void printWall(FILE *arqOut, Wall wall);
+
+/*Imprime os elementos da lista e suas bounding box correspondentes no arquivo SVG passado como parametro*/
+void printBB(List figures, FILE *arq, char color[]);
 
 #endif

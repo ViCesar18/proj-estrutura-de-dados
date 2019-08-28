@@ -213,7 +213,19 @@ void scanBuilding(FILE *arqIn, List buildings){
     Building building = createBuilding(cep, face, num, faceSize, depth, margin);
 
     insertElement(buildings, building, "bl");
+}
 
+void scanWall(FILE *arqIn, List walls){
+    double x1, y1, x2, y2;
+
+    fscanf(arqIn, "%lf", &x1);
+    fscanf(arqIn, "%lf", &y1);
+    fscanf(arqIn, "%lf", &x2);
+    fscanf(arqIn, "%lf", &y2);
+
+    Wall wall = createWall(x1, y1, x2, y2);
+
+    insertElement(walls, wall, "w");
 }
 
 void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2){
@@ -287,4 +299,12 @@ Element scanTRNS(FILE *arqQuery, double *dx, double *dy){
     Form rect = createRect("0", x, y, w, h, "black", "none", 0, "1");
 
     return rect;
+}
+
+void scanFI(FILE *arqQuery, double *x, double *y, int *n, double *r){
+
+    fscanf(arqQuery, "%lf", x);
+    fscanf(arqQuery, "%lf", y);
+    fscanf(arqQuery, "%d", n);
+    fscanf(arqQuery, "%lf", r);
 }

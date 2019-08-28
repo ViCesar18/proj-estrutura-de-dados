@@ -243,6 +243,9 @@ void printList(List listAux, FILE *arqOut){
         else if(!strcmp(list->node[i].type, "rb")){
             printRadioTower(arqOut, list->node[i].element);
         }
+        else if(!strcmp(list->node[i].type, "w")){
+            printWall(arqOut, list->node[i].element);
+        }
     }
 }
 

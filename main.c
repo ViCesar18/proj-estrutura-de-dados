@@ -21,8 +21,9 @@ int main(int argc, char *argv[]){
     FILE *arqGeo = NULL, *arqQuery = NULL, *arqSvg = NULL, *arqSvgQ = NULL, *arqText = NULL, *arqSvgBB = NULL; //Arquivos
 
     char command[8];   //Armazena o comando lido do arquivo .qry
-    char sufixo[32], cor[32], id1[32], id2[32], metric[4];  //Armazena os parâmetros do arquivo .qry (string)
-    double x, y, r;        //Armazena os parâmetros do arquivo .qry (coordenadas)
+    char sufixo[32], cor[32], id1[32], id2[32], metric[4];  //Armazena os parametros do arquivo .qry (string)
+    double x, y, r;        //Armazena os parametros do arquivo .qry (coordenadas)
+    int n;                //Armazena os parametros do arquivo .qry
 
     char cfillQ[24], cstrkQ[24], cfillH[24], cstrkH[24], cfillS[24], cstrkS[24], cfillR[24], cstrkR[24];    //Cores para quadras, hidrântes, semáforos e torres de rádio
     char swQ[12] = {"1"}, swH[12] = {"1"}, swS[12] = {"1"}, swR[12] = {"1"};    //Espessura de borda de quadras, hidrântes, semáforos e torres de rádio
@@ -38,7 +39,7 @@ int main(int argc, char *argv[]){
     strcpy(cfillR, "gray");
     strcpy(cstrkR, "black");
 
-    List figures, blocks, hydrants, tLights, rTowers, buildings;    //Listas de cada objeto urbano
+    List figures, blocks, hydrants, tLights, rTowers, buildings, walls;    //Listas de cada objeto urbano
     Form figure1, figure2;  //Armazena uma forma
     char type1[4], type2[4];    //Armazena o tipo do objeto urbano em questão
 
@@ -125,6 +126,7 @@ int main(int argc, char *argv[]){
     tLights = createList(ns);
     rTowers = createList(nr);
     buildings = createList(np);
+    walls = createList(nm);
 
     
     /*Le os dados das formas do arquivo de entrada*/
@@ -173,6 +175,9 @@ int main(int argc, char *argv[]){
         else if(!strcmp(command, "prd")){
             scanBuilding(arqGeo, buildings);
         }
+        else if(!strcmp(command, "mur")){
+            scanWall(arqGeo, walls);
+        }
     }
     
     /*Imprime todo o conteudo das listas no arquivo .svg(1)*/
@@ -182,10 +187,7 @@ int main(int argc, char *argv[]){
     printList(tLights, arqSvg);
     printList(rTowers, arqSvg);
     printBuildingList(blocks, buildings, arqSvg);
-
-    /*Imprime os figuras no arquivo .svg(2) (se existir)*/
-    if(arqSvgQ != NULL)
-        printList(figures, arqSvgQ);
+    printList(walls, arqSvg);
     
     /*Le os dados de consulta(se existir)*/
     if(nameQuery != NULL){
@@ -312,15 +314,22 @@ int main(int argc, char *argv[]){
                 treatTRNS(arqText, blocks, hydrants, tLights, rTowers, rect, x, y, arqSvgQ);
                 free(rect);
             }
+            else if(!strcmp(command, "fi")){
+                scanFI(arqQuery, &x, &y, &n, &r);
+                treatFI(arqTxt, x, y, n, r, tLights, hydrants);
+            }
         }
     }
     
     /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
     if(arqSvgQ != NULL){
+        printList(figures, arqSvgQ);
         printList(blocks, arqSvgQ);
         printList(hydrants, arqSvgQ);
         printList(tLights, arqSvgQ);
         printList(rTowers, arqSvgQ);
+        printBuildingList(blocks, buildings, arqSvgQ);
+        printList(walls, arqSvgQ);
     }
 
     /*Finalização, libreracao de memoria e fechamento dos arquivos*/
@@ -364,6 +373,8 @@ int main(int argc, char *argv[]){
     deallocateList(hydrants, freeHydrant);
     deallocateList(tLights, freeTrafficLight);
     deallocateList(rTowers, freeRadioTower);
+    deallocateList(buildings, freeBuilding);
+    deallocateList(walls, freeWall);
 
     return 0;
 }
