@@ -94,29 +94,45 @@ int cmpDoubles(const void *a, const void *b){
     return 0;
 }
 
+typedef struct stDist{
+    Element *element;
+    double dist;
+} *DistImp;
+
+double getDist(Dist distAux){
+    DistImp dist = (DistImp) distAux;
+
+    return dist->dist;
+}
+
 void treatFI(FILE *arqTxt, double x, double y, int ns, double r, List tLights, List hydrants){
     double dist;
     TrafficLight tLight;
-    double *tLightDists = (double *) malloc(getSize(tLights) * sizeof(double));
+    DistImp *tLightDists = (DistImp *) malloc(getSize(tLights) * sizeof(DistImp));
     int cont = 0;
     
     for(int i = getFirst(tLights); i != getNulo(); i = getNext(tLights, i)){
         tLight = getElementByIndex(tLights, i);
-        tLightDists[cont] = distEuclid(x, y, getTrafficLightX(tLight), getTrafficLightY(tLight));
+        DistImp s = malloc(sizeof(struct stDist));
+        s->element = tLight;
+        s->dist = distEuclid(x, y, getTrafficLightX(tLight), getTrafficLightY(tLight));
+        tLightDists[cont] = s;
         cont++;
     }
 
     printf("Desordenado:\n");
     for(int i = 0; i < getSize(tLights); i++){
-        printf("%lf\n", tLightDists[i]);
+        printf("ID: %s\n", getTrafficLightId(((TrafficLight) tLightDists[i]->element)));
+        printf("Dist: %lf\n", tLightDists[i]->dist);
         printf("\n");
     }
 
-    heap_sort(tLightDists, getSize(tLights) - 1, ns);
+    heap_sort((void *) tLightDists, getSize(tLights) - 1, ns);
 
     printf("Ordenado:\n");
     for(int i = 0; i < getSize(tLights); i++){
-        printf("%lf\n", tLightDists[i]);
+        printf("ID: %s\n", getTrafficLightId(((TrafficLight) tLightDists[i]->element)));
+        printf("Dist: %lf\n", tLightDists[i]->dist);
         printf("\n");
     }
 

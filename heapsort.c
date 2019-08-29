@@ -1,30 +1,43 @@
 #include "heapsort.h"
 
-void heapify(double vet[], int i, int heapSize){
-    double aux;
+void heapify(Dist vet[], int i, int heapSize){
+    printf("%d %d\n", i, heapSize);
+    Dist aux;
+    double distI, distLeft, distRight, distLowest;
     int left, right, lowest;
 
     left = 2 * i + 1;
     right = 2 * i + 2;
 
-    if(left <= heapSize && vet[left] < vet[i])
+    distI = getDist(vet[i]);
+    if(left < heapSize)
+        distLeft = getDist(vet[left]);
+
+    if (right < heapSize)
+        distRight = getDist(vet[right]);
+
+    if(left < heapSize && distLeft < distI)
         lowest = left;
     else
         lowest = i;
 
-    if(right <= heapSize && vet[right] < vet[lowest])
+    distLowest = getDist(vet[lowest]);
+
+    if(right < heapSize && distRight < distLowest)
         lowest = right;
 
     if(lowest != i){
+        printf("Aqui!\n");
         aux = vet[lowest];
         vet[lowest] = vet[i];
         vet[i] = aux;
+        printf("eae\n");
         
         heapify(vet, lowest, heapSize);
     }
 }
 
-void build_heap(double vet[], int heapSize){
+void build_heap(Dist vet[], int heapSize){
     int i;
 
     for(i = heapSize / 2; i >= 0; i--){
@@ -32,8 +45,8 @@ void build_heap(double vet[], int heapSize){
     }
 }
 
-void heap_sort(double vet[], int heapSize, int k){
-    double aux;
+void heap_sort(Dist vet[], int heapSize, int k){
+    Dist aux;
     int i;
 
     build_heap(vet, heapSize);

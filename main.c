@@ -316,7 +316,7 @@ int main(int argc, char *argv[]){
             }
             else if(!strcmp(command, "fi")){
                 scanFI(arqQuery, &x, &y, &n, &r);
-                treatFI(arqTxt, x, y, n, r, tLights, hydrants);
+                treatFI(arqText, x, y, n, r, tLights, hydrants);
             }
         }
     }

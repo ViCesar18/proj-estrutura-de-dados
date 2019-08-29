@@ -2,11 +2,15 @@
 #define HEAP_SORT_H
 
 #include <stdio.h>
+#include "operations.h"
+#include "queryBuildings.h"
 
-void heapify(double vet[], int i, int heapSize);
+typedef void *Dist;
 
-void build_heap(double vet[], int heapSize);
+void heapify(Dist vet[], int i, int heapSize);
 
-void heap_sort(double vet[], int heapSize, int k);
+void build_heap(Dist vet[], int heapSize);
+
+void heap_sort(Dist vet[], int heapSize, int k);
 
 #endif
