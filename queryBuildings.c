@@ -105,35 +105,72 @@ double getDist(Dist distAux){
     return dist->dist;
 }
 
-void treatFI(FILE *arqTxt, double x, double y, int ns, double r, List tLights, List hydrants){
+void treatFI(FILE *arqSvg, FILE *arqTxt, List auxList, double x, double y, int ns, double r, List tLights, List hydrants){
+    Form ring;
+    Wall line;
+
     double dist;
     TrafficLight tLight;
     DistImp *tLightDists = (DistImp *) malloc(getSize(tLights) * sizeof(DistImp));
-    int cont = 0;
+    int i, cont = 0;
     
-    for(int i = getFirst(tLights); i != getNulo(); i = getNext(tLights, i)){
+    for(i = getFirst(tLights); i != getNulo(); i = getNext(tLights, i)){
         tLight = getElementByIndex(tLights, i);
-        DistImp s = malloc(sizeof(struct stDist));
+
+        DistImp s = (DistImp) malloc(sizeof(struct stDist));
         s->element = tLight;
         s->dist = distEuclid(x, y, getTrafficLightX(tLight), getTrafficLightY(tLight));
         tLightDists[cont] = s;
+
         cont++;
     }
 
-    printf("Desordenado:\n");
-    for(int i = 0; i < getSize(tLights); i++){
-        printf("ID: %s\n", getTrafficLightId(((TrafficLight) tLightDists[i]->element)));
-        printf("Dist: %lf\n", tLightDists[i]->dist);
-        printf("\n");
+    min_heap_sort((void *) tLightDists, getSize(tLights) - 1, ns);
+    reverseVector((void *) tLightDists, getSize(tLights) - 1);
+
+    Hydrant hydrant;
+    DistImp *hydrantDists = (DistImp *) malloc(getSize(hydrants) * sizeof(DistImp));
+    cont = 0;
+
+    for(i = getFirst(hydrants); i != getNulo(); i = getNext(hydrants, i)){
+        hydrant = getElementByIndex(hydrants, i);
+
+        DistImp h = (DistImp) malloc(sizeof(struct stDist));
+        h->element = hydrant;
+        h->dist = distEuclid(x, y, getHydrantX(hydrant), getHydrantY(hydrant));
+        hydrantDists[cont] = h;
+
+        cont++;
     }
 
-    heap_sort((void *) tLightDists, getSize(tLights) - 1, ns);
+    min_heap_sort((void *) hydrantDists, getSize(hydrants) - 1, getSize(hydrants));
+    reverseVector((void *) hydrantDists, getSize(hydrants) - 1);
 
-    printf("Ordenado:\n");
-    for(int i = 0; i < getSize(tLights); i++){
-        printf("ID: %s\n", getTrafficLightId(((TrafficLight) tLightDists[i]->element)));
-        printf("Dist: %lf\n", tLightDists[i]->dist);
-        printf("\n");
+    ring = createCircle("", x, y, 20, "red", "red", "1");
+    insertElement(auxList, ring, "c");
+
+    fprintf(arqTxt, "Incêndio em %lf %lf!\n", x, y);
+    fprintf(arqTxt, "Semáforos com a programação alterada:\n");
+    for(i = 0; i < ns; i++){
+        fprintf(arqTxt, "%s ", getTrafficLightId(tLightDists[i]->element));
+        ring = createCircle("", getTrafficLightX(tLightDists[i]->element), getTrafficLightY(tLightDists[i]->element), 9, "green", "none", "3");
+        line = createWall(x, y, getTrafficLightX(tLightDists[i]->element), getTrafficLightY(tLightDists[i]->element));
+        insertElement(auxList, ring, "c");
+        insertElement(auxList, line, "w");
     }
-
+    
+    fprintf(arqTxt, "\n\nHidrantes ativados:\n");
+    for(i = 0; i < getSize(hydrants); i++){
+        if(hydrantDists[i]->dist <= r){
+            fprintf(arqTxt, "%s ", getHydrantId(hydrantDists[i]->element));
+            ring = createCircle("", getHydrantX(hydrantDists[i]->element), getHydrantY(hydrantDists[i]->element), 9, "green", "none", "3");
+            line = createWall(x, y, getHydrantX(hydrantDists[i]->element), getHydrantY(hydrantDists[i]->element));
+            insertElement(auxList, ring, "c");
+            insertElement(auxList, line, "w");
+        }
+        else{
+            break;
+        }
+    }
+    fprintf(arqTxt, "\n\n");
 }

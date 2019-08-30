@@ -236,3 +236,15 @@ bool quadInsideRect(Block block, Form rect){
     else
         return false;
 }
+
+void reverseVector(Dist vet[], int size){
+    Dist aux;
+    int i, j;
+
+    for(i = 0; i < size; i++){
+        aux = vet[i];
+        vet[i] = vet[size];
+        vet[size] = aux;
+        size--;
+    }
+}

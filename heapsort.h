@@ -7,10 +7,16 @@
 
 typedef void *Dist;
 
-void heapify(Dist vet[], int i, int heapSize);
+void min_heapify(Dist vet[], int i, int heapSize);
 
-void build_heap(Dist vet[], int heapSize);
+void min_build_heap(Dist vet[], int heapSize);
 
-void heap_sort(Dist vet[], int heapSize, int k);
+void min_heap_sort(Dist vet[], int heapSize, int k);
+
+void max_heapify(Dist vet[], int i, int heapSize);
+
+void max_build_heap(Dist vet[], int heapSize);
+
+void max_heap_sort(Dist vet[], int heapSize, int k);
 
 #endif

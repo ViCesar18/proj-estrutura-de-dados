@@ -1,7 +1,6 @@
 #include "heapsort.h"
 
-void heapify(Dist vet[], int i, int heapSize){
-    printf("%d %d\n", i, heapSize);
+void min_heapify(Dist vet[], int i, int heapSize){
     Dist aux;
     double distI, distLeft, distRight, distLowest;
     int left, right, lowest;
@@ -27,29 +26,27 @@ void heapify(Dist vet[], int i, int heapSize){
         lowest = right;
 
     if(lowest != i){
-        printf("Aqui!\n");
         aux = vet[lowest];
         vet[lowest] = vet[i];
         vet[i] = aux;
-        printf("eae\n");
         
-        heapify(vet, lowest, heapSize);
+        min_heapify(vet, lowest, heapSize);
     }
 }
 
-void build_heap(Dist vet[], int heapSize){
+void min_build_heap(Dist vet[], int heapSize){
     int i;
 
     for(i = heapSize / 2; i >= 0; i--){
-        heapify(vet, i, heapSize);
+        min_heapify(vet, i, heapSize);
     }
 }
 
-void heap_sort(Dist vet[], int heapSize, int k){
+void min_heap_sort(Dist vet[], int heapSize, int k){
     Dist aux;
     int i;
 
-    build_heap(vet, heapSize);
+    min_build_heap(vet, heapSize);
 
     int kNearests = heapSize - k;
     
@@ -59,6 +56,66 @@ void heap_sort(Dist vet[], int heapSize, int k){
         vet[0] = aux;
         heapSize--;
 
-        heapify(vet, 0, heapSize);
+        min_heapify(vet, 0, heapSize);
+    }
+}
+
+void max_heapify(Dist vet[], int i, int heapSize){
+    Dist aux;
+    double distI, distLeft, distRight, distLowest;
+    int left, right, largest;
+
+    left = 2 * i + 1;
+    right = 2 * i + 2;
+
+    distI = getDist(vet[i]);
+    if(left < heapSize)
+        distLeft = getDist(vet[left]);
+
+    if (right < heapSize)
+        distRight = getDist(vet[right]);
+
+    if(left < heapSize && distLeft > distI)
+        largest = left;
+    else
+        largest = i;
+
+    distLowest = getDist(vet[largest]);
+
+    if(right < heapSize && distRight > distLowest)
+        largest = right;
+
+    if(largest != i){
+        aux = vet[largest];
+        vet[largest] = vet[i];
+        vet[i] = aux;
+        
+        max_heapify(vet, largest, heapSize);
+    }
+}
+
+void max_build_heap(Dist vet[], int heapSize){
+    int i;
+
+    for(i = heapSize / 2; i >= 0; i--){
+        max_heapify(vet, i, heapSize);
+    }
+}
+
+void max_heap_sort(Dist vet[], int heapSize, int k){
+    Dist aux;
+    int i;
+
+    max_build_heap(vet, heapSize);
+
+    int kNearests = heapSize - k;
+    
+    for(i = heapSize; i > kNearests; i--){
+        aux = vet[i];
+        vet[i] = vet[0];
+        vet[0] = aux;
+        heapSize--;
+
+        max_heapify(vet, 0, heapSize);
     }
 }

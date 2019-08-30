@@ -39,7 +39,7 @@ int main(int argc, char *argv[]){
     strcpy(cfillR, "gray");
     strcpy(cstrkR, "black");
 
-    List figures, blocks, hydrants, tLights, rTowers, buildings, walls;    //Listas de cada objeto urbano
+    List figures, blocks, hydrants, tLights, rTowers, buildings, walls, auxList;    //Listas de cada objeto urbano
     Form figure1, figure2;  //Armazena uma forma
     char type1[4], type2[4];    //Armazena o tipo do objeto urbano em questão
 
@@ -127,6 +127,7 @@ int main(int argc, char *argv[]){
     rTowers = createList(nr);
     buildings = createList(np);
     walls = createList(nm);
+    auxList = createList(1000);
 
     
     /*Le os dados das formas do arquivo de entrada*/
@@ -316,11 +317,11 @@ int main(int argc, char *argv[]){
             }
             else if(!strcmp(command, "fi")){
                 scanFI(arqQuery, &x, &y, &n, &r);
-                treatFI(arqText, x, y, n, r, tLights, hydrants);
+                treatFI(arqSvgQ, arqText, auxList, x, y, n, r, tLights, hydrants);
             }
         }
     }
-    
+
     /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
     if(arqSvgQ != NULL){
         printList(figures, arqSvgQ);
@@ -330,6 +331,7 @@ int main(int argc, char *argv[]){
         printList(rTowers, arqSvgQ);
         printBuildingList(blocks, buildings, arqSvgQ);
         printList(walls, arqSvgQ);
+        printList(auxList, arqSvgQ);
     }
 
     /*Finalização, libreracao de memoria e fechamento dos arquivos*/

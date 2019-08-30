@@ -26,6 +26,6 @@ int cmpDoubles(const void *a, const void *b);
 
 double getDist(Dist distAux);
 
-void treatFI(FILE *arqTxt, double x, double y, int ns, double r, List tLights, List hydrants);
+void treatFI(FILE *arqSvg, FILE *arqTxt, List auxList, double x, double y, int ns, double r, List tLights, List hydrants);
 
 #endif

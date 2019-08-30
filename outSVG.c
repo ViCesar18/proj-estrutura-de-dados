@@ -188,3 +188,9 @@ void printBB(List figures, FILE *arq, char color[]){
         }
     }
 }
+
+void printFire(FILE *arqSvg, double x, double y, double r){
+    Form circle = createCircle("", x, y, r, "red", "red", "1");
+
+    printCircle(arqSvg, circle);
+}

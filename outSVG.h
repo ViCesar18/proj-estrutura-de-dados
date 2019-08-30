@@ -54,4 +54,6 @@ void printWall(FILE *arqOut, Wall wall);
 /*Imprime os elementos da lista e suas bounding box correspondentes no arquivo SVG passado como parametro*/
 void printBB(List figures, FILE *arq, char color[]);
 
+void printFire(FILE *arqSvg, double x, double y, double r);
+
 #endif

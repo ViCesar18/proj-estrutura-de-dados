@@ -7,6 +7,9 @@
 #include <stdbool.h>
 #include "./Objetos/forms.h"
 #include "list.h"
+#include "queryBuildings.h"
+
+typedef void *Dist;
 
 /*Calcula a distancia euclidiana entre dois pontos*/
 double distEuclid(double x1, double y1, double x2, double y2);
@@ -34,5 +37,7 @@ bool quadInsideCirc(Block block, Form circle, char met[]);
 
 /*Retorna true se uma quadra esta inteiramente dentro de um retangulo, false caso contrario*/
 bool quadInsideRect(Block block, Form rect);
+
+void reverseVector(Dist vet[], int size);
 
 #endif
