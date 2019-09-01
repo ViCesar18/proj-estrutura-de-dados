@@ -18,42 +18,46 @@
 /*Aloca memoria e recebe o nome do arquivo de saida em questao*/
 void createOutputFileName(char **nameOut, char nameIn[]);
 
-/*Aloca memoria e recebe o nome do arquivo de saida em questao, alem de tratar o '-'*/
+/*Aloca memoria e recebe o nome do arquivo SVG de consulta, alem de tratar o '-'*/
 void createOutputQryFileName(char **nameOut, char nameIn[], char nameQuery[]);
 
-/*Aloca memoria e recebe o nome do arquivo de saida em questao, alem de tratar os '-'*/
+/*Aloca memoria e recebe o nome do arquivo SVG de bounding box, alem de tratar os '-'*/
 void createOutputBBFileName(char **nameOut, char nameIn[], char nameQuery[], char suffix[]);
 
-/*Recebe como parametros as informacoes para desenhar um circulo em um arquivo SVG*/
+/*Desenha um circulo no arquivo SVG*/
 void printCircle(FILE *arqOut, Form circle);
 
-/*Recebe como parametros as informacoes para desenhar um retangulo em um arquivo SVG*/
+/*Desenha um retangulo no arquivo SVG*/
 void printRect(FILE *arqOut, Form rect);
 
-/*Recebe como parametros as informacoes para desenhar um texto em um arquivo SVG*/
+/*Escreve um texto no arquivo SVG*/
 void printText(FILE *arqOut, double x, double y, char text[], char fillColor[]);
 
-/*Recebe como parametros as informacoes para desenhar uma linha em um arquivo SVG*/
+/*Desenha uma linha no arquivo SVG*/
 void printLine(FILE *arqOut, double x1, double y1, double x2, double y2, char color[]);
 
-/*Recebe como parametros as informacoes para desenhar uma elipse em um arquivo SVG*/
+/*Desenha uma elipse no arquivo SVG*/
 void printEllipse(FILE *arqOut, double xC, double yC, double rX, double rY, char cor[]);
 
+/*Desenha uma quadra no arquivo SVG*/
 void printBlock(FILE *arqOut, Block block);
 
+/*Desenha um hidrante no arquivo SVG*/
 void printHydrant(FILE *arqOut, Hydrant hydrant);
 
+/*Desenha um semaforo no arquivo SVG*/
 void printTrafficLight(FILE *arqOut, TrafficLight tLight);
 
+/*Desenha uma torre de radio no arquivo SVG*/
 void printRadioTower(FILE *arqOut, RadioTower rTower);
 
+/*Desenha um predio no arquivo SVG*/
 void printBuilding(FILE *arqOut, Building building, Block block);
 
+/*Desenha um muro no arquivo SVG*/
 void printWall(FILE *arqOut, Wall wall);
 
 /*Imprime os elementos da lista e suas bounding box correspondentes no arquivo SVG passado como parametro*/
 void printBB(List figures, FILE *arq, char color[]);
-
-void printFire(FILE *arqSvg, double x, double y, double r);
 
 #endif

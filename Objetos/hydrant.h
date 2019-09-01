@@ -7,6 +7,8 @@
 
 typedef void *Hydrant;
 
+/*TAD dos hidrantes*/
+
 /*Coloca os dados de hidrante em uma estrutura e retorna a estrutura*/
 Hydrant createHydrant(char id[], double x, double y, char strokeColor[], char fillColor[], char sw[]);
 

@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
     char command[8];   //Armazena o comando lido do arquivo .qry
     char sufixo[32], cor[32], id1[32], id2[32], metric[4];  //Armazena os parametros do arquivo .qry (string)
     double x, y, r;        //Armazena os parametros do arquivo .qry (coordenadas)
-    int n;                //Armazena os parametros do arquivo .qry
+    int n, k;                //Armazena os parametros do arquivo .qry
 
     char cfillQ[24], cstrkQ[24], cfillH[24], cstrkH[24], cfillS[24], cstrkS[24], cfillR[24], cstrkR[24];    //Cores para quadras, hidrântes, semáforos e torres de rádio
     char swQ[12] = {"1"}, swH[12] = {"1"}, swS[12] = {"1"}, swR[12] = {"1"};    //Espessura de borda de quadras, hidrântes, semáforos e torres de rádio
@@ -254,24 +254,24 @@ int main(int argc, char *argv[]){
                 fscanf(arqQuery, "%s", id1);
                 figure1 = getElementByIdInLists(blocks, hydrants, tLights, rTowers, id1, type1);
                 if(!strcmp(type1, "h")){
-                    deleteElement(hydrants, id1);
                     x = getHydrantX(figure1);
                     y = getHydrantY(figure1);
+                    deleteElement(hydrants, id1);
                 }
                 else if(!strcmp(type1, "s")){
-                    deleteElement(tLights, id1);
                     x = getTrafficLightX(figure1);
                     y = getTrafficLightY(figure1);
+                    deleteElement(tLights, id1);
                 }
                 else if(!strcmp(type1, "rb")){
-                    deleteElement(rTowers, id1);
                     x = getRadioTowerX(figure1);
                     y = getRadioTowerY(figure1);
+                    deleteElement(rTowers, id1);
                 }
                 else if(!strcmp(type1, "q")){
-                    deleteElement(blocks, id1);
                     x = getBlockX(figure1);
                     y = getBlockY(figure1);
+                    deleteElement(blocks, id1);
                 }
                 fprintf(arqText, "del %s\n", id1);
                 fprintf(arqText, "\tEquipamento Urbano Removido: %s (%lf %lf)\n\n", id1, x, y);
@@ -318,6 +318,16 @@ int main(int argc, char *argv[]){
             else if(!strcmp(command, "fi")){
                 scanFI(arqQuery, &x, &y, &n, &r);
                 treatFI(arqSvgQ, arqText, auxList, x, y, n, r, tLights, hydrants);
+            }
+            else if(!strcmp(command, "fh")){
+                scanFHFS(arqQuery, &k, id1, id2, &n);
+                getAddress(id1, id2, n, &x, &y, blocks);
+                treatFH(arqText, arqSvgQ, hydrants, k, x, y, auxList);
+            }
+            else if(!strcmp(command, "fs")){
+                scanFHFS(arqQuery, &k, id1, id2, &n);
+                getAddress(id1, id2, n, &x, &y, blocks);
+                treatFS(arqText, arqSvgQ, tLights, k, x, y, auxList);
             }
         }
     }
@@ -377,6 +387,8 @@ int main(int argc, char *argv[]){
     deallocateList(rTowers, freeRadioTower);
     deallocateList(buildings, freeBuilding);
     deallocateList(walls, freeWall);
+    deallocateList(auxList, freeForm);
+    //deallocateList(auxList, freeWall);
 
     return 0;
 }

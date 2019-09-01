@@ -117,10 +117,9 @@ void treatFI(FILE *arqSvg, FILE *arqTxt, List auxList, double x, double y, int n
     for(i = getFirst(tLights); i != getNulo(); i = getNext(tLights, i)){
         tLight = getElementByIndex(tLights, i);
 
-        DistImp s = (DistImp) malloc(sizeof(struct stDist));
-        s->element = tLight;
-        s->dist = distEuclid(x, y, getTrafficLightX(tLight), getTrafficLightY(tLight));
-        tLightDists[cont] = s;
+        tLightDists[cont] = (DistImp) malloc(sizeof(struct stDist));
+        tLightDists[cont]->element = tLight;
+        tLightDists[cont]->dist = distEuclid(x, y, getTrafficLightX(tLight), getTrafficLightY(tLight));
 
         cont++;
     }
@@ -135,10 +134,9 @@ void treatFI(FILE *arqSvg, FILE *arqTxt, List auxList, double x, double y, int n
     for(i = getFirst(hydrants); i != getNulo(); i = getNext(hydrants, i)){
         hydrant = getElementByIndex(hydrants, i);
 
-        DistImp h = (DistImp) malloc(sizeof(struct stDist));
-        h->element = hydrant;
-        h->dist = distEuclid(x, y, getHydrantX(hydrant), getHydrantY(hydrant));
-        hydrantDists[cont] = h;
+        hydrantDists[cont] = (DistImp) malloc(sizeof(struct stDist));
+        hydrantDists[cont]->element = hydrant;
+        hydrantDists[cont]->dist = distEuclid(x, y, getHydrantX(hydrant), getHydrantY(hydrant));
 
         cont++;
     }
@@ -146,7 +144,7 @@ void treatFI(FILE *arqSvg, FILE *arqTxt, List auxList, double x, double y, int n
     min_heap_sort((void *) hydrantDists, getSize(hydrants) - 1, getSize(hydrants));
     reverseVector((void *) hydrantDists, getSize(hydrants) - 1);
 
-    ring = createCircle("", x, y, 20, "red", "red", "1");
+    ring = createCircle("", x, y, 10, "red", "yellow", "4");
     insertElement(auxList, ring, "c");
 
     fprintf(arqTxt, "Incêndio em %lf %lf!\n", x, y);
@@ -173,4 +171,121 @@ void treatFI(FILE *arqSvg, FILE *arqTxt, List auxList, double x, double y, int n
         }
     }
     fprintf(arqTxt, "\n\n");
+
+    for(int i = 0; i < getSize(tLights); i++){
+        free(tLightDists[i]);
+    }
+    free(tLightDists);
+
+    for(i = 0; i < getSize(hydrants); i++){
+        free(hydrantDists[i]);
+    }
+    free(hydrantDists);
+}
+
+void getAddress(char cep[], char face[], int num, double *x, double *y, List blocks){
+    Block block;
+    char type[4];
+
+    block = getElementById(blocks, cep, type);
+
+    if(!strcmp(face, "N")){
+        *x = getBlockX(block) + num;
+        *y = getBlockY(block) + getBlockH(block);
+    }
+    else if(!strcmp(face, "S")){
+        *x = getBlockX(block) + num;
+        *y = getBlockY(block);
+    }
+    else if(!strcmp(face, "O")){
+        *x = getBlockX(block) + getBlockW(block);
+        *y = getBlockY(block) + num;
+    }
+    else if(!strcmp(face, "L")){
+        *x = getBlockX(block);
+        *y = getBlockY(block) + num;
+    }
+}
+
+void treatFH(FILE *arqTxt, FILE *arqSvg, List hydrants, int k, double x, double y, List auxList){
+    int i, cont = 0;
+    Form ring;
+    Wall line;
+    DistImp *hydrantDists = (DistImp *) malloc(getSize(hydrants) * sizeof(DistImp));
+
+    for(i = getFirst(hydrants); i != getNulo(); i = getNext(hydrants, i)){
+        Hydrant hydrant = getElementByIndex(hydrants, i);
+        hydrantDists[cont] = (DistImp) malloc(sizeof(struct stDist));
+        hydrantDists[cont]->element = hydrant;
+        hydrantDists[cont]->dist = distEuclid(x, y, getHydrantX(hydrant), getHydrantY(hydrant));
+
+        cont++;
+    }
+
+    if(k < 0){
+        k *= -1;
+        min_heap_sort((void *)hydrantDists, getSize(hydrants) - 1, k);
+        fprintf(arqTxt, "Hidrantes mais próximos do endeço:\n");
+    }
+    else if(k > 0){
+        max_heap_sort((void *)hydrantDists, getSize(hydrants) - 1, k);
+        fprintf(arqTxt, "Hidrantes mais distantes do endeço:\n");
+    }
+    
+    reverseVector((void *)hydrantDists, getSize(hydrants) - 1);
+
+    ring = createCircle("", x, y, 10, "red", "yellow", "4");
+    insertElement(auxList, ring, "c");
+
+    for(i = 0; i < k; i++){
+        fprintf(arqTxt, "%s ", getHydrantId(hydrantDists[i]->element));
+        ring = createCircle("", getHydrantX(hydrantDists[i]->element), getHydrantY(hydrantDists[i]->element), 9, "green", "none", "3");
+        line = createWall(x, y, getHydrantX(hydrantDists[i]->element), getHydrantY(hydrantDists[i]->element));
+        insertElement(auxList, ring, "c");
+        insertElement(auxList, line, "w");
+    }
+    fprintf(arqTxt, "\n\n");
+
+    for(i = 0; i < getSize(hydrants); i++){
+        free(hydrantDists[i]);
+    }
+    free(hydrantDists);
+}
+
+void treatFS(FILE *arqTxt, FILE *arqSvg, List tLights, int k, double x, double y, List auxList){
+    int i, cont = 0;
+    Form ring;
+    Wall line;
+    DistImp *tLightDists = (DistImp *) malloc(getSize(tLights) * sizeof(DistImp));
+
+    for(i = getFirst(tLights); i != getNulo(); i = getNext(tLights, i)){
+        Hydrant tLight = getElementByIndex(tLights, i);
+        tLightDists[cont] = (DistImp) malloc(sizeof(struct stDist));
+        tLightDists[cont]->element = tLight;
+        tLightDists[cont]->dist = distEuclid(x, y, getTrafficLightX(tLight), getTrafficLightY(tLight));
+
+        cont++;
+    }
+
+    min_heap_sort((void *)tLightDists, getSize(tLights) - 1, k);
+    fprintf(arqTxt, "Semáforos mais próximos do endeço:\n");
+    
+    reverseVector((void *)tLightDists, getSize(tLights) - 1);
+
+    ring = createCircle("", x, y, 10, "red", "yellow", "4");
+    insertElement(auxList, ring, "c");
+
+    for(i = 0; i < k; i++){
+        fprintf(arqTxt, "%s ", getTrafficLightId(tLightDists[i]->element));
+        ring = createCircle("", getTrafficLightX(tLightDists[i]->element), getTrafficLightY(tLightDists[i]->element), 9, "green", "none", "3");
+        line = createWall(x, y, getTrafficLightX(tLightDists[i]->element), getTrafficLightY(tLightDists[i]->element));
+        insertElement(auxList, ring, "c");
+        insertElement(auxList, line, "w");
+    }
+    fprintf(arqTxt, "\n\n");
+
+    for(i = 0; i < getSize(tLights); i++){
+        free(tLightDists[i]);
+    }
+    free(tLightDists);
 }

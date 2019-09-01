@@ -7,6 +7,8 @@
 
 typedef void *Block;
 
+/*TAD das Quadras*/
+
 /*Coloca os dados de quadra em uma estrutura e retorna a estrutura*/
 Block createBlock(char cep[], double x, double y, double w, double h, char strokeColor[], char fillColor[], char sw[]);
 

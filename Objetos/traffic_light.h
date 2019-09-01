@@ -7,6 +7,8 @@
 
 typedef void *TrafficLight;
 
+/*TAD dos semaforos*/
+
 /*Coloca os dados de semaforo em uma estrutura e retorna a estrutura*/
 TrafficLight createTrafficLight(char id[], double x, double y, char strokeColor[], char fillColor[], char sw[]);
 

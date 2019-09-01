@@ -7,6 +7,8 @@
 
 typedef void *Building;
 
+/*TAD dos predios*/
+
 /*Coloca os dados de predio em uma estrutura e retorna a estrutura*/
 Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin);
 

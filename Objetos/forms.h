@@ -7,6 +7,8 @@
 
 typedef void *Form;
 
+/*TAD das formas*/
+
 /*Coloca os dados de circulo em uma estrutura e retorna a estrutura*/
 Form createCircle(char id[], double x, double y, double r, char strokeColor[], char fillColor[], char sw[]);
 

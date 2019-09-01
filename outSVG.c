@@ -136,13 +136,13 @@ void printBuilding(FILE *arqOut, Building building, Block block){
         h = depth;
     }
     else if(!strcmp(face, "O")){
-        x = xB + margin;
+        x = xB + wB - margin - depth;
         y = yB + num - faceSize / 2;
         w = depth;
         h = faceSize;
     }
     else if(!strcmp(face, "L")){
-        x = xB + wB - margin - depth;
+        x = xB + margin;
         y = yB + num - faceSize / 2;
         w = depth;
         h = faceSize;
@@ -150,6 +150,8 @@ void printBuilding(FILE *arqOut, Building building, Block block){
 
     rect = createRect("", x, y, w, h, "black", "white", 0, "1");
     printRect(arqOut, rect);
+
+    freeForm(rect);
 }
 
 void printWall(FILE *arqOut, Wall wall){
@@ -187,10 +189,4 @@ void printBB(List figures, FILE *arq, char color[]){
             printEllipse(arq, x, y, rx, ry, color);
         }
     }
-}
-
-void printFire(FILE *arqSvg, double x, double y, double r){
-    Form circle = createCircle("", x, y, r, "red", "red", "1");
-
-    printCircle(arqSvg, circle);
 }

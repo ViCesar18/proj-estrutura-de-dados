@@ -11,6 +11,8 @@ typedef void *List;
 #include "./Objetos/forms.h"
 #include "./Objetos/building.h"
 
+/*Nesse header encontram-se as funcoes relacionadas a manipulacao de listas duplamente encadeadas estaticas*/
+
 /*Cria e aloca memoria para uma lista duplamente encadeada estatica*/
 List createList(int capacity);
 
@@ -35,6 +37,7 @@ int getSize(List listAux);
 /*Retorna o fim da lista*/
 int getLast(List listAux);
 
+/*Retorna o tipo do elemento contido na lista*/
 char *getType(List listAux, int i);
 
 /*Insere um elemento na lista*/
@@ -61,6 +64,7 @@ Element getElementByIdInLists(List lista1, List lista2, List lista3, List lista4
 /*Imprime os elementos da lista no arquivo SVG passado como parametro*/
 void printList(List listAux, FILE *arqOut);
 
+/*Imprime os predios contidos em uma lista*/
 void printBuildingList(List blocksAux, List buildingsAux, FILE *arqOut);
 
 /*Desaloca uma lista*/

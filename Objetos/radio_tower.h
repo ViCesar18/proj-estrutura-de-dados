@@ -7,6 +7,8 @@
 
 typedef void *RadioTower;
 
+/*TAD das torres de radio*/
+
 /*Coloca os dados de radio-base em uma estrutura e retorna a estrutura*/
 RadioTower createRadioTower(char id[], double x, double y, char strokeColor[], char fillColor[], char sw[]);
 

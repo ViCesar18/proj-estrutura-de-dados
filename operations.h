@@ -9,6 +9,8 @@
 #include "list.h"
 #include "queryBuildings.h"
 
+/*Nesse header encontram-se todas as oprecoes utilizadas por outras funcoes em todo o resto do programa*/
+
 typedef void *Dist;
 
 /*Calcula a distancia euclidiana entre dois pontos*/
@@ -38,6 +40,7 @@ bool quadInsideCirc(Block block, Form circle, char met[]);
 /*Retorna true se uma quadra esta inteiramente dentro de um retangulo, false caso contrario*/
 bool quadInsideRect(Block block, Form rect);
 
+/*Inverte o vetor vet*/
 void reverseVector(Dist vet[], int size);
 
 #endif

@@ -308,3 +308,11 @@ void scanFI(FILE *arqQuery, double *x, double *y, int *n, double *r){
     fscanf(arqQuery, "%d", n);
     fscanf(arqQuery, "%lf", r);
 }
+
+void scanFHFS(FILE *arqQuery, int *k, char cep[], char face[], int *num){
+
+    fscanf(arqQuery, "%d", k);
+    fscanf(arqQuery, "%s", cep);
+    fscanf(arqQuery, "%s", face);
+    fscanf(arqQuery, "%d", num);
+}

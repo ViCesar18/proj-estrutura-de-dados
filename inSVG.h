@@ -59,6 +59,7 @@ void changeThickness(FILE *arqIn, char cw[], char rw[]);
 /*Le as informacoes de predio do arquivo .geo e armazena na lista buildings*/
 void scanBuilding(FILE *arqIn, List buildings);
 
+/*Le as informacoes de muro do arquivo .geo e armazena na lista walls*/
 void scanWall(FILE *arqIn, List walls);
 
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
@@ -85,6 +86,10 @@ Element scanCBQ(FILE *arqQuery, char cstrk[]);
 /*Le os parametros de consulta do comando "trns" e retorna um retangulo com os parametros passados*/
 Element scanTRNS(FILE *arqQuery, double *dx, double *dy);
 
+/*Le os parametros de consulta do comando "fi" e retorna um retangulo com os parametros passados*/
 void scanFI(FILE *arqQuery, double *x, double *y, int *n, double *r);
+
+/*Le of parametros de consulta do comando "fh" e "fs" e retorna um retangulo com os parametros passados*/
+void scanFHFS(FILE *arqQuery, int *k, char cep[], char face[], int *num);
 
 #endif

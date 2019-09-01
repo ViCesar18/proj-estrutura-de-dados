@@ -8,7 +8,7 @@
 #include "outSVG.h"
 #include "./Objetos/forms.h"
 
-/*Nesse header encontra-se todas as funcoes relacionadas ao arquivo de consulta(.qry), aqui são feitas as verificacoes
+/*Nesse header encontram-se todas as funcoes relacionadas aos comandos de formas do arquivo de consulta(.qry), aqui são feitas as verificacoes
 e os calculos matematicos*/
 
 /*Verifica se uma figura (c ou r) esta colidindo com outra (c ou r)*/
