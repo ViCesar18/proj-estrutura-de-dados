@@ -7,6 +7,7 @@
 #include "queryBuildings.h"
 #include "list.h"
 #include "Objetos/forms.h"
+#include "segments.h"
 
 int main(int argc, char *argv[]){
     int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000, np = 1000, nm = 1000;  //Número máximo padrão das formas
@@ -23,7 +24,7 @@ int main(int argc, char *argv[]){
     char command[8];   //Armazena o comando lido do arquivo .qry
     char sufixo[32], cor[32], id1[32], id2[32], metric[4];  //Armazena os parametros do arquivo .qry (string)
     double x, y, r;        //Armazena os parametros do arquivo .qry (coordenadas)
-    int n, k;                //Armazena os parametros do arquivo .qry
+    int n, k, vectSize = 0;                //Armazena os parametros do arquivo .qry
 
     char cfillQ[24], cstrkQ[24], cfillH[24], cstrkH[24], cfillS[24], cstrkS[24], cfillR[24], cstrkR[24];    //Cores para quadras, hidrântes, semáforos e torres de rádio
     char swQ[12] = {"1"}, swH[12] = {"1"}, swS[12] = {"1"}, swR[12] = {"1"};    //Espessura de borda de quadras, hidrântes, semáforos e torres de rádio
@@ -42,6 +43,8 @@ int main(int argc, char *argv[]){
     List figures, blocks, hydrants, tLights, rTowers, buildings, walls, auxList;    //Listas de cada objeto urbano
     Form figure1, figure2;  //Armazena uma forma
     char type1[4], type2[4];    //Armazena o tipo do objeto urbano em questão
+
+    Segment segments; //Vetor de segmentos que barra o a luz da bomba de radiacao luminosa
 
     /*Recebe os parametros da main (argv)*/
     receiveParameters(argc, argv, &pathIn, &nameIn, &nameQuery, &pathOut);
@@ -329,6 +332,12 @@ int main(int argc, char *argv[]){
                 getAddress(id1, id2, n, &x, &y, blocks);
                 treatFS(arqText, arqSvgQ, tLights, k, x, y, auxList);
             }
+            else if(!strcmp(command, "brl")){
+                scanBRL(arqQuery, &x, &y);
+                int capacitySegments = nm + np * 4 + 4;
+                segments = createSegments(capacitySegments, walls, buildings, &vectSize);
+                
+            }
         }
     }
 
@@ -342,6 +351,7 @@ int main(int argc, char *argv[]){
         printBuildingList(blocks, buildings, arqSvgQ);
         printList(walls, arqSvgQ);
         printList(auxList, arqSvgQ);
+        printSegments(arqSvgQ, segments, vectSize);
     }
 
     /*Finalização, libreracao de memoria e fechamento dos arquivos*/

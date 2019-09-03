@@ -3,7 +3,7 @@
 typedef struct stBuilding{
     char cep[32], face[2];
     int num;
-    double faceSize, depth, margin;
+    double faceSize, depth, margin, x, y, w, h;
 }*BuildingImp;
 
 Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin){
@@ -59,4 +59,52 @@ void freeBuilding(Building b){
     BuildingImp building = (BuildingImp) b;
 
     free(building);   
+}
+
+double getBuildingX(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    return building->x;
+}
+
+double getBuildingY(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    return building->y;
+}
+
+double getBuildingW(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    return building->w;
+}
+
+double getBuildingH(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    return building->h;
+}
+
+void setBuildingX(Building b, double x){
+    BuildingImp building = (BuildingImp) b;
+
+    building->x = x;
+}
+
+void setBuildingY(Building b, double y){
+    BuildingImp building = (BuildingImp) b;
+
+    building->y = y;
+}
+
+void setBuildingW(Building b, double w){
+    BuildingImp building = (BuildingImp) b;
+
+    building->w = w;
+}
+
+void setBuildingH(Building b, double h){
+    BuildingImp building = (BuildingImp) b;
+
+    building->h = h;
 }

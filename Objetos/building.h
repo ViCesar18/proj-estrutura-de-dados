@@ -24,6 +24,22 @@ double getBuildingFaceSize(Building b);
 double getBuildingDepth(Building b);
 
 double getBuildingMargin(Building b);
+
+double getBuildingX(Building b);
+
+double getBuildingY(Building b);
+
+double getBuildingW(Building b);
+
+double getBuildingH(Building b);
+
+void setBuildingX(Building b, double x);
+
+void setBuildingY(Building b, double y);
+
+void setBuildingW(Building b, double w);
+
+void setBuildingH(Building b, double h);
 /*Fim getters e setters*/
 
 /*Libera memoria de um predio*/

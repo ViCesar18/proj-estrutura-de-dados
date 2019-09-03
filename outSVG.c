@@ -148,6 +148,11 @@ void printBuilding(FILE *arqOut, Building building, Block block){
         h = faceSize;
     }
 
+    setBuildingX(building, x);
+    setBuildingY(building, y);
+    setBuildingW(building, w);
+    setBuildingH(building, h);
+
     rect = createRect("", x, y, w, h, "black", "white", 0, "1");
     printRect(arqOut, rect);
 

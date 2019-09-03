@@ -92,4 +92,6 @@ void scanFI(FILE *arqQuery, double *x, double *y, int *n, double *r);
 /*Le of parametros de consulta do comando "fh" e "fs" e retorna um retangulo com os parametros passados*/
 void scanFHFS(FILE *arqQuery, int *k, char cep[], char face[], int *num);
 
+void scanBRL(FILE *arqQuery, double *x, double *y);
+
 #endif
