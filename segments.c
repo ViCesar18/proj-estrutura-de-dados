@@ -1,8 +1,16 @@
 #include "segments.h"
 
+#define PI 3.14159265
+
 typedef struct stSegment{
     double x1, y1, x2, y2;
 } *SegmentImp;
+
+typedef struct stVertex{
+    double x, y, angle, dist;
+    bool start;
+    Segment segment;
+} *VertexImp;
 
 Segment allocateSegments(int capacity){
     SegmentImp *segments = (SegmentImp *) malloc(capacity * sizeof(SegmentImp));
@@ -24,7 +32,7 @@ void insertSegment(Segment segmentAux, int *size, double x1, double y1, double x
 }
 
 Segment createSegments(int capacity, List walls, List buildings, int *vectSize){
-    Segment segments = allocateSegments(capacity);
+    SegmentImp *segments = allocateSegments(capacity);
 
     for(int i = getFirst(walls); i != getNulo(); i = getNext(walls, i)){
         Wall wall = getElementByIndex(walls, i);
@@ -51,26 +59,70 @@ void printSegments(FILE *arqSvgQ, Segment s, int size){
         }
 }
 
-/*double getSegmentX1(Segment segmentAux, int index){
-    SegmentImp *segments = (SegmentImp *) segmentAux;
+Vertex createVertices(double x, double y, int capacity, Segment s, int size, FILE *arqSvgQ){
+    int j = 0, k = 1;
+    SegmentImp *segments = (SegmentImp *) s;
+    VertexImp *vertices = (VertexImp *) malloc(capacity * sizeof(VertexImp));
 
-    return segments[index]->x1;
+    for(int i = 0; i < size; i++){
+        vertices[j] = (VertexImp) malloc(sizeof(struct stVertex));
+        vertices[j]->x = segments[i]->x1;
+        vertices[j]->y = segments[i]->y1;
+        vertices[j]->dist = distEuclid(x, y, vertices[j]->x, vertices[j]->y);
+        vertices[j]->angle = atan2(vertices[j]->y - y, vertices[j]->x - x) * 180 / PI;
+        
+
+        vertices[k] = (VertexImp) malloc(sizeof(struct stVertex));
+        vertices[k]->x = segments[i]->x2;
+        vertices[k]->y = segments[i]->y2;
+        vertices[k]->dist = distEuclid(x, y, vertices[k]->x, vertices[k]->y);
+        vertices[k]->angle = atan2(vertices[k]->y - y, vertices[k]->x - x) * 180 / PI;
+
+        if(vertices[j]->angle < vertices[k]->angle){
+            vertices[j]->start = true;
+            vertices[k]->start = false;
+        }
+        else{
+            vertices[j]->start = false;
+            vertices[k]->start = true;
+        }
+
+        j += 2;
+        k += 2;
+    }
+
+    return vertices;
 }
 
-double getSegmentY1(Segment segmentAux, int index){
-    SegmentImp *segments = (SegmentImp *) segmentAux;
+int cmpVertex(const void *a, const void *b){
+    VertexImp arg1 = * (const VertexImp *)a;
+    VertexImp arg2 = * (const VertexImp *)b;
 
-    return segments[index]->y1;
+
+    if(arg1->angle < arg2->angle) return -1;
+    else if(arg1->angle > arg2->angle) return 1;
+
+    else if(arg1->dist < arg2->dist) return -1;
+    else if(arg1->dist > arg2->dist) return 1;
+
+    else if(arg1->start && !arg2->start) return -1;
+    else if(!arg1->start && arg2->start) return 1;
+    return 0;
 }
 
-double getSegmentX2(Segment segmentAux, int index){
-    SegmentImp *segments = (SegmentImp *) segmentAux;
+void sortVertex(Vertex v, int size, FILE *arqSvgQ){
+    VertexImp *vertices = (VertexImp *) v;
 
-    return segments[index]->x2;
+    qsort(vertices, size, sizeof(VertexImp), cmpVertex);
+
+    Form circle;
+    for(int i = 0; i < 6; i++){
+        printf("%lf %lf\n", vertices[i]->x, vertices[i]->y);
+        if(vertices[i]->start)
+            circle = createCircle("", vertices[i]->x, vertices[i]->y, 3, "green", "green", "1");
+        else
+            circle = createCircle("", vertices[i]->x, vertices[i]->y, 3, "red", "red", "1");
+
+        printCircle(arqSvgQ, circle);
+    }
 }
-
-double getSegmentY2(Segment segmentAux, int index){
-    SegmentImp *segments = (SegmentImp *) segmentAux;
-
-    return segments[index]->y2;
-}*/

@@ -45,6 +45,7 @@ int main(int argc, char *argv[]){
     char type1[4], type2[4];    //Armazena o tipo do objeto urbano em questão
 
     Segment segments; //Vetor de segmentos que barra o a luz da bomba de radiacao luminosa
+    Vertex vertices;
 
     /*Recebe os parametros da main (argv)*/
     receiveParameters(argc, argv, &pathIn, &nameIn, &nameQuery, &pathOut);
@@ -336,7 +337,8 @@ int main(int argc, char *argv[]){
                 scanBRL(arqQuery, &x, &y);
                 int capacitySegments = nm + np * 4 + 4;
                 segments = createSegments(capacitySegments, walls, buildings, &vectSize);
-                
+                vertices = createVertices(x, y, capacitySegments * 2, segments, vectSize, arqSvgQ);
+                sortVertex(vertices, vectSize * 2, arqSvgQ);
             }
         }
     }
@@ -344,7 +346,7 @@ int main(int argc, char *argv[]){
     /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
     if(arqSvgQ != NULL){
         printList(figures, arqSvgQ);
-        printList(blocks, arqSvgQ);
+        //printList(blocks, arqSvgQ);
         printList(hydrants, arqSvgQ);
         printList(tLights, arqSvgQ);
         printList(rTowers, arqSvgQ);

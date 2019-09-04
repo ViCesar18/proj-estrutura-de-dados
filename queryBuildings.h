@@ -25,9 +25,6 @@ void treatCBQ(FILE *arqTxt, List blocks, Form circle, char cstrk[]);
 /*Move todos os equipamentos urbanos que estão inteiramente dentro do retangulo em dx no eixo X e dy no eixo Y*/
 void treatTRNS(FILE *arqTxt, List blocks, List hydrants, List tLights, List rTowers, Form rect, double dx, double dy, FILE *arqSvgQ);
 
-/*Compara duas variaveis double. Retorna -1 caso a < b. Retorna 1 caso a > b. Retorna 0 caso a = b*/
-int cmpDoubles(const void *a, const void *b);
-
 /*Retorna a distancia armazenada em uma na estrutura*/
 double getDist(Dist distAux);
 

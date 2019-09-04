@@ -3,9 +3,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+#include "operations.h"
 #include "list.h"
 
 typedef void *Segment;
+typedef void *Vertex;
 
 Segment allocateSegments(int capacity);
 
@@ -15,12 +19,10 @@ Segment createSegments(int capacity, List walls, List buildings, int *vectSize);
 
 void printSegments(FILE *arqSvgQ, Segment s, int size);
 
-/*double getSegmentX1(Segment segmentAux, int index);
+Vertex createVertices(double x, double y, int capacity, Segment s, int size, FILE *arqSvgQ);
 
-double getSegmentY1(Segment segmentAux, int index);
+int cmpVertex(const void *a, const void *b);
 
-double getSegmentX2(Segment segmentAux, int index);
-
-double getSegmentY2(Segment segmentAux, int index);*/
+void sortVertex(Vertex v, int size, FILE *arqSvgQ);
 
 #endif
