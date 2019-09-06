@@ -248,3 +248,46 @@ void reverseVector(Dist vet[], int size){
         size--;
     }
 }
+
+bool checkLeftTurn(Point a, Point b, Point c){
+	double s = (getPointX(a) * getPointY(b) - getPointY(a) * getPointX(b) + getPointY(a) * getPointX(c) - getPointX(a) * getPointY(c) + 
+					  getPointX(b) * getPointY(c) - getPointY(b) * getPointX(c)) / 2;
+	return s <= 0;
+}
+
+bool checkSegmentsIntersection(Segment s1, Segment s2){
+
+	if(s1 == NULL || s2 == NULL) return false;
+	
+	Segment a = getVertexV(getSegmentV1(s1));
+	Segment b = getVertexV(getSegmentV2(s1));
+
+	Segment c = getVertexV(getSegmentV1(s2));
+	Segment d = getVertexV(getSegmentV2(s2));
+
+	return (checkLeftTurn(c, d, a) ^ checkLeftTurn(c, d, b)) &&
+	 		(checkLeftTurn(a, b, c) ^ checkLeftTurn(a, b, d));
+}
+
+void segmentIntersection(Segment s1, Segment s2, double *x, double *y){
+    double m1, m2, c1, c2;
+
+    Point s1v1 = getVertexV(getSegmentV1(s1));
+    Point s1v2 = getVertexV(getSegmentV2(s1));
+    Point s2v1 = getVertexV(getSegmentV1(s2));
+    Point s2v2 = getVertexV(getSegmentV2(s2));
+
+    m1 = (getPointY(s1v2) - getPointY(s1v1)) / (getPointX(s1v2) - getPointX(s1v1));
+    c1 = getPointY(s1v1) - m1 * getPointX(s1v1);
+
+    m2 = (getPointY(s2v2) - getPointY(s2v1)) / (getPointX(s2v2) - getPointX(s2v1));
+    c2 = getPointY(s2v1) - m2 * getPointX(s2v1);
+
+    if(m1 - m2 == 0){
+        printf("Retas nao se cruzam!\n");
+    }
+    else{
+        *x = (c2 - c1) / (m1 - m2);
+        *y = m1 * (*x) + c1;
+    }
+}

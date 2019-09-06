@@ -7,7 +7,10 @@
 #include "queryBuildings.h"
 #include "list.h"
 #include "Objetos/forms.h"
-#include "segments.h"
+#include "segment.h"
+#include "vertex.h"
+#include "point.h"
+#include "bomb.h"
 
 int main(int argc, char *argv[]){
     int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000, np = 1000, nm = 1000;  //Número máximo padrão das formas
@@ -44,7 +47,7 @@ int main(int argc, char *argv[]){
     Form figure1, figure2;  //Armazena uma forma
     char type1[4], type2[4];    //Armazena o tipo do objeto urbano em questão
 
-    Segment segments; //Vetor de segmentos que barra o a luz da bomba de radiacao luminosa
+    Segment *segments; //Vetor de segmentos que barra o a luz da bomba de radiacao luminosa
     Vertex vertices;
 
     /*Recebe os parametros da main (argv)*/
@@ -335,10 +338,10 @@ int main(int argc, char *argv[]){
             }
             else if(!strcmp(command, "brl")){
                 scanBRL(arqQuery, &x, &y);
+                Form circle = createCircle("", x, y, 5, "black", "red", "2");
+                insertElement(auxList, circle, "c");
                 int capacitySegments = nm + np * 4 + 4;
-                segments = createSegments(capacitySegments, walls, buildings, &vectSize);
-                vertices = createVertices(x, y, capacitySegments * 2, segments, vectSize, arqSvgQ);
-                sortVertex(vertices, vectSize * 2, arqSvgQ);
+                bombAreaRadiation(x, y, capacitySegments, walls, buildings, &vectSize, arqSvgQ);
             }
         }
     }
@@ -347,13 +350,12 @@ int main(int argc, char *argv[]){
     if(arqSvgQ != NULL){
         printList(figures, arqSvgQ);
         //printList(blocks, arqSvgQ);
-        printList(hydrants, arqSvgQ);
-        printList(tLights, arqSvgQ);
-        printList(rTowers, arqSvgQ);
-        printBuildingList(blocks, buildings, arqSvgQ);
-        printList(walls, arqSvgQ);
-        printList(auxList, arqSvgQ);
-        printSegments(arqSvgQ, segments, vectSize);
+        //printList(hydrants, arqSvgQ);
+        //printList(tLights, arqSvgQ);
+        //printList(rTowers, arqSvgQ);
+        //printBuildingList(blocks, buildings, arqSvgQ);
+        //printList(walls, arqSvgQ);
+        //printList(auxList, arqSvgQ);
     }
 
     /*Finalização, libreracao de memoria e fechamento dos arquivos*/

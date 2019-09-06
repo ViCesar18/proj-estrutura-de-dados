@@ -8,10 +8,13 @@
 #include "./Objetos/forms.h"
 #include "list.h"
 #include "queryBuildings.h"
+#include "point.h"
+#include "segment.h"
 
 /*Nesse header encontram-se todas as oprecoes utilizadas por outras funcoes em todo o resto do programa*/
 
 typedef void *Dist;
+typedef void *Segment;
 
 /*Calcula a distancia euclidiana entre dois pontos*/
 double distEuclid(double x1, double y1, double x2, double y2);
@@ -42,5 +45,11 @@ bool quadInsideRect(Block block, Form rect);
 
 /*Inverte o vetor vet*/
 void reverseVector(Dist vet[], int size);
+
+bool checkLeftTurn(Point a, Point b, Point c);
+
+bool checkSegmentsIntersection(Segment s1, Segment s2);
+
+void segmentIntersection(Segment s1, Segment s2, double *x, double *y);
 
 #endif
