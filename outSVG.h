@@ -12,6 +12,10 @@
 #include "./Objetos/radio_tower.h"
 #include "./Objetos/building.h"
 #include "./Objetos/wall.h"
+#include "vertex.h"
+#include "point.h"
+
+typedef void *Vertex;
 
 /*Nesse header encontra-se todas as funcoes relacionadas a saida de dados*/
 
@@ -61,5 +65,7 @@ void printWall(FILE *arqOut, Wall wall);
 void printBB(List figures, FILE *arq, char color[]);
 
 void printBomb(FILE *arq, double x, double y);
+
+void svg_escreverTriangulo(FILE *SVG, double x1, double y1, Vertex v2, Vertex v3) ;
 
 #endif

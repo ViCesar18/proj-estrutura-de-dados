@@ -52,5 +52,7 @@ void setSegmentStartVertex(Segment s){
 void freeSegment(Segment s){
     SegmentImp segment = (SegmentImp) s;
     
+    freeVertex(segment->v1);
+    freeVertex(segment->v2);
     free(segment);
 }

@@ -188,6 +188,32 @@ void deleteElement(List listAux, char id[]){
     free(list->node[index].element);
 }
 
+bool lista_excluirObjetoMemoria(List l, Element objeto) {
+    ListImp lista = (ListImp) l;
+    for(int i = lista->start; i != -1; i = lista->node[i].next) {
+        if(lista->node[i].element == objeto) {
+            if(i == lista->start) {
+                lista->start = lista->node[i].next;
+                if(lista->node[i].next == -1) {
+                    lista->node[lista->node[i].previous].next = -1;
+                    lista->end = lista->node[i].previous;
+                }
+            } else if(lista->node[i].next == -1) {
+                lista->node[lista->node[i].previous].next = -1;
+                lista->end = lista->node[i].previous;
+            } else {
+                lista->node[lista->node[i].previous].next = lista->node[i].next;
+                lista->node[lista->node[i].next].previous = lista->node[i].previous;
+            }
+            lista->size--;
+            lista->node[i].next = lista->free;
+            lista->free = i;
+            return true;
+        }
+    }
+    return false;
+}
+
 Element getElementByIndex(List listAux, int i){
     ListImp list = (ListImp) listAux;
 

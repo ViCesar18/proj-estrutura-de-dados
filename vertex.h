@@ -21,6 +21,8 @@ double getVertexAngle(Vertex v);
 
 bool getVertexStart(Vertex v);
 
+Segment getVertexSegment(Vertex v);
+
 void setVertexSegment(Vertex v, Segment s);
 
 void setVertexStart(Vertex v, bool start);

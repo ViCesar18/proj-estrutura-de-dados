@@ -15,6 +15,70 @@ int cmpVertex(const void *a, const void *b){
     return 0;
 }
 
+Segment buscarSegmentoFormadoComVertice(double xc, double yc, Vertex v, Point pontoMin, Point pontoMax) {
+	double xv = getPointX(getVertexV(v)), yv = getPointY(getVertexV(v));
+	double a, b;
+	if(xv != xc) { // reta perpendicular ver dps
+		a = (yv-yc)/(xv-xc);
+		b = yc - a*xc;
+	}
+
+	double xq, yq;
+	// y = ax + b
+	// x = (y-b)/a
+	if(xc < xv && yc > yv) { 
+		xq = (getPointY(pontoMin) - 50 - b)/a;
+		yq = a*(getPointX(pontoMax) + 50) + b;
+		if(distEuclid(xc, yc, xq, getPointY(pontoMin) - 50) > distEuclid(xc, yc, getPointX(pontoMax) + 50, yq)) {
+			yq = getPointY(pontoMin) - 50;
+		} else {
+			xq = getPointX(pontoMax) + 50;
+		}
+	} else if(xc < xv && yc == yv) { // certo
+		xq = getPointX(pontoMax) + 50;
+		yq = yc;
+	} else if(xc < xv && yc < yv) {
+		xq = (yc + 50 - b)/a;
+		yq = a*(getPointX(pontoMax) + 50) + b;
+		if(distEuclid(xc, yc, xq, yc + 50) > distEuclid(xc, yc, getPointX(pontoMax) + 50, yq)) {
+			yq = yc + 50;
+		} else {
+			xq = getPointX(pontoMax) + 50;
+		}
+	} else if(xc > xv && yc > yv) {
+		xq = (getPointX(pontoMin) - 50 - b)/a;
+		yq = a*(getPointX(pontoMin) - 50) + b;
+		if(distEuclid(xc, yc, xq, getPointY(pontoMin) - 50) > distEuclid(xc, yc, getPointX(pontoMin) - 50, yq)) {
+			yq = getPointY(pontoMin) - 50;
+		} else {
+			xq = getPointX(pontoMin) - 50;
+		}
+	} else if(xc > xv && yc == yv) { // certo
+		xq = getPointX(pontoMin) - 50;
+		yq = yc;
+	} else if(xc > xv && yc < yv) {
+		xq = (getPointY(pontoMax) + 50 - b)/a;
+		yq = a*(getPointX(pontoMin) - 50) + b;
+		if(distEuclid(xc, yc, xq, getPointY(pontoMax) + 50) > distEuclid(xc, yc, getPointX(pontoMin) - 50, yq)) {
+			yq = getPointY(pontoMax) + 50;
+		} else {
+			xq = getPointX(pontoMin) - 50;
+		}
+	} else if(xc == xv && yc > yv) { // certo
+		xq = xc;
+		yq = getPointY(pontoMin) - 50;
+	} else if(xc == xv && yc < yv) { // certo
+		xq = xc;
+		yq = getPointY(pontoMax) + 50;
+	}
+
+	// ver como vou dar free dps
+    Vertex vc = createVertex(createPoint(xc, yc), xc, yc);
+    Vertex vq = createVertex(createPoint(xq, yq), xc, yc);
+
+	return createSegment(vc, vq);
+}
+
 void bombAreaRadiation(double x, double y, int capacity, List walls, List buildings, int *vectSize, FILE *arq){
     Segment *segments = (Segment *) malloc(capacity * sizeof(Segment));
     Point pMin = createPoint(x, y);
@@ -31,6 +95,9 @@ void bombAreaRadiation(double x, double y, int capacity, List walls, List buildi
         setPointMin(pMin, getPointX(p2), getPointY(p2));
         setPointMax(pMax, getPointX(p1), getPointY(p1));
         setPointMax(pMax, getPointX(p2), getPointY(p2));
+
+        if(getPointX(p1) == x && getPointY(p2) == x || getPointY(p1) == y && getPointY(p2) == y)
+            continue;
 
         Vertex v1 = createVertex(p1, x, y);
         Vertex v2 = createVertex(p2, x, y);
@@ -210,6 +277,88 @@ void bombAreaRadiation(double x, double y, int capacity, List walls, List buildi
     qsort(vertices, verticesSize, sizeof(Vertex), cmpVertex);
 
     List activeSegments = createList((int) verticesSize / 2);
+    Vertex biombo = createVertex(createPoint(getPointX(getVertexV(vertices[0])), getPointY(getVertexV(vertices[0]))), x, y);
+    setVertexSegment(biombo, getVertexSegment(vertices[0]));
+
+    for(int i = 0; i < verticesSize; i++){
+        Vertex v = vertices[i];
+        Segment sv = getVertexSegment(v);
+        Segment s_v = buscarSegmentoFormadoComVertice(x, y, v, pMin, pMax);
+        Segment closerSegment = NULL;
+
+        double dMin = __INT_MAX__;
+
+        for(int j = getFirst(activeSegments); j != getNulo(); j = getNext(activeSegments, j)){
+            Segment s = getElementByIndex(activeSegments, j);
+
+            if(s == sv) continue;
+
+            if(checkSegmentsIntersection(s_v, s)){
+                double xInter, yInter;
+                segmentIntersection(s_v, s, &xInter, &yInter);
+
+                double distBombInter = distEuclid(x, y, xInter, yInter);
+                if(distBombInter < dMin){
+                    dMin = distBombInter;
+                    closerSegment = s;
+                }
+            }
+        }
+
+        if(getVertexStart(v)){
+            bool itsCloserSegment;
+
+            if(distEuclid(x, y, getPointX(getVertexV(v)), getPointY(getVertexV(v))) < dMin)
+                itsCloserSegment = true;
+            else
+                itsCloserSegment = false;
+
+            if(itsCloserSegment){
+                double biomboInterX, biomboInterY;
+
+                segmentIntersection(s_v, getVertexSegment(biombo), &biomboInterX, &biomboInterY);
+                Vertex vInter = createVertex(createPoint(biomboInterX, biomboInterY), x, y);
+                Segment s1 = createSegment(biombo, vInter);
+                Segment s2 = createSegment(vInter, v);
+
+                svg_escreverTriangulo(arq, x, y, biombo, vInter);
+
+                biombo = v;
+            }     
+            insertElement(activeSegments, sv, "seg");       
+        }
+        else{
+            bool itsCloserSegment;
+
+            if(distEuclid(x, y, getPointX(getVertexV(v)), getPointY(getVertexV(v))) <= dMin)
+                itsCloserSegment = true;
+            else
+                itsCloserSegment = false;
+
+            if(itsCloserSegment){
+                if(closerSegment != NULL){
+                    double biomboInterX, biomboInterY;
+                    segmentIntersection(s_v, closerSegment, &biomboInterX, &biomboInterY);
+                    Vertex vInter = createVertex(createPoint(biomboInterX, biomboInterY), x, y);
+
+                    Segment s1 = createSegment(biombo, v);
+                    Segment s2 = createSegment(v, vInter);
+
+                    svg_escreverTriangulo(arq, x, y, v, vInter);
+                    svg_escreverTriangulo(arq, x, y, biombo, v);
+
+                    biombo = vInter;
+                    setVertexSegment(biombo, closerSegment);
+                }
+                else{
+                    Segment s = createSegment(biombo, v);
+                    svg_escreverTriangulo(arq, x, y, biombo, v);
+                    biombo = v;
+                }
+            }
+            lista_excluirObjetoMemoria(activeSegments, sv);
+        }
+    }
 
     for(int i = 0; i < segmentsSize; i++){
         Wall w = createWall(getPointX(getVertexV(getSegmentV1((Segment)segments[i]))), getPointY(getVertexV(getSegmentV1((Segment)segments[i]))), getPointX(getVertexV(getSegmentV2((Segment)segments[i]))), getPointY(getVertexV(getSegmentV2((Segment)segments[i]))));
@@ -231,8 +380,8 @@ void bombAreaRadiation(double x, double y, int capacity, List walls, List buildi
         freeForm(circle);
     }
 
-    for(int i = 0; i < verticesSize; i++){
-        freeVertex(vertices[i]);
+    for(int i = 0; i < segmentsSize; i++){
+        freeSegment(segments[i]);
     }
     freePoint(pMin);
     freePoint(pMax);

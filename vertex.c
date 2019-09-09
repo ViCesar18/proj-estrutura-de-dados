@@ -41,6 +41,12 @@ bool getVertexStart(Vertex v){
     return vertex->start;
 }
 
+Segment getVertexSegment(Vertex v){
+    VertexImp vertex = (VertexImp) v;
+
+    return vertex->s;
+}
+
 void setVertexSegment(Vertex v, Segment s){
     VertexImp vertex = (VertexImp) v;
 
@@ -63,6 +69,5 @@ void freeVertex(Vertex v){
     VertexImp vertex = (VertexImp) v;
 
     freePoint(vertex->v);
-    freeSegment(vertex->s);
     free(vertex);
 }

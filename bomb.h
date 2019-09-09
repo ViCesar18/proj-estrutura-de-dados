@@ -10,6 +10,10 @@
 
 #define PI 3.14159265359
 
+int cmpVertex(const void *a, const void *b);
+
+Segment buscarSegmentoFormadoComVertice(double xc, double yc, Vertex v, Point pontoMin, Point pontoMax);
+
 void bombAreaRadiation(double x, double y, int capacity, List walls, List buildings, int *vectSize, FILE *arq);
 
 #endif
