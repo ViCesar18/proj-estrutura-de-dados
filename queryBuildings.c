@@ -104,6 +104,8 @@ void treatFI(FILE *arqSvg, FILE *arqTxt, List auxList, double x, double y, int n
     TrafficLight tLight;
     DistImp *tLightDists = (DistImp *) malloc(getSize(tLights) * sizeof(DistImp));
     int i, cont = 0;
+
+    printFire(arqSvg, x, y);
     
     for(i = getFirst(tLights); i != getNulo(); i = getNext(tLights, i)){
         tLight = getElementByIndex(tLights, i);
@@ -134,9 +136,6 @@ void treatFI(FILE *arqSvg, FILE *arqTxt, List auxList, double x, double y, int n
 
     min_heap_sort((void *) hydrantDists, getSize(hydrants) - 1, getSize(hydrants));
     reverseVector((void *) hydrantDists, getSize(hydrants) - 1);
-
-    ring = createCircle("", x, y, 10, "red", "yellow", "4");
-    insertElement(auxList, ring, "c");
 
     fprintf(arqTxt, "Incêndio em %lf %lf!\n", x, y);
     fprintf(arqTxt, "Semáforos com a programação alterada:\n");

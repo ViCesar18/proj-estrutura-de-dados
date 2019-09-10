@@ -188,30 +188,28 @@ void deleteElement(List listAux, char id[]){
     free(list->node[index].element);
 }
 
-bool lista_excluirObjetoMemoria(List l, Element objeto) {
-    ListImp lista = (ListImp) l;
-    for(int i = lista->start; i != -1; i = lista->node[i].next) {
-        if(lista->node[i].element == objeto) {
-            if(i == lista->start) {
-                lista->start = lista->node[i].next;
-                if(lista->node[i].next == -1) {
-                    lista->node[lista->node[i].previous].next = -1;
-                    lista->end = lista->node[i].previous;
+void deleteElement2(List l, Element element) {
+    ListImp list = (ListImp) l;
+    for(int i = list->start; i != -1; i = list->node[i].next) {
+        if(list->node[i].element == element) {
+            if(i == list->start) {
+                list->start = list->node[i].next;
+                if(list->node[i].next == -1) {
+                    list->node[list->node[i].previous].next = -1;
+                    list->end = list->node[i].previous;
                 }
-            } else if(lista->node[i].next == -1) {
-                lista->node[lista->node[i].previous].next = -1;
-                lista->end = lista->node[i].previous;
+            } else if(list->node[i].next == -1) {
+                list->node[list->node[i].previous].next = -1;
+                list->end = list->node[i].previous;
             } else {
-                lista->node[lista->node[i].previous].next = lista->node[i].next;
-                lista->node[lista->node[i].next].previous = lista->node[i].previous;
+                list->node[list->node[i].previous].next = list->node[i].next;
+                list->node[list->node[i].next].previous = list->node[i].previous;
             }
-            lista->size--;
-            lista->node[i].next = lista->free;
-            lista->free = i;
-            return true;
+            list->size--;
+            list->node[i].next = list->free;
+            list->free = i;
         }
     }
-    return false;
 }
 
 Element getElementByIndex(List listAux, int i){
@@ -249,6 +247,7 @@ Element getElementByIdInLists(List list1, List list2, List list3, List list4, ch
 
 void printList(List listAux, FILE *arqOut){
     ListImp list = (ListImp) listAux;
+    int j = 0;
 
     for(int i = list->start; i != NULO; i = list->node[i].next){
         if(!strcmp(list->node[i].type, "c")){
@@ -271,6 +270,11 @@ void printList(List listAux, FILE *arqOut){
         }
         else if(!strcmp(list->node[i].type, "w")){
             printWall(arqOut, list->node[i].element);
+        }
+        else if(!strcmp(list->node[i].type, "t")){
+            printTriangle(arqOut, list->node[i].element);
+            //printf("%d\n", j);
+            j++;
         }
     }
 }

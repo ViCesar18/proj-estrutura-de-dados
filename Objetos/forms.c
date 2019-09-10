@@ -4,6 +4,7 @@ typedef struct stForm{
     char id[32];
     int stroke;
     double x, y, r, w, h;
+    Vertex v2, v3;
     char strokeColor[24], fillColor[24], sw[12];
 }*FormImp;
 
@@ -35,6 +36,17 @@ Form createRect(char id[], double x, double y, double w, double h, char strokeCo
     strcpy(rect->sw, sw);
 
     return rect;
+}
+
+Form createTriangle(double x, double y, Vertex v2, Vertex v3){
+    FormImp triangle = (FormImp)malloc(sizeof(struct stForm));
+
+    triangle->x = x;
+    triangle->y = y;
+    triangle->v2 = v2;
+    triangle->v3 = v3;
+
+    return triangle;
 }
 
 char  *getFormId(Form f){
@@ -77,6 +89,18 @@ double getFormH(Form f){
     FormImp form = (FormImp) f;
 
     return form->h;
+}
+
+Vertex getFormV2(Form f){
+    FormImp form = (FormImp) f;
+
+    return form->v2;
+}
+
+Vertex getFormV3(Form f){
+    FormImp form = (FormImp) f;
+
+    return form->v3;
 }
 
 char *getFormStrokeColor(Form f){

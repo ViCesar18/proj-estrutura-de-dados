@@ -134,7 +134,7 @@ int main(int argc, char *argv[]){
     rTowers = createList(nr);
     buildings = createList(np);
     walls = createList(nm);
-    auxList = createList(1000);
+    auxList = createList(100000);
 
     
     /*Le os dados das formas do arquivo de entrada*/
@@ -341,7 +341,7 @@ int main(int argc, char *argv[]){
                 Form circle = createCircle("", x, y, 5, "black", "red", "2");
                 insertElement(auxList, circle, "c");
                 int capacitySegments = nm + np * 4 + 4;
-                bombAreaRadiation(x, y, capacitySegments, walls, buildings, &vectSize, arqSvgQ);
+                bombAreaRadiation(x, y, capacitySegments, walls, buildings, auxList, arqSvgQ);
             }
         }
     }
@@ -349,13 +349,13 @@ int main(int argc, char *argv[]){
     /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
     if(arqSvgQ != NULL){
         printList(figures, arqSvgQ);
-        //printList(blocks, arqSvgQ);
-        //printList(hydrants, arqSvgQ);
-        //printList(tLights, arqSvgQ);
-        //printList(rTowers, arqSvgQ);
-        //printBuildingList(blocks, buildings, arqSvgQ);
-        //printList(walls, arqSvgQ);
-        //printList(auxList, arqSvgQ);
+        printList(blocks, arqSvgQ);
+        printList(hydrants, arqSvgQ);
+        printList(tLights, arqSvgQ);
+        printList(rTowers, arqSvgQ);
+        printBuildingList(blocks, buildings, arqSvgQ);
+        printList(walls, arqSvgQ);
+        printList(auxList, arqSvgQ);
     }
 
     /*Finalização, libreracao de memoria e fechamento dos arquivos*/

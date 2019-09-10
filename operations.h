@@ -46,10 +46,13 @@ bool quadInsideRect(Block block, Form rect);
 /*Inverte o vetor vet*/
 void reverseVector(Dist vet[], int size);
 
+/*Verifica a virada a esquerda do segmento AB com o ponto C*/
 bool checkLeftTurn(Point a, Point b, Point c);
 
+/*Verifica se dois segmentos se interceptao*/
 bool checkSegmentsIntersection(Segment s1, Segment s2);
 
+/*Retorna o ponto de intercessao*/
 void segmentIntersection(Segment s1, Segment s2, double *x, double *y);
 
 #endif

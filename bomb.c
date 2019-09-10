@@ -18,68 +18,77 @@ int cmpVertex(const void *a, const void *b){
 Segment buscarSegmentoFormadoComVertice(double xc, double yc, Vertex v, Point pontoMin, Point pontoMax) {
 	double xv = getPointX(getVertexV(v)), yv = getPointY(getVertexV(v));
 	double a, b;
-	if(xv != xc) { // reta perpendicular ver dps
+	if(xv != xc){
 		a = (yv-yc)/(xv-xc);
 		b = yc - a*xc;
 	}
 
 	double xq, yq;
-	// y = ax + b
-	// x = (y-b)/a
-	if(xc < xv && yc > yv) { 
-		xq = (getPointY(pontoMin) - 50 - b)/a;
-		yq = a*(getPointX(pontoMax) + 50) + b;
-		if(distEuclid(xc, yc, xq, getPointY(pontoMin) - 50) > distEuclid(xc, yc, getPointX(pontoMax) + 50, yq)) {
+
+	if(xc < xv && yc > yv){ 
+		xq = (getPointY(pontoMin) - 50 - b) / a;
+		yq = a * (getPointX(pontoMax) + 50) + b;
+		if(distEuclid(xc, yc, xq, getPointY(pontoMin) - 50) > distEuclid(xc, yc, getPointX(pontoMax) + 50, yq)){
 			yq = getPointY(pontoMin) - 50;
-		} else {
+		}
+        else{
 			xq = getPointX(pontoMax) + 50;
 		}
-	} else if(xc < xv && yc == yv) { // certo
+	}
+    else if(xc < xv && yc == yv){
 		xq = getPointX(pontoMax) + 50;
 		yq = yc;
-	} else if(xc < xv && yc < yv) {
+	}
+    else if(xc < xv && yc < yv){
 		xq = (yc + 50 - b)/a;
 		yq = a*(getPointX(pontoMax) + 50) + b;
-		if(distEuclid(xc, yc, xq, yc + 50) > distEuclid(xc, yc, getPointX(pontoMax) + 50, yq)) {
+		if(distEuclid(xc, yc, xq, yc + 50) > distEuclid(xc, yc, getPointX(pontoMax) + 50, yq)){
 			yq = yc + 50;
-		} else {
+		}
+        else{
 			xq = getPointX(pontoMax) + 50;
 		}
-	} else if(xc > xv && yc > yv) {
+	}
+    else if(xc > xv && yc > yv){
 		xq = (getPointX(pontoMin) - 50 - b)/a;
 		yq = a*(getPointX(pontoMin) - 50) + b;
-		if(distEuclid(xc, yc, xq, getPointY(pontoMin) - 50) > distEuclid(xc, yc, getPointX(pontoMin) - 50, yq)) {
+		if(distEuclid(xc, yc, xq, getPointY(pontoMin) - 50) > distEuclid(xc, yc, getPointX(pontoMin) - 50, yq)){
 			yq = getPointY(pontoMin) - 50;
-		} else {
+		}
+        else{
 			xq = getPointX(pontoMin) - 50;
 		}
-	} else if(xc > xv && yc == yv) { // certo
+	}
+    else if(xc > xv && yc == yv){
 		xq = getPointX(pontoMin) - 50;
 		yq = yc;
-	} else if(xc > xv && yc < yv) {
+	}
+    else if(xc > xv && yc < yv){
 		xq = (getPointY(pontoMax) + 50 - b)/a;
 		yq = a*(getPointX(pontoMin) - 50) + b;
-		if(distEuclid(xc, yc, xq, getPointY(pontoMax) + 50) > distEuclid(xc, yc, getPointX(pontoMin) - 50, yq)) {
+		if(distEuclid(xc, yc, xq, getPointY(pontoMax) + 50) > distEuclid(xc, yc, getPointX(pontoMin) - 50, yq)){
 			yq = getPointY(pontoMax) + 50;
-		} else {
+		}
+        else{
 			xq = getPointX(pontoMin) - 50;
 		}
-	} else if(xc == xv && yc > yv) { // certo
+	}
+    else if(xc == xv && yc > yv){
 		xq = xc;
 		yq = getPointY(pontoMin) - 50;
-	} else if(xc == xv && yc < yv) { // certo
+	}
+    else if(xc == xv && yc < yv){
 		xq = xc;
 		yq = getPointY(pontoMax) + 50;
 	}
 
-	// ver como vou dar free dps
     Vertex vc = createVertex(createPoint(xc, yc), xc, yc);
     Vertex vq = createVertex(createPoint(xq, yq), xc, yc);
 
 	return createSegment(vc, vq);
 }
 
-void bombAreaRadiation(double x, double y, int capacity, List walls, List buildings, int *vectSize, FILE *arq){
+void bombAreaRadiation(double x, double y, int capacity, List walls, List buildings, List auxList, FILE *arq){
     Segment *segments = (Segment *) malloc(capacity * sizeof(Segment));
     Point pMin = createPoint(x, y);
     Point pMax = createPoint(x, y);
@@ -321,11 +330,14 @@ void bombAreaRadiation(double x, double y, int capacity, List walls, List buildi
                 Segment s1 = createSegment(biombo, vInter);
                 Segment s2 = createSegment(vInter, v);
 
-                svg_escreverTriangulo(arq, x, y, biombo, vInter);
+                Form triangle = createTriangle(x, y, biombo, vInter);
+                insertElement(auxList, triangle, "t");
+
+                //printTriangle2(arq, x, y, biombo, vInter);
 
                 biombo = v;
-            }     
-            insertElement(activeSegments, sv, "seg");       
+            }
+            insertElement(activeSegments, sv, "seg");
         }
         else{
             bool itsCloserSegment;
@@ -344,19 +356,26 @@ void bombAreaRadiation(double x, double y, int capacity, List walls, List buildi
                     Segment s1 = createSegment(biombo, v);
                     Segment s2 = createSegment(v, vInter);
 
-                    svg_escreverTriangulo(arq, x, y, v, vInter);
-                    svg_escreverTriangulo(arq, x, y, biombo, v);
+                    Form triangle = createTriangle(x, y, v, vInter);
+                    insertElement(auxList, triangle, "t");
+                    //printTriangle2(arq, x, y, v, vInter);
+
+                    Form triangle2 = createTriangle(x, y, biombo, v);
+                    insertElement(auxList, triangle2, "t");
+                    //printTriangle2(arq, x, y, biombo, v);
 
                     biombo = vInter;
                     setVertexSegment(biombo, closerSegment);
                 }
                 else{
                     Segment s = createSegment(biombo, v);
-                    svg_escreverTriangulo(arq, x, y, biombo, v);
+                    Form triangle = createTriangle(x, y, biombo, v);
+                    insertElement(auxList, triangle, "t");
+                    //printTriangle2(arq, x, y, biombo, v);
                     biombo = v;
                 }
             }
-            lista_excluirObjetoMemoria(activeSegments, sv);
+            deleteElement2(activeSegments, sv);
         }
     }
 

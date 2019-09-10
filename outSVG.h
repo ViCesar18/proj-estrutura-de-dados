@@ -64,8 +64,15 @@ void printWall(FILE *arqOut, Wall wall);
 /*Imprime os elementos da lista e suas bounding box correspondentes no arquivo SVG passado como parametro*/
 void printBB(List figures, FILE *arq, char color[]);
 
+/*Desenha uma bomba no arquivo SVG*/
 void printBomb(FILE *arq, double x, double y);
 
-void svg_escreverTriangulo(FILE *SVG, double x1, double y1, Vertex v2, Vertex v3) ;
+/*Desenha fogo no arquivo SVG*/
+void printFire(FILE *arq, double x, double y);
+
+/*Desenha um triangulo no arquivo SVG*/
+void printTriangle(FILE *SVG, Form triangle);
+
+void printTriangle2(FILE *arq, double x, double y, Vertex p2, Vertex p3);
 
 #endif

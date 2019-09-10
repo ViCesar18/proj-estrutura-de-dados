@@ -52,7 +52,8 @@ void insertAfter(List listAux, Element element, int index);
 /*Deleta um elemento da lista filtrando pelo id*/
 void deleteElement(List listAux, char id[]);
 
-bool lista_excluirObjetoMemoria(List l, Element objeto);
+/*Deleta o elemento passado como parametro da lista*/
+void deleteElement2(List l, Element element);
 
 /*Retorna o elemento da lista cujo index é i*/
 Element getElementByIndex(List ListaAux, int i);
