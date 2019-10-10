@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
     strcpy(cfillR, "gray");
     strcpy(cstrkR, "black");
 
-    List figures, blocks, hydrants, tLights, rTowers, buildings, walls, auxList, stores, storeTypes, person, resident;    //Listas de cada objeto urbano
+    List figures, blocks, hydrants, tLights, rTowers, buildings, walls, auxList, stores, storeTypes, persons, residents;    //Listas de cada objeto urbano
     Form figure1, figure2;  //Armazena uma forma
     char type1[4], type2[4];    //Armazena o tipo do objeto urbano em questão
 
@@ -165,8 +165,8 @@ int main(int argc, char *argv[]){
     buildings = createList(np);
     walls = createList(nm);
     stores = createList (100000);
-    person = createList (100000);
-    resident = createList (100000);
+    persons = createList (100000);
+    residents = createList (100000);
     storeTypes = createList (100000);
     auxList = createList(100000);
 
@@ -233,33 +233,32 @@ int main(int argc, char *argv[]){
 
     if (nameEC != NULL){
         while (1){
-            fscanf (arqEst, "%s", command);
-
             if (feof (arqEst))
                 break;
             
+            fscanf (arqEst, "%s", command);
+
             if (!strcmp (command, "t")){
-                printf ("T nessa porra\n");
+                scanStoreType (arqEst, storeTypes);
             }
             if (!strcmp (command, "e")){
-                printf ("E nessa porra\n");
+                scanStore (arqEst, stores);
             }
         }
     }
 
     if (namePM != NULL){
         while (1){
-            fscanf (arqPes, "%s", command);
-
             if (feof (arqPes))
                 break;
+            
+            fscanf (arqPes, "%s", command);
 
             if (!strcmp (command, "p")){
-                printf ("P nessa porra\n");
+                scanPerson (arqPes, persons);
             }
-
-            if (strcmp (command, "m")){
-                printf ("M nessa porra\n");
+            else if (!strcmp (command, "m")){
+                scanResident (arqPes, residents);
             }
         }
     }

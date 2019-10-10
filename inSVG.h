@@ -15,6 +15,8 @@
 #include "./Objetos/building.h"
 #include "./Objetos/wall.h"
 #include "./Objetos/store.h"
+#include "./Objetos/person.h"
+#include "./Objetos/resident.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a entrada/leitura de dados*/
 
@@ -63,9 +65,13 @@ void scanBuilding(FILE *arqIn, List buildings);
 /*Le as informacoes de muro do arquivo .geo e armazena na lista walls*/
 void scanWall(FILE *arqIn, List walls);
 
-void scanStoreType (FILE *arqEst, List stores);
+void scanStoreType (FILE *arqEst, List storeTypes);
 
 void scanStore (FILE *arqEst, List stores);
+
+void scanPerson (FILE *arqPes, List persons);
+
+void scanResident (FILE *arqPes, List residents);
 
 
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/

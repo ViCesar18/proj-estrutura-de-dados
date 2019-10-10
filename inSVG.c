@@ -217,6 +217,31 @@ void scanStoreType (FILE *arqEst, List storeTypes){
     insertElement (storeTypes, store, "codtEc");
 }
 
+void scanPerson (FILE *arqPes, List persons){
+    char cpf[32], nome[32], sobrenome[32], sexo[2], nascimento[16];
+    fscanf (arqPes, "%s", cpf);
+    fscanf (arqPes, "%s", nome);
+    fscanf (arqPes, "%s", sobrenome);
+    fscanf (arqPes, "%s", sexo);
+    fscanf (arqPes, "%s", nascimento);
+
+    Person person = createPerson (cpf, nome, sobrenome, sexo, nascimento);
+    insertElement (persons, person, "pp");
+}
+
+void scanResident (FILE *arqPes, List residents){
+    char cpf[32], cep[32], face[2], compl[16];
+    int num;
+    fscanf (arqPes, "%s", cpf);
+    fscanf (arqPes, "%s", cep);
+    fscanf (arqPes, "%s", face);
+    fscanf (arqPes, "%d", &num);
+    fscanf (arqPes, "%s", compl);
+
+    Resident resident = createResident (cpf, cep, face, compl, num);
+    insertElement (residents, resident, "pm");
+}
+
 void scanStore (FILE *arqEst, List stores){
     char cnpj[32], cpf [32], codt [32], cep[32], face[2], nome[32];
     int num;
