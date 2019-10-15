@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "outsvg.h": "c",
+        "querybuildings.h": "c",
+        "rbtree.h": "c"
+    }
+}
