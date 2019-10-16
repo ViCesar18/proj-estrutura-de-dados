@@ -24,7 +24,7 @@ void printStoreData (char cnpj[], List stores, List persons, List storeTypes, FI
         }
 
         if (strcmp(cnpjStore, cnpj) == 0){
-            fprintf (arq, "-%s:\n\tCodt: %s\n\tDescricao: %s\n\tCNPJ: %s\n\tCEP: %s, Face: %s ,Numero: %d\n\tNome do proprietario: %s %s, CPF: %s\n", getStoreNome (store), getCodt (storeType), getDescricao (storeType), getStoreCnpj (store), getStoreCep (store), getStoreFace (store), getStoreNum (store), getPersonNome (person), getPersonSobrenome (person), getPersonCpf (person));
+            fprintf (arq, "-%s:\n\tCodt: %s\n\tDescricao: %s\n\tCNPJ: %s\n\tCEP: %s, Face: %s, Numero: %d\n\tNome do proprietario: %s %s, CPF: %s\n", getStoreNome (store), getCodt (storeType), getDescricao (storeType), getStoreCnpj (store), getStoreCep (store), getStoreFace (store), getStoreNum (store), getPersonNome (person), getPersonSobrenome (person), getPersonCpf (person));
         }
     }
 }

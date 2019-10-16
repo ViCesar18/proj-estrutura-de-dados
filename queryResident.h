@@ -11,5 +11,7 @@
 
 void printResidentData (char cpf[], List residents, List persons, FILE* arq);
 void treatM (FILE *arqTxt, List persons, List residents, char cep[]);
+void treatMud (FILE *arqTxt, List persons, List residents, char cpf[], char cep[], char face[], int num, char compl[]);
+
     
 #endif

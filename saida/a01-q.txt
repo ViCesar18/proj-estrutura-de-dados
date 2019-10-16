@@ -1,5 +1,15 @@
-m? b02.0
+m? b02.1
 Moradores do cep fornecido: 
+-Claudio Neto:
+	CPF: cpf2
+	Sexo: m
+	Nascimento: 12/08/1999
+	CEP: b02.1, Face: n, Numero: 1, Complemento: oi
+-Yngrid Silva:
+	CPF: cpf4
+	Sexo: f
+	Nascimento: minaDoGuizao
+	CEP: b02.1, Face: n, Numero: 1, Complemento: oi
 
 m? b01.1
 Moradores do cep fornecido: 
@@ -7,30 +17,62 @@ Moradores do cep fornecido:
 	CPF: cpf3
 	Sexo: m
 	Nascimento: 24/24/1924
-	CEP: b01.1, Face: n ,Numero: 1, Complemento: oi
+	CEP: b01.1, Face: n, Numero: 1, Complemento: oi
 -Felipe Barusso:
 	CPF: cpf1
 	Sexo: m
 	Nascimento: 01/06/2000
-	CEP: b01.1, Face: n ,Numero: 1, Complemento: oi
+	CEP: b01.1, Face: n, Numero: 1, Complemento: oi
 -Lorena Lopes:
 	CPF: cpf5
 	Sexo: f
 	Nascimento: minaDoFelipe
-	CEP: b01.1, Face: n ,Numero: 1, Complemento: oi
+	CEP: b01.1, Face: n, Numero: 1, Complemento: oi
 
 dm? cpf1
 -Felipe Barusso:
 	CPF: cpf1
 	Sexo: m
 	Nascimento: 01/06/2000
-	CEP: b01.1, Face: n ,Numero: 1, Complemento: oi
+	CEP: b01.1, Face: n, Numero: 1, Complemento: oi
 
 de? cnpj1
 -AutoMecanicaStilo:
 	Codt: oficina
 	Descricao: arrumarCarrofodase
 	CNPJ: cnpj1
-	CEP: b01.1, Face: n ,Numero: 10
+	CEP: b01.1, Face: n, Numero: 10
 	Nome do proprietario: Felipe Barusso, CPF: cpf1
+
+mud cpf1 b02.1 s 9 ola
+Dados antigos: 
+-Felipe Barusso:
+	CPF: cpf1
+	Sexo: m
+	Nascimento: 01/06/2000
+	CEP: b01.1, Face: n, Numero: 1, Complemento: oi
+Dados novos: 
+-Felipe Barusso:
+	CPF: cpf1
+	Sexo: m
+	Nascimento: 01/06/2000
+	CEP: b02.1, Face: s, Numero: 9, Complemento: ola
+
+m? b02.1
+Moradores do cep fornecido: 
+-Claudio Neto:
+	CPF: cpf2
+	Sexo: m
+	Nascimento: 12/08/1999
+	CEP: b02.1, Face: n, Numero: 1, Complemento: oi
+-Felipe Barusso:
+	CPF: cpf1
+	Sexo: m
+	Nascimento: 01/06/2000
+	CEP: b02.1, Face: s, Numero: 9, Complemento: ola
+-Yngrid Silva:
+	CPF: cpf4
+	Sexo: f
+	Nascimento: minaDoGuizao
+	CEP: b02.1, Face: n, Numero: 1, Complemento: oi
 

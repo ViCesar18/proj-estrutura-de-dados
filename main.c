@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
     FILE *arqGeo = NULL, *arqQuery = NULL, *arqSvg = NULL, *arqSvgQ = NULL, *arqText = NULL, *arqSvgBB = NULL, *arqEst = NULL, *arqPes = NULL; //Arquivos
 
     char command[8];   //Armazena o comando lido do arquivo .qry
-    char sufixo[32], cor[32], id1[32], id2[32], metric[4], cep[32], cpf[32], cnpj[32];//Armazena os parametros do arquivo .qry (string)
+    char sufixo[32], cor[32], id1[32], id2[32], metric[4], cep[32], cpf[32], cnpj[32], face[2], compl[32];//Armazena os parametros do arquivo .qry (string)
     double x, y, r;        //Armazena os parametros do arquivo .qry (coordenadas)
     int n, k, vectSize = 0;                //Armazena os parametros do arquivo .qry
 
@@ -425,6 +425,13 @@ int main(int argc, char *argv[]){
                 scanDE (arqQuery, cnpj);
                 fprintf (arqText, "de? %s\n", cnpj);
                 printStoreData (cnpj, stores, persons, storeTypes, arqText);
+                fprintf (arqText, "\n");
+            }
+            else if (!strcmp (command, "mud")){
+                scanMud (arqQuery, cpf, cep, face, &n, compl);
+                fprintf (arqText, "mud %s %s %s %d %s\n", cpf, cep, face, n, compl);
+
+                treatMud (arqText, persons, residents, cpf, cep, face, n, compl);
                 fprintf (arqText, "\n");
             }
         }

@@ -43,3 +43,34 @@ int getResidentNum (Resident r){
 
     return resident->num;
 }
+
+void setResidentCep (Resident r, char cep[]){
+    ResidentImp resident = (ResidentImp) r;
+
+    strcpy (resident->cep, cep);
+}
+
+void setResidentFace (Resident r, char face[]){
+    ResidentImp resident = (ResidentImp) r;
+
+    strcpy (resident->face, face);
+}
+
+void setResidentNum (Resident r, int num){
+    ResidentImp resident = (ResidentImp) r;
+
+    resident->num = num;
+}
+
+void setResidentCompl (Resident r, char compl[]){
+    ResidentImp resident = (ResidentImp) r;
+
+    strcpy (resident->compl, compl);
+}
+
+void changeResidentAdress (Resident r, char cep[], char face[], int num, char compl[]){
+    setResidentCep (r, cep);
+    setResidentFace (r, face);
+    setResidentNum (r, num);
+    setResidentCompl (r, compl);
+}

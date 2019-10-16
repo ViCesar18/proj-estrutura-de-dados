@@ -394,3 +394,11 @@ void scanDM (FILE *arqQuery, char cpf[]){
 void scanDE (FILE *arqQuery, char cnpj[]){
     fscanf (arqQuery, "%s", cnpj);
 }
+
+void scanMud (FILE *arqQuery, char cpf[], char cep[], char face[], int *num, char compl[]){
+    fscanf (arqQuery, "%s", cpf);
+    fscanf (arqQuery, "%s", cep);
+    fscanf (arqQuery, "%s", face);
+    fscanf (arqQuery, "%d", num);
+    fscanf (arqQuery, "%s", compl);
+}

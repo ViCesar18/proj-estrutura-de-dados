@@ -110,6 +110,8 @@ void scanBRL(FILE *arqQuery, double *x, double *y);
 void scanM (FILE *arqQuery, char cep[]);
 void scanDM (FILE *arqQuery, char cpf[]);
 void scanDE (FILE *arqQuery, char cnpj[]);
+void scanMud (FILE *arqQuery, char cpf[], char cep[], char face[], int *num, char compl[]);
+
 
 
 
