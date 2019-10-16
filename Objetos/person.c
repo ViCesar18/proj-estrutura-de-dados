@@ -15,3 +15,34 @@ Person createPerson (char cpf[], char nome[], char sobrenome[], char sexo[], cha
 
     return rPerson;
 }
+
+char* getPersonCpf (Person p){ 
+    PersonImp person = (PersonImp) p;
+
+    return person->cpf;
+}
+
+char* getPersonNome (Person p){ 
+    PersonImp person = (PersonImp) p;
+
+    return person->nome;
+}
+
+char* getPersonSobrenome (Person p){ 
+    PersonImp person = (PersonImp) p;
+
+    return person->sobrenome;
+}
+
+char* getPersonSexo (Person p){ 
+    PersonImp person = (PersonImp) p;
+
+    return person->sexo;
+}
+
+char* getPersonNascimento (Person p){ 
+    PersonImp person = (PersonImp) p;
+
+    return person->nascimento;
+}
+

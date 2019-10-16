@@ -5,6 +5,8 @@
 #include "outSVG.h"
 #include "queryForms.h"
 #include "queryBuildings.h"
+#include "queryResident.h"
+#include "queryStore.h"
 #include "list.h"
 #include "Objetos/forms.h"
 #include "segment.h"
@@ -27,7 +29,7 @@ int main(int argc, char *argv[]){
     FILE *arqGeo = NULL, *arqQuery = NULL, *arqSvg = NULL, *arqSvgQ = NULL, *arqText = NULL, *arqSvgBB = NULL, *arqEst = NULL, *arqPes = NULL; //Arquivos
 
     char command[8];   //Armazena o comando lido do arquivo .qry
-    char sufixo[32], cor[32], id1[32], id2[32], metric[4];  //Armazena os parametros do arquivo .qry (string)
+    char sufixo[32], cor[32], id1[32], id2[32], metric[4], cep[32], cpf[32], cnpj[32];//Armazena os parametros do arquivo .qry (string)
     double x, y, r;        //Armazena os parametros do arquivo .qry (coordenadas)
     int n, k, vectSize = 0;                //Armazena os parametros do arquivo .qry
 
@@ -233,11 +235,11 @@ int main(int argc, char *argv[]){
 
     if (nameEC != NULL){
         while (1){
+            fscanf (arqEst, "%s", command);
+
             if (feof (arqEst))
                 break;
             
-            fscanf (arqEst, "%s", command);
-
             if (!strcmp (command, "t")){
                 scanStoreType (arqEst, storeTypes);
             }
@@ -249,10 +251,10 @@ int main(int argc, char *argv[]){
 
     if (namePM != NULL){
         while (1){
+            fscanf (arqPes, "%s", command);
+
             if (feof (arqPes))
                 break;
-            
-            fscanf (arqPes, "%s", command);
 
             if (!strcmp (command, "p")){
                 scanPerson (arqPes, persons);
@@ -408,6 +410,22 @@ int main(int argc, char *argv[]){
                 insertElement(auxList, circle, "c");
                 int capacitySegments = nm + np * 4 + 4;
                 bombAreaRadiation(x, y, capacitySegments, walls, buildings, auxList, arqSvgQ);
+            }
+            else if (!strcmp (command, "m?")){
+                scanM (arqQuery, cep);
+                treatM (arqText, persons, residents, cep);    
+            }
+            else if (!strcmp (command, "dm?")){
+                scanDM (arqQuery, cpf);
+                fprintf (arqText,"dm? %s\n", cpf);
+                printResidentData (cpf, residents, persons, arqText);
+                fprintf (arqText, "\n");
+            }
+            else if (!strcmp (command, "de?")){
+                scanDE (arqQuery, cnpj);
+                fprintf (arqText, "de? %s\n", cnpj);
+                printStoreData (cnpj, stores, persons, storeTypes, arqText);
+                fprintf (arqText, "\n");
             }
         }
     }

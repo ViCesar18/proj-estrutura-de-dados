@@ -382,3 +382,15 @@ void scanBRL(FILE *arqQuery, double *x, double *y){
     fscanf(arqQuery, "%lf", x);
     fscanf(arqQuery, "%lf", y);
 }
+
+void scanM (FILE *arqQuery, char cep[]){
+    fscanf (arqQuery, "%s", cep);
+}
+
+void scanDM (FILE *arqQuery, char cpf[]){
+    fscanf (arqQuery, "%s", cpf);
+}
+
+void scanDE (FILE *arqQuery, char cnpj[]){
+    fscanf (arqQuery, "%s", cnpj);
+}

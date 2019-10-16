@@ -107,4 +107,11 @@ void scanFHFS(FILE *arqQuery, int *k, char cep[], char face[], int *num);
 /*Le os parametros de consulta do comando "brl"*/
 void scanBRL(FILE *arqQuery, double *x, double *y);
 
+void scanM (FILE *arqQuery, char cep[]);
+void scanDM (FILE *arqQuery, char cpf[]);
+void scanDE (FILE *arqQuery, char cnpj[]);
+
+
+
+
 #endif
