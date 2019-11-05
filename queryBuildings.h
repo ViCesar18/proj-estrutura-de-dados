@@ -14,7 +14,9 @@
 /*Nesse header encontras-se todas as funcoes relacionadas aos comandos de construcoes e objetos urbanos do arquivo de consulta(.qry), 
 aqui são feitas as verificacoes e os calculos matematicos*/
 
-typedef void *Dist;
+typedef void* Dist;
+typedef void* Tree;
+typedef void* Element;
 
 /*Remove todas as quadras que estiverem inteiramente dentro do circulo dependendo da metrica (L1 ou L2)*/
 void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blockRoot, char metric[], Form circle);

@@ -15,7 +15,8 @@
 #include "vertex.h"
 #include "point.h"
 
-typedef void *Vertex;
+typedef void* Vertex;
+typedef void* Wall;
 
 /*Nesse header encontra-se todas as funcoes relacionadas a saida de dados*/
 

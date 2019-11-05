@@ -194,7 +194,7 @@ void treatFI(FILE *arqSvg, FILE *arqTxt, Tree auxTree, double x, double y, int n
             line = createWall(x, y, getHydrantX(hydrantDists[i]->element), getHydrantY(hydrantDists[i]->element));
 
             insertNode(&auxTree, ring, comparatorForm);
-            insertElement(&auxTree, line, comparatorWall);
+            insertNode(&auxTree, line, comparatorWall);
         }
         else{
             break;
