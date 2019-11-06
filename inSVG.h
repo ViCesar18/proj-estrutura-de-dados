@@ -6,14 +6,14 @@
 #include <string.h>
 #include <stdbool.h>
 #include "outSVG.h"
-#include "rbtree.h"
-#include "./Objetos/forms.h"
-#include "./Objetos/block.h"
-#include "./Objetos/hydrant.h"
-#include "./Objetos/traffic_light.h"
-#include "./Objetos/radio_tower.h"
-#include "./Objetos/building.h"
-#include "./Objetos/wall.h"
+#include "./data_structures/rbtree.h"
+#include "./objects/forms.h"
+#include "./objects/block.h"
+#include "./objects/hydrant.h"
+#include "./objects/traffic_light.h"
+#include "./objects/radio_tower.h"
+#include "./objects/building.h"
+#include "./objects/wall.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a entrada/leitura de dados*/
 

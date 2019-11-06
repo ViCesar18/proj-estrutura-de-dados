@@ -7,8 +7,8 @@
 #include <stdbool.h>
 #include "operations.h"
 #include "outSVG.h"
-#include "./Objetos/forms.h"
-#include "rbtree.h"
+#include "./objects/forms.h"
+#include "./data_structures/rbtree.h"
 #include "heapsort.h"
 
 /*Nesse header encontras-se todas as funcoes relacionadas aos comandos de construcoes e objetos urbanos do arquivo de consulta(.qry), 

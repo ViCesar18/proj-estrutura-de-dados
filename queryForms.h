@@ -6,8 +6,8 @@
 #include <stdbool.h>
 #include "operations.h"
 #include "outSVG.h"
-#include "./Objetos/forms.h"
-#include "rbtree.h"
+#include "./objects/forms.h"
+#include "./data_structures/rbtree.h"
 
 /*Nesse header encontram-se todas as funcoes relacionadas aos comandos de formas do arquivo de consulta(.qry), aqui são feitas as verificacoes
 e os calculos matematicos*/

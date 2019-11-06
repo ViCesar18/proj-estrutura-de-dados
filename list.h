@@ -8,8 +8,8 @@ typedef void *List;
 #include <stdlib.h>
 #include <stdbool.h>
 #include "outSVG.h"
-#include "./Objetos/forms.h"
-#include "./Objetos/building.h"
+#include "./objects/forms.h"
+#include "./objects/building.h"
 
 /*Nesse header encontram-se as funcoes relacionadas a manipulacao de listas duplamente encadeadas estaticas*/
 

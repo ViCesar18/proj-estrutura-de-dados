@@ -4,14 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "rbtree.h"
-#include "./Objetos/forms.h"
-#include "./Objetos/block.h"
-#include "./Objetos/hydrant.h"
-#include "./Objetos/traffic_light.h"
-#include "./Objetos/radio_tower.h"
-#include "./Objetos/building.h"
-#include "./Objetos/wall.h"
+#include "./data_structures/rbtree.h"
+#include "./objects/forms.h"
+#include "./objects/block.h"
+#include "./objects/hydrant.h"
+#include "./objects/traffic_light.h"
+#include "./objects/radio_tower.h"
+#include "./objects/building.h"
+#include "./objects/wall.h"
 #include "vertex.h"
 #include "point.h"
 
