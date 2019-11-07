@@ -1,0 +1,12 @@
+#Objetos
+*.o
+
+#Diretórios de Entrada e Saida
+entrada
+saida
+
+#Pasta do VSCode
+.vscode
+
+#Executavel
+siguel
