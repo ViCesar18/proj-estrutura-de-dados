@@ -4,13 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../data_structures/rbtree.h"
 
 typedef void *Building;
+typedef void *Block;
 
 /*TAD dos predios*/
 
 /*Coloca os dados de predio em uma estrutura e retorna a estrutura*/
-Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin);
+Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin, Tree blocks);
 
 /*Compara os cep's dos predios b1 e b2*/
 int comparatorBuilding(Building b1, Building b2);
@@ -35,6 +37,10 @@ double getBuildingY(Building b);
 double getBuildingW(Building b);
 
 double getBuildingH(Building b);
+
+Block getBuildingBlock(Building b);
+
+void setBuildingBlock(Building b, Tree blocks);
 
 void setBuildingX(Building b, double x);
 

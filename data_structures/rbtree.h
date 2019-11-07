@@ -18,6 +18,9 @@ Tree createRBTree(int (*comparator)(Element, Element));
 /*Retorna o elemento armazenado pelo no n*/
 Element getElement(Tree t, Node n);
 
+/*Retorna a raiz da arvore t*/
+Node getTreeRoot(Tree t);
+
 /*Retorna o no que contem o elemento element*/
 Node findNode(Tree t, Element element);
 
@@ -31,10 +34,13 @@ void removeNode(Tree t, Element element);
 void destroyRBTree(Tree t);
 
 /*Retorna o no identificado pelo id*/
-Node getElementById(Tree t, char id[]);
+Element getElementById(Tree t, char id[], char *(getID)(Element));
 
 /*Escreve a arvore t no terminal*/
 void printTree(Node n, int level);
+
+/*Desenha os elementos armazenados na arvore t no arquivo svg*/
+void printTreeElements(Tree t, Node n, FILE *arqSVG, void (*printElement)(FILE*, Element));
 
 /*Desenha a arvore t no arquivo SVG*/
 void printTreeInSVG(Tree t, FILE* svg);

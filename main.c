@@ -129,14 +129,14 @@ int main(int argc, char *argv[]){
     rewind(arqGeo);
 
     /*Cria as listas*/
-    figures = createTree();
-    blocks = createTree();
-    hydrants = createTree();
-    tLights = createTree();
-    rTowers = createTree();
-    buildings = createTree();
-    walls = createTree();
-    auxList = createTree();
+    figures = createRBTree(comparatorForm);
+    blocks = createRBTree(comparatorBlock);
+    hydrants = createRBTree(comparatorHydrant);
+    tLights = createRBTree(comparatorTrafficLight);
+    rTowers = createRBTree(comparatorRadioTower);
+    buildings = createRBTree(comparatorBuilding);
+    walls = createRBTree(comparatorWall);
+    //auxList = createRBTree();
 
     
     /*Le os dados das formas do arquivo de entrada*/
@@ -183,7 +183,7 @@ int main(int argc, char *argv[]){
             changeThickness(arqGeo, cw, rw);
         }
         else if(!strcmp(command, "prd")){
-            scanBuilding(arqGeo, buildings);
+            scanBuilding(arqGeo, buildings, blocks);
         }
         else if(!strcmp(command, "mur")){
             scanWall(arqGeo, walls);
@@ -191,18 +191,18 @@ int main(int argc, char *argv[]){
     }
     
     /*Imprime todo o conteudo das listas no arquivo .svg(1)*/
-    /*printTree(figures, arqSvg, printRect);
-    printTree(figures, arqSvg, printCircle);
-    printTree(figures, arqSvg, printTriangle);*/
-    printTree(hydrants, arqSvg, printHydrant);
-    printTree(tLights, arqSvg, printTrafficLight);
-    printTree(rTowers, arqSvg, printRadioTower);
-    printBuildingTree(blocks, buildings, arqSvg);
-    printTree(walls, arqSvg, printWall);
+    printTreeElements(figures, getTreeRoot(figures), arqSvg, printRect);
+    printTreeElements(figures, getTreeRoot(figures), arqSvg, printCircle);
+    printTreeElements(blocks, getTreeRoot(blocks), arqSvg, printBlock);
+    printTreeElements(hydrants, getTreeRoot(hydrants), arqSvg, printHydrant);
+    printTreeElements(tLights, getTreeRoot(tLights), arqSvg, printTrafficLight);
+    printTreeElements(rTowers, getTreeRoot(rTowers), arqSvg, printRadioTower);
+    printTreeElements(buildings, getTreeRoot(buildings), arqSvg, printBuilding);
+    printTreeElements(walls, getTreeRoot(walls), arqSvg, printWall);
     
     
     /*Le os dados de consulta(se existir)*/
-    if(nameQuery != NULL){
+    /*if(nameQuery != NULL){
         while(1){
             fscanf(arqQuery, "%s", command);
 
@@ -351,18 +351,18 @@ int main(int argc, char *argv[]){
                 //bombAreaRadiation(x, y, capacitySegments, walls, buildings, auxList, arqAux);
             }
         }
-    }
+    }*/
 
     /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
     if(arqSvgQ != NULL){
-        /*printTree(figures, arqSvgQ, printCircle);
-        printTree(figures, arqSvgQ, printRect);*/
-        printTree(blocks, arqSvgQ, printBlock);
-        printTree(hydrants, arqSvgQ, printHydrant);
-        printTree(tLights, arqSvgQ, printTrafficLight);
-        printTree(rTowers, arqSvgQ, printRadioTower);
-        printBuildingTree(blocks, buildings, arqSvgQ);
-        printTree(walls, arqSvgQ, printWall);
+        printTreeElements(figures, getTreeRoot(figures), arqSvgQ, printCircle);
+        printTreeElements(figures, getTreeRoot(figures), arqSvgQ, printRect);
+        printTreeElements(blocks, getTreeRoot(blocks), arqSvgQ, printBlock);
+        printTreeElements(hydrants, getTreeRoot(hydrants), arqSvgQ, printHydrant);
+        printTreeElements(tLights, getTreeRoot(tLights), arqSvgQ, printTrafficLight);
+        printTreeElements(rTowers, getTreeRoot(rTowers), arqSvgQ, printRadioTower);
+        printTreeElements(buildings, getTreeRoot(buildings), arqSvgQ, printBuilding);
+        printTreeElements(walls, getTreeRoot(walls), arqSvgQ, printWall);
         //printTree(auxList, arqSvgQ, printWall);
 
         /*Tratamento para desenhar a radiacao luminosa da bomba acima de tudo*/
@@ -410,13 +410,13 @@ int main(int argc, char *argv[]){
     }
 
     //Liberação da memória das listas
-    freeRBTree(figures);
-    freeRBTree(blocks);
-    freeRBTree(hydrants);
-    freeRBTree(tLights);
-    freeRBTree(rTowers);
-    freeRBTree(buildings);
-    freeRBTree(walls);
+    destroyRBTree(figures);
+    destroyRBTree(blocks);
+    destroyRBTree(hydrants);
+    destroyRBTree(tLights);
+    destroyRBTree(rTowers);
+    destroyRBTree(buildings);
+    destroyRBTree(walls);
     //freeRBTree(auxList);
 
     return 0;

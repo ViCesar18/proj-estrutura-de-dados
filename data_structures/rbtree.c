@@ -35,6 +35,12 @@ Element getElement(Tree t, Node n){
     return NULL;
 }
 
+Node getTreeRoot(Tree t){
+	TreeImp tree = (TreeImp) t;
+
+	return tree->root;
+}
+
 void rotateRight(TreeImp tree, NodeImp node){
     NodeImp l = node->left;
 
@@ -92,7 +98,6 @@ Node findNode(Tree t, Element element){
 }
 
 void fixInsert(TreeImp tree, NodeImp node){
-	NodeImp grandparent = getGrandparent(tree, node);
 
 	while(node != tree->root && node->parent != tree->root && node->parent->color == RED){
 		if(node->parent == node->parent->parent->left){
@@ -368,17 +373,13 @@ void destroyRBTree(Tree t){
     free(tree);
 }
 
-Node getElementById(Tree t, char id[]){
+Element getElementById(Tree t, char id[], char *(getID)(Element)){
     TreeImp tree = (TreeImp) t;
     NodeImp node = tree->root;
 
-    char n1[50], n2[50];
-
     while(node != tree->nil){
-    	sprintf(n1, "%011d", atoi(Pessoa_getCpf(node->element)));
-    	sprintf(n2, "%011d", atoi(id));
-		int result = strcmp(n2, n1);
-
+		int result = strcmp(id, getID(node->element));
+		
     	if(result < 0)
     		node = node->left;
     	else if(result > 0)
@@ -390,7 +391,7 @@ Node getElementById(Tree t, char id[]){
     return NULL;
 }
 
-Element getElementByIdInLists(Node t1, Node t2, Node t3, Node t4, char id[]){
+/*Element getElementByIdInLists(Node t1, Node t2, Node t3, Node t4, char id[]){
     Element element;
 
     element = getElementById(t1, id);
@@ -402,9 +403,9 @@ Element getElementByIdInLists(Node t1, Node t2, Node t3, Node t4, char id[]){
         element = getElementById(t4, id);
 
     return element;
-}
+}*/
 
-void printTree(Node n, int level){
+/*void printTree(Node n, int level){
 	NodeImp node = (NodeImp) n;
 
 	if(node == NULL){
@@ -418,9 +419,25 @@ void printTree(Node n, int level){
 		printArvore(node->left, level + 1);
 		printArvore(node->right, level + 1);
 	}
+}*/
+
+void printTreeElements(Tree t, Node n, FILE *arqSVG, void (*printElement)(FILE*, Element)){
+	TreeImp tree = (TreeImp) t;
+	NodeImp node = (NodeImp) n;
+
+	if(node == tree->nil) return; 
+
+	if(node != tree->nil)
+		printTreeElements(tree, node->left, arqSVG, printElement);
+
+	printElement(arqSVG, node->element);
+
+	if(node != tree->nil)
+		printTreeElements(tree, node->right, arqSVG, printElement);
+
 }
 
-int Y_PRINT_ARVORE = 15;
+/*int Y_PRINT_ARVORE = 15;
 
 void printTreeInSVG_util(TreeImp tree, Node n, int x, FILE* svg){
 	NodeImp node = (NodeImp) n;
@@ -450,4 +467,4 @@ void printTreeInSVG(Tree t, FILE* svg){
 	fprintf(svg, "<svg width=\"1000\" height=\"1000\">\n");
 	Arvore_escreverSvg_util(tree, node, 0, svg);
 	fprintf(svg, "</svg>\n");
-}
+}*/

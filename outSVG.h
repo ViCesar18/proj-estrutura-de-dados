@@ -57,7 +57,7 @@ void printTrafficLight(FILE *arqOut, TrafficLight tLight);
 void printRadioTower(FILE *arqOut, RadioTower rTower);
 
 /*Desenha um predio no arquivo SVG*/
-void printBuilding(FILE *arqOut, Building building, Block block);
+void printBuilding(FILE *arqOut, Building building);
 
 /*Desenha um muro no arquivo SVG*/
 void printWall(FILE *arqOut, Wall wall);

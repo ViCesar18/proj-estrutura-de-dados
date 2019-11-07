@@ -96,7 +96,7 @@ void scanNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr, int *np, int
     fscanf(arq, "%d", nm);
 }
 
-void scanCircle(FILE *arqIn, Tree figureRoot, char cw[]){
+void scanCircle(FILE *arqIn, Tree figures, char cw[]){
     char id[32];
     double r, x, y;
     char strokeColor[24], fillColor[24];
@@ -110,10 +110,10 @@ void scanCircle(FILE *arqIn, Tree figureRoot, char cw[]){
 
     Form circle = createCircle(id, x, y, r, strokeColor, fillColor, cw);
 
-    insertNode(figureRoot, circle, comparatorForm);
+    insertNode(figures, circle);
 }
 
-void scanRect(FILE *arqIn, Tree figureRoot, char rw[]){
+void scanRect(FILE *arqIn, Tree figures, char rw[]){
     char id[32];
     double x, y, w, h;
     char strokeColor[24], fillColor[24];
@@ -128,10 +128,10 @@ void scanRect(FILE *arqIn, Tree figureRoot, char rw[]){
 
     Form rect = createRect(id, x, y, w, h, strokeColor, fillColor, 0, rw);
 
-    insertNode(figureRoot, rect, comparatorForm);
+    insertNode(figures, rect);
 }
 
-void scanBlock(FILE *arqIn, Tree blockRoot, char fillColor[], char strokeColor[], char sw[]){
+void scanBlock(FILE *arqIn, Tree blocks, char fillColor[], char strokeColor[], char sw[]){
     char cep[64];
     double x, y, w, h;
 
@@ -143,10 +143,10 @@ void scanBlock(FILE *arqIn, Tree blockRoot, char fillColor[], char strokeColor[]
 
     Block block = createBlock(cep, x, y, w, h, strokeColor, fillColor, sw);
 
-    insertNode(blockRoot, block, comparatorBlock);
+    insertNode(blocks, block);
 }
 
-void scanHydrant(FILE *arqIn, Tree hydrantRoot, char fillColor[], char strokeColor[], char sw[]){
+void scanHydrant(FILE *arqIn, Tree hydrants, char fillColor[], char strokeColor[], char sw[]){
     char id[32];
     double x, y;
 
@@ -156,10 +156,10 @@ void scanHydrant(FILE *arqIn, Tree hydrantRoot, char fillColor[], char strokeCol
 
     Hydrant hydrant = createHydrant(id, x, y, strokeColor, fillColor, sw);
 
-    insertNode(hydrantRoot, hydrant, comparatorHydrant);
+    insertNode(hydrants, hydrant);
 }
 
-void scanTrafficLight(FILE *arqIn, Tree tLightRoot, char fillColor[], char strokeColor[], char sw[]){
+void scanTrafficLight(FILE *arqIn, Tree tLights, char fillColor[], char strokeColor[], char sw[]){
     char id[32];
     double x, y;
 
@@ -169,10 +169,10 @@ void scanTrafficLight(FILE *arqIn, Tree tLightRoot, char fillColor[], char strok
 
     TrafficLight tLight = createTrafficLight(id, x, y, strokeColor, fillColor, sw);
 
-    insertNode(tLightRoot, tLight, comparatorTrafficLight);
+    insertNode(tLights, tLight);
 }
 
-void scanRadioTower(FILE *arqIn, Tree rTowerRoot, char fillColor[], char strokeColor[], char sw[]){
+void scanRadioTower(FILE *arqIn, Tree rTowers, char fillColor[], char strokeColor[], char sw[]){
     char id[32];
     double x, y;
 
@@ -182,7 +182,7 @@ void scanRadioTower(FILE *arqIn, Tree rTowerRoot, char fillColor[], char strokeC
 
     RadioTower rTower = createRadioTower(id, x, y, strokeColor, fillColor, sw);
 
-    insertNode(rTowerRoot, rTower, comparatorRadioTower);
+    insertNode(rTowers, rTower);
 }
 
 void changeColor(FILE *arqIn, char fillColor[], char strokeColor[], char sw[]){
@@ -198,7 +198,7 @@ void changeThickness(FILE *arqIn, char cw[], char rw[]){
     fscanf(arqIn, "%s", rw);
 }
 
-void scanBuilding(FILE *arqIn, Tree buildingRoot){
+void scanBuilding(FILE *arqIn, Tree buildings, Tree blocks){
     char cep[32], face[2];
     int num;
     double faceSize, depth, margin;
@@ -210,12 +210,12 @@ void scanBuilding(FILE *arqIn, Tree buildingRoot){
     fscanf(arqIn, "%lf", &depth);
     fscanf(arqIn, "%lf", &margin);
 
-    Building building = createBuilding(cep, face, num, faceSize, depth, margin);
+    Building building = createBuilding(cep, face, num, faceSize, depth, margin, blocks);
 
-    insertNode(buildingRoot, building, comparatorBuilding);
+    insertNode(buildings, building);
 }
 
-void scanWall(FILE *arqIn, Tree wallRoot){
+void scanWall(FILE *arqIn, Tree walls){
     double x1, y1, x2, y2;
 
     fscanf(arqIn, "%lf", &x1);
@@ -225,7 +225,7 @@ void scanWall(FILE *arqIn, Tree wallRoot){
 
     Wall wall = createWall(x1, y1, x2, y2);
     
-    insertNode(wallRoot, wall, comparatorWall);
+    insertNode(walls, wall);
 }
 
 void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2){

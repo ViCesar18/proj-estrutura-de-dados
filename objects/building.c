@@ -4,9 +4,10 @@ typedef struct stBuilding{
     char cep[32], face[2];
     int num;
     double faceSize, depth, margin, x, y, w, h;
+    Block *block;
 }*BuildingImp;
 
-Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin){
+Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin, Tree blocks){
     BuildingImp building = (BuildingImp)malloc(sizeof(struct stBuilding));
 
     strcpy(building->cep, cep);
@@ -15,6 +16,7 @@ Building createBuilding(char cep[], char face[], double num, double faceSize, do
     building->faceSize = faceSize;
     building->depth =  depth;
     building->margin = margin;
+    setBuildingBlock(building, blocks);
 
     return building;
 }
@@ -90,6 +92,20 @@ double getBuildingH(Building b){
     BuildingImp building = (BuildingImp) b;
 
     return building->h;
+}
+
+Block getBuildingBlock(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    return building->block;
+}
+
+void setBuildingBlock(Building b, Tree blocks){
+    BuildingImp building = (BuildingImp) b;
+
+    Block block = getElementById(blocks, getBuildingCep(building), getBuildingCep);
+
+    building->block = block;
 }
 
 void setBuildingX(Building b, double x){

@@ -57,7 +57,7 @@ void changeColor(FILE *arqIn, char fillColor[], char strokeColor[], char sw[]);
 void changeThickness(FILE *arqIn, char cw[], char rw[]);
 
 /*Le as informacoes de predio do arquivo .geo e armazena na lista buildings*/
-void scanBuilding(FILE *arqIn, Tree buildings);
+void scanBuilding(FILE *arqIn, Tree buildings, Tree blocks);
 
 /*Le as informacoes de muro do arquivo .geo e armazena na lista walls*/
 void scanWall(FILE *arqIn, Tree walls);

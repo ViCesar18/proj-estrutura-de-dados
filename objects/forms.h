@@ -46,6 +46,8 @@ char *getFormStrokeColor(Form f);
 char *getFormFillColor(Form f);
 
 char *getFormSw(Form f);
+
+char *getFormType(Form f);
 /*Fim getters e setters*/
 
 /*Libera memoria de uma forma*/

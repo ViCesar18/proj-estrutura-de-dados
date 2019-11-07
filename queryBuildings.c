@@ -1,6 +1,6 @@
 #include "queryBuildings.h"
 
-void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blockRoot, char metric[], Form circle){
+/*void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blockRoot, char metric[], Form circle){
     Block block;
     Form ring1 = createCircle("0", getFormX(circle), getFormY(circle), 18, "green", "none", "5");
     Form ring2 = createCircle("0", getFormX(circle), getFormY(circle), 13, "lightgreen", "none", "5");
@@ -113,7 +113,7 @@ void treatTRNS_rTower(FILE *arqTxt, Tree rTowerRoot, Form rect, double dx, doubl
         treatTRNS_rTower(arqTxt, getLeft(rTowerRoot), rect, dx, dy, arqSvgQ);
     if(getRight(rTowerRoot) != NULL)
         treatTRNS_rTower(arqTxt, getRight(rTowerRoot), rect, dx, dy, arqSvgQ);
-}
+}*/
 
 typedef struct stDist{
     Element *element;
@@ -126,7 +126,7 @@ double getDist(Dist distAux){
     return dist->dist;
 }
 
-void treeToListDists(double x, double y, Tree root, Dist lD, int *cont, double getX(Element), double getY(Element)){
+/*void treeToListDists(double x, double y, Tree root, Dist lD, int *cont, double getX(Element), double getY(Element)){
     Element element;
     DistImp* listDists = (DistImp*) lD;
 
@@ -306,4 +306,4 @@ void treatFS(FILE *arqTxt, FILE *arqSvg, Tree tLightRoot, int k, double x, doubl
         free(tLightDists[i]);
     }
     free(tLightDists);
-}
+}*/
