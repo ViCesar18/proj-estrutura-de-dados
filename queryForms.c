@@ -1,11 +1,11 @@
 #include "queryForms.h"
 
-void treatO(FILE *arqTxt, FILE *arqSvgQ, Form figure1, Form figure2, char type1[], char type2[]){
+void treatO(FILE *arqTxt, FILE *arqSvgQ, Form figure1, Form figure2){
     double a, xProx, yProx;
     bool collision;
 
     char id1[32], id2[32];
-
+    
     strcpy(id1, getFormId(figure1));
     strcpy(id2, getFormId(figure2));
     double r1 = getFormR(figure1);
@@ -18,7 +18,10 @@ void treatO(FILE *arqTxt, FILE *arqSvgQ, Form figure1, Form figure2, char type1[
     double w2 = getFormW(figure2);
     double h1 = getFormH(figure1);
     double h2 = getFormH(figure2);
-
+    
+    char *type1 = getFormType(figure1);
+    char *type2 = getFormType(figure2);
+    
     if(!strcmp(type1, "c") && !strcmp(type2, "c")){
         if(r1 + r2 >= distEuclid(x1, y1, x2, y2)){
             fprintf(arqTxt, "o? %s %s\nSIM\n\n", id1, id2);
@@ -75,7 +78,7 @@ void treatO(FILE *arqTxt, FILE *arqSvgQ, Form figure1, Form figure2, char type1[
     }
 }
 
-void treatI(FILE *arqTxt, FILE *arqSvgQ, Form figure, double x, double y, char type[]){
+void treatI(FILE *arqTxt, FILE *arqSvgQ, Form figure, double x, double y){
     double xP = x;
     double yP = y;
     double rP = 3;
@@ -87,6 +90,7 @@ void treatI(FILE *arqTxt, FILE *arqSvgQ, Form figure, double x, double y, char t
     double rF = getFormR(figure);
     double wF = getFormW(figure);
     double hF = getFormH(figure);
+    char *type = getFormType(figure);
 
     if(!strcmp(type, "c")){
         if(pointInsideFigure(x, y, figure, "c", "L2")){
@@ -123,7 +127,7 @@ void treatI(FILE *arqTxt, FILE *arqSvgQ, Form figure, double x, double y, char t
     }
 }
 
-void treatD(FILE *arqTxt, FILE *arqSvgQ, Form figure1, Form figure2, char type1[], char type2[]){
+void treatD(FILE *arqTxt, FILE *arqSvgQ, Form figure1, Form figure2){
     double dist;
     char distText[32], id1[32], id2[32];
     double xL, yL;
@@ -140,6 +144,8 @@ void treatD(FILE *arqTxt, FILE *arqSvgQ, Form figure1, Form figure2, char type1[
     double w2 = getFormW(figure2);
     double h1 = getFormH(figure1);
     double h2 = getFormH(figure2);
+    char *type1 = getFormType(figure1);
+    char *type2 = getFormType(figure2);
 
     if(!strcmp(type1, "c") && !strcmp(type2, "c")){
         dist = distEuclid(x1, y1, x2, y2);
@@ -177,7 +183,7 @@ void treatBB(FILE *arqSvgBB, Tree figures, char color[]){
 
     fprintf(arqSvgBB, "<svg>\n");
 
-    //printBB(figures, arqSvgBB, color);
+    printBB(figures, getTreeRoot(figures), arqSvgBB, color);
 
     fprintf(arqSvgBB, "\n</svg>");
 }

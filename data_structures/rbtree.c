@@ -43,6 +43,30 @@ Node getTreeRoot(Tree t){
 	return tree->root;
 }
 
+Node getNil(Tree t){
+	TreeImp tree = (TreeImp) t;
+
+	return tree->nil;
+}
+
+Node getLeft(Tree t, Node n){
+	TreeImp tree = (TreeImp) t;
+	NodeImp node = (NodeImp) n;
+
+	if(node == tree->nil) return NULL;
+
+	return node->left;
+}
+
+Node getRight(Tree t, Node n){
+	TreeImp tree = (TreeImp) t;
+	NodeImp node = (NodeImp) n;
+
+	if(node == tree->nil) return NULL;
+
+	return node->right;
+}
+
 void rotateRight(TreeImp tree, NodeImp node){
     NodeImp l = node->left;
 
@@ -380,47 +404,29 @@ void destroyRBTree(Tree t){
     free(tree);
 }
 
-/*void printTree(Node n, int level){
-	NodeImp node = (NodeImp) n;
-
-	if(node == NULL){
-		return;
-	}
-	else{
-		for(int i = 0; i < level; i++){
-			printf("   ");
-		}
-		printf("%s\n", Pessoa_getCpf(node->element));
-		printArvore(node->left, level + 1);
-		printArvore(node->right, level + 1);
-	}
-}*/
-
 void printTreeElements(Tree t, Node n, FILE *arqSVG, void (*printElement)(FILE*, Element)){
 	TreeImp tree = (TreeImp) t;
 	NodeImp node = (NodeImp) n;
 
 	if(node == tree->nil) return; 
 
-	if(node != tree->nil)
-		printTreeElements(tree, node->left, arqSVG, printElement);
+	printTreeElements(tree, node->left, arqSVG, printElement);
 
 	printElement(arqSVG, node->element);
 
-	if(node != tree->nil)
-		printTreeElements(tree, node->right, arqSVG, printElement);
+	printTreeElements(tree, node->right, arqSVG, printElement);
 
 }
 
-/*int Y_PRINT_ARVORE = 15;
+int Y_PRINT_ARVORE = 15;
 
-void printTreeInSVG_util(TreeImp tree, Node n, int x, FILE* svg){
+void printTreeInSVG_util(TreeImp tree, Node n, int x, FILE* svg, char *(getId)(Element)){
 	NodeImp node = (NodeImp) n;
 
 	if(node == tree->nil) return;
 
 	x+=20;
-	Arvore_escreverSvg_util(tree, node->left, x, svg);
+	printTreeInSVG_util(tree, node->left, x, svg, getId);
 
 	fprintf(svg, "<circle cx=\"%d\" cy=\"%d\" r=\"5\" stroke=\"black\" fill=\"%s\" stroke-width=\"2\" />\n", 
             Y_PRINT_ARVORE,
@@ -429,17 +435,17 @@ void printTreeInSVG_util(TreeImp tree, Node n, int x, FILE* svg){
 	fprintf(svg, "<text x=\"%d\" y=\"%d\" fill=\"white\" font-size=\"5\">%s</text>",
         Y_PRINT_ARVORE, 
         x, 
-        Pessoa_getCpf(node->element));
+        getId(node->element));
 	Y_PRINT_ARVORE+=13;
 
-	Arvore_escreverSvg_util(tree, node->right, x, svg);
+	printTreeInSVG_util(tree, node->right, x, svg, getId);
 }
 
-void printTreeInSVG(Tree t, FILE* svg){
+void printTreeInSVG(Tree t, FILE* svg, char *(getId)(Element)){
 	TreeImp tree = (TreeImp) t;
 	NodeImp node = (NodeImp) tree->root;
 
 	fprintf(svg, "<svg width=\"1000\" height=\"1000\">\n");
-	Arvore_escreverSvg_util(tree, node, 0, svg);
+	printTreeInSVG_util(tree, node, 0, svg, getId);
 	fprintf(svg, "</svg>\n");
-}*/
+}

@@ -21,6 +21,12 @@ Element getElement(Tree t, Node n);
 /*Retorna a raiz da arvore t*/
 Node getTreeRoot(Tree t);
 
+Node getNil(Tree t);
+
+Node getLeft(Tree t, Node n);
+
+Node getRight(Tree t, Node n);
+
 /*Retorna o no que contem o elemento element*/
 Node findNode(Tree t, Element element);
 
@@ -39,7 +45,9 @@ void printTree(Node n, int level);
 /*Desenha os elementos armazenados na arvore t no arquivo svg*/
 void printTreeElements(Tree t, Node n, FILE *arqSVG, void (*printElement)(FILE*, Element));
 
+//void printTreeInSVG_util(TreeImp tree, Node n, int x, FILE* svg, char *(getId)(Element));
+
 /*Desenha a arvore t no arquivo SVG*/
-void printTreeInSVG(Tree t, FILE* svg);
+void printTreeInSVG(Tree t, FILE* svg, char *(getId)(Element));
 
 #endif

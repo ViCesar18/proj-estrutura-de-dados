@@ -34,10 +34,10 @@ void allocateFileMamory(char fname[], char path[], char **arq);
 void scanNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr, int *np, int *nm);
 
 /*Le as informacoes de circulo do arquivo .geo e armazena na lista figuras*/
-void scanCircle(FILE *arqIn, Tree figures, char cw[]);
+void scanCircle(FILE *arqIn, Tree figures, HashTable formsTable, char cw[]);
 
 /*Le as informacoes de retangulo do arquivo .geo e armazena na lista figuras*/
-void scanRect(FILE *arqIn, Tree figures, char rw[]);
+void scanRect(FILE *arqIn, Tree figures, HashTable formsTable, char rw[]);
 
 /*Le as informacoes de quadra do arquivo .geo e armazena na lista blocks*/
 void scanBlock(FILE *arqIn, Tree blocks, HashTable blocksTable, char strokeColor[], char fillColor[], char sw[]);

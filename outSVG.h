@@ -14,6 +14,7 @@
 #include "./objects/wall.h"
 #include "vertex.h"
 #include "point.h"
+#include "./data_structures/hash_table.h"
 
 typedef void* Vertex;
 typedef void* Wall;
@@ -63,7 +64,7 @@ void printBuilding(FILE *arqOut, Building building);
 void printWall(FILE *arqOut, Wall wall);
 
 /*Imprime os elementos da lista e suas bounding box correspondentes no arquivo SVG passado como parametro*/
-//void printBB(List figures, FILE *arq, char color[]);
+void printBB(Tree forms, Node node, FILE *arq, char color[]);
 
 /*Desenha uma bomba no arquivo SVG*/
 void printBomb(FILE *arq, double x, double y);

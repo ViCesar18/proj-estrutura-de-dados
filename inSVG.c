@@ -96,7 +96,7 @@ void scanNX(FILE *arq, int *nx, int *nq, int *nh, int *ns, int *nr, int *np, int
     fscanf(arq, "%d", nm);
 }
 
-void scanCircle(FILE *arqIn, Tree figures, char cw[]){
+void scanCircle(FILE *arqIn, Tree figures, HashTable formsTable, char cw[]){
     char id[32];
     double r, x, y;
     char strokeColor[24], fillColor[24];
@@ -111,9 +111,10 @@ void scanCircle(FILE *arqIn, Tree figures, char cw[]){
     Form circle = createCircle(id, x, y, r, strokeColor, fillColor, cw);
 
     insertNode(figures, circle);
+    insertHashTable(formsTable, getFormId(circle), circle);
 }
 
-void scanRect(FILE *arqIn, Tree figures, char rw[]){
+void scanRect(FILE *arqIn, Tree figures, HashTable formsTable, char rw[]){
     char id[32];
     double x, y, w, h;
     char strokeColor[24], fillColor[24];
@@ -129,6 +130,7 @@ void scanRect(FILE *arqIn, Tree figures, char rw[]){
     Form rect = createRect(id, x, y, w, h, strokeColor, fillColor, 0, rw);
 
     insertNode(figures, rect);
+    insertHashTable(formsTable, getFormId(rect), rect);
 }
 
 void scanBlock(FILE *arqIn, Tree blocks, HashTable blocksTable, char fillColor[], char strokeColor[], char sw[]){

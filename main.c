@@ -141,19 +141,20 @@ int main(int argc, char *argv[]){
 
     /*Cria as tabelas hash*/
     HashTable blocksTable = createHashTable(nq, NULL);
+    HashTable formsTable = createHashTable(nx, NULL);
     
     /*Le os dados das formas do arquivo de entrada*/
     while(1){
+        fscanf(arqGeo, "%s", command);
+
         if(feof(arqGeo))
             break;
 
-        fscanf(arqGeo, "%s", command);
-
         if(!strcmp(command, "c")){
-            scanCircle(arqGeo, figures, cw);
+            scanCircle(arqGeo, figures, formsTable, cw);
         }
         else if(!strcmp(command, "r")){
-            scanRect(arqGeo, figures, rw);
+            scanRect(arqGeo, figures, formsTable, rw);
         }
         else if(!strcmp(command, "t")){
             scanText(arqGeo, arqSvg, arqSvgQ);
@@ -193,6 +194,10 @@ int main(int argc, char *argv[]){
         }
     }
 
+    FILE *a = fopen("tree.svg", "w");
+    printTreeInSVG(figures, a, getFormId);
+    fclose(a);
+
     /*Imprime todo o conteudo das listas no arquivo .svg(1)*/
     printTreeElements(figures, getTreeRoot(figures), arqSvg, printRect);
     printTreeElements(figures, getTreeRoot(figures), arqSvg, printCircle);
@@ -208,25 +213,25 @@ int main(int argc, char *argv[]){
         while(1){
             fscanf(arqQuery, "%s", command);
 
-            /*if(feof(arqQuery))
+            if(feof(arqQuery))
                 break;
 
             if(!strcmp(command, "o?")){
                 scanO(arqQuery, id1, id2);
-                figure1 = getElementById(figures, id1, type1);
-                figure2 = getElementById(figures, id2, type2);
-                treatO(arqText, arqSvgQ, figure1, figure2, type1, type2);
+                figure1 = searchHashTable(formsTable, id1);
+                figure2 = searchHashTable(formsTable, id2);
+                treatO(arqText, arqSvgQ, figure1, figure2);
             }
             else if(!strcmp(command, "i?")){
                 scanI(arqQuery, id1, &x, &y);
-                //figure1 = getElementById(figures, id1, type1);
-                treatI(arqText, arqSvgQ, figure1, x, y, type1);
+                figure1 = searchHashTable(formsTable, id1);
+                treatI(arqText, arqSvgQ, figure1, x, y);
             }
             else if(!strcmp(command, "d?")){
                 scanD(arqQuery, id1, id2);
-                //figure1 = getElementById(figures, id1, type1);
-                //figure2 = getElementById(figures, id2, type2);
-                treatD(arqText, arqSvgQ, figure1, figure2, type1, type2);
+                figure1 = searchHashTable(formsTable, id1);
+                figure2 = searchHashTable(formsTable, id2);
+                treatD(arqText, arqSvgQ, figure1, figure2);
             }
             else if(!strcmp(command, "bb")){
                 scanBB(arqQuery, sufixo, cor);
@@ -239,7 +244,7 @@ int main(int argc, char *argv[]){
                 fclose(arqSvgBB);
                 free(nameOutBB);
                 free(arqOutBB);
-            }*/
+            }
             /*else if(!strcmp(command, "dq")){
                 scanDQ(arqQuery, metric, id1, &r);
                 figure1 = getElementByIdInLists(blocks, hydrants, tLights, rTowers, id1);
@@ -354,7 +359,7 @@ int main(int argc, char *argv[]){
             }*/
         }
     }
-
+    
     /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
     if(arqSvgQ != NULL){
         printTreeElements(figures, getTreeRoot(figures), arqSvgQ, printCircle);
@@ -373,7 +378,7 @@ int main(int argc, char *argv[]){
         while((c = fgetc(arqAux)) != EOF)
             fputc(c, arqSvgQ);
     }
-    
+
     /*Finalização, libreracao de memoria e fechamento dos arquivos*/
     fputs("\n</svg>\n", arqSvg);
 
@@ -419,9 +424,10 @@ int main(int argc, char *argv[]){
     destroyRBTree(buildings);
     destroyRBTree(walls);
     //freeRBTree(auxList);
-    
+
     //Liberação da memória das tabelas hash
     destroyHashTable(blocksTable);
+    destroyHashTable(formsTable);
 
     return 0;
 }

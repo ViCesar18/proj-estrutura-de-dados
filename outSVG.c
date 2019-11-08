@@ -9,6 +9,7 @@ void createOutputFileName(char **nameOut, char nameIn[]){
         (*nameOut)[i] = nameIn[i];
         i++;
     }
+    (*nameOut)[i] = '\0';
 }
 
 void createOutputQryFileName(char **nameOut, char nameIn[], char nameQuery[]){
@@ -28,6 +29,8 @@ void createOutputQryFileName(char **nameOut, char nameIn[], char nameQuery[]){
         i++;
         j++;
     }
+
+    (*nameOut)[j] = '\0';
 }
 
 void createOutputBBFileName(char **nameOut, char nameIn[], char nameQuery[], char suffix[]){
@@ -55,6 +58,8 @@ void createOutputBBFileName(char **nameOut, char nameIn[], char nameQuery[], cha
         i++;
         j++;
     }
+
+    (*nameOut)[j] = '\0';
 }
 
 /*Printa as informacoes de circulo armazenadas no vetor de struct e formatadas para SVG no arquivo SVG*/
@@ -164,7 +169,7 @@ void printBuilding(FILE *arqOut, Building building){
     setBuildingW(building, w);
     setBuildingH(building, h);
 
-    rect = createRect("", x, y, w, h, "black", "white", 0, "1");
+    rect = createRect("0", x, y, w, h, "black", "white", 0, "1");
     printRect(arqOut, rect);
 
     sprintf(text, "%d", getBuildingNum(building));
@@ -178,59 +183,39 @@ void printWall(FILE *arqOut, Wall wall){
     printLine(arqOut, getWallX1(wall), getWallY1(wall), getWallX2(wall), getWallY2(wall), "black");
 }
 
-/*void printBB(Tree figures, FILE *arq, char color[]){
-
+void printBB(Tree forms, Node node, FILE *arq, char color[]){
     double x, y, w, h, rx, ry;
     char strokeColorR[24], fillColorR[24];
-    Form figure;
 
-    for(int i = getFirst(figures); i != getNulo(); i = getNext(figures, i)){
-        figure = getElementByIndex(figures, i);
-        
-        if(!strcmp(getType(figures, i), "c")){
-            printCircle(arq, figure);
-            x = getFormX(figure) - getFormR(figure);
-            y = getFormY(figure) - getFormR(figure);
-            w = 2 * getFormR(figure);
-            h = 2 * getFormR(figure);
-            strcpy(strokeColorR, color);
-            strcpy(fillColorR, "none");
-            Form retangulo = createRect("0", x, y, w, h, strokeColorR, fillColorR, 0, "1");
-            printRect(arq, retangulo);
-            free(retangulo);
-        }
-        else if(!strcmp(getType(figures, i), "r")){
-            printRect(arq, figure);
-            x = getFormX(figure) + getFormW(figure) / 2;
-            y = getFormY(figure) + getFormH(figure) / 2;
-            rx = getFormW(figure) / 2;
-            ry = getFormH(figure) / 2;
-            printEllipse(arq, x, y, rx, ry, color);
-        }
-    }
+    if(node == getNil(forms)) return;
 
-    if(!strcmp(getType(figures, i), "c")){
-        printCircle(arq, figure);
-        x = getFormX(figure) - getFormR(figure);
-        y = getFormY(figure) - getFormR(figure);
-        w = 2 * getFormR(figure);
-        h = 2 * getFormR(figure);
+    printBB(forms, getLeft(forms, node), arq, color);
+
+    Form form = getElement(forms, node);
+    
+    if(!strcmp(getFormType(form), "c")){
+        printCircle(arq, form);
+        x = getFormX(form) - getFormR(form);
+        y = getFormY(form) - getFormR(form);
+        w = 2 * getFormR(form);
+        h = 2 * getFormR(form);
         strcpy(strokeColorR, color);
         strcpy(fillColorR, "none");
         Form retangulo = createRect("0", x, y, w, h, strokeColorR, fillColorR, 0, "1");
         printRect(arq, retangulo);
         free(retangulo);
     }
-    else if(!strcmp(getType(figures, i), "r")){
-        printRect(arq, figure);
-        x = getFormX(figure) + getFormW(figure) / 2;
-        y = getFormY(figure) + getFormH(figure) / 2;
-        rx = getFormW(figure) / 2;
-        ry = getFormH(figure) / 2;
+    else if(!strcmp(getFormType(form), "r")){
+        printRect(arq, form);
+        x = getFormX(form) + getFormW(form) / 2;
+        y = getFormY(form) + getFormH(form) / 2;
+        rx = getFormW(form) / 2;
+        ry = getFormH(form) / 2;
         printEllipse(arq, x, y, rx, ry, color);
     }
-
-}*/
+    
+    printBB(forms, getRight(forms, node), arq, color);
+}
 
 void printBomb(FILE *arq, double x, double y){
 

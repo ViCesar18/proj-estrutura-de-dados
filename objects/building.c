@@ -10,6 +10,8 @@ typedef struct stBuilding{
 Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin, Block block){
     BuildingImp building = (BuildingImp)malloc(sizeof(struct stBuilding));
 
+    building->x = 0;
+    building->y = 0;
     strcpy(building->cep, cep);
     strcpy(building->face, face);
     building->num = num;

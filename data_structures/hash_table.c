@@ -96,7 +96,7 @@ Element searchHashTable(HashTable h, char *key){
 	while(currentNode != NULL && strcmp(key, currentNode->key) != 0){
 		currentNode = currentNode->next;
 	}
-
+	
 	if(currentNode == NULL)
 		return NULL;
 
