@@ -34,6 +34,6 @@ void setHydrantY(Hydrant h, double y);
 /*Fim getters e setters*/
 
 /*Libera memoria de um hidrante*/
-void freeHydrant(Hydrant h);
+void destroyHydrant(Hydrant h);
 
 #endif

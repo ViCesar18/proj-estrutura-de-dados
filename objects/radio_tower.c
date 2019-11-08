@@ -79,7 +79,7 @@ void setRadioTowerY(RadioTower r, double y){
     rTower->y = y;
 }
 
-void freeRadioTower(RadioTower r){
+void destroyRadioTower(RadioTower r){
     RadioTowerImp rTower = (RadioTowerImp) r;
 
     free(rTower);

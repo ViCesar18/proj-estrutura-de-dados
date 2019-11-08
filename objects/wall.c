@@ -52,7 +52,7 @@ double getWallY2(Wall w){
     return wall->y2;
 }
 
-void freeWall(Wall w){
+void destroyWall(Wall w){
     WallImp wall = (WallImp) w;
 
     free(wall);

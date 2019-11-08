@@ -71,7 +71,7 @@ double getBuildingMargin(Building b){
     return building->margin;
 }
 
-void freeBuilding(Building b){
+void destroyBuilding(Building b){
     BuildingImp building = (BuildingImp) b;
 
     free(building);   

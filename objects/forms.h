@@ -51,6 +51,6 @@ char *getFormType(Form f);
 /*Fim getters e setters*/
 
 /*Libera memoria de uma forma*/
-void freeForm(Form f);
+void destroyForm(Form f);
 
 #endif

@@ -130,17 +130,17 @@ int main(int argc, char *argv[]){
     rewind(arqGeo);
 
     /*Cria as arvores rubro-negras*/
-    figures = createRBTree(comparatorForm);
-    blocks = createRBTree(comparatorBlock);
-    hydrants = createRBTree(comparatorHydrant);
-    tLights = createRBTree(comparatorTrafficLight);
-    rTowers = createRBTree(comparatorRadioTower);
-    buildings = createRBTree(comparatorBuilding);
-    walls = createRBTree(comparatorWall);
+    figures = createRBTree(comparatorForm, destroyForm);
+    blocks = createRBTree(comparatorBlock, destroyBlock);
+    hydrants = createRBTree(comparatorHydrant, destroyHydrant);
+    tLights = createRBTree(comparatorTrafficLight, destroyTrafficLight);
+    rTowers = createRBTree(comparatorRadioTower, destroyRadioTower);
+    buildings = createRBTree(comparatorBuilding, destroyBuilding);
+    walls = createRBTree(comparatorWall, destroyWall);
     //auxList = createRBTree();
 
     /*Cria as tabelas hash*/
-    HashTable blocksTable = createHashTable(nq);
+    HashTable blocksTable = createHashTable(nq, NULL);
     
     /*Le os dados das formas do arquivo de entrada*/
     while(1){
@@ -192,6 +192,7 @@ int main(int argc, char *argv[]){
             scanWall(arqGeo, walls);
         }
     }
+
     /*Imprime todo o conteudo das listas no arquivo .svg(1)*/
     printTreeElements(figures, getTreeRoot(figures), arqSvg, printRect);
     printTreeElements(figures, getTreeRoot(figures), arqSvg, printCircle);
@@ -372,7 +373,7 @@ int main(int argc, char *argv[]){
         while((c = fgetc(arqAux)) != EOF)
             fputc(c, arqSvgQ);
     }
-
+    
     /*Finalização, libreracao de memoria e fechamento dos arquivos*/
     fputs("\n</svg>\n", arqSvg);
 
@@ -409,7 +410,6 @@ int main(int argc, char *argv[]){
         free(arqTxt);
         free(arqQry);
     }
-
     //Liberação da memória das asvores
     destroyRBTree(figures);
     destroyRBTree(blocks);
@@ -419,9 +419,9 @@ int main(int argc, char *argv[]){
     destroyRBTree(buildings);
     destroyRBTree(walls);
     //freeRBTree(auxList);
-
+    
     //Liberação da memória das tabelas hash
-    //destroyHashTable(blocksTable);
+    destroyHashTable(blocksTable);
 
     return 0;
 }

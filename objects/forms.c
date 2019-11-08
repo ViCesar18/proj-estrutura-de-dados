@@ -143,7 +143,7 @@ char *getFormType(Form f){
     return form->type;
 }
 
-void freeForm(Form f){
+void destroyForm(Form f){
     FormImp form = (FormImp) f;
 
     free(form);

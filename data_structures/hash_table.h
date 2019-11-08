@@ -10,7 +10,7 @@ typedef void *HashTable;
 typedef void *Element;
 
 /*Cria e retorna uma tabela de espalhamento*/
-HashTable createHashTable(int size);
+HashTable createHashTable(int size, void (*destroy)(Element));
 
 /*Insere element na tabela h com a chave key. Retorna true caso insira, false caso contrario*/
 bool insertHashTable(HashTable h, char *key, Element element);

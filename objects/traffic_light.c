@@ -79,7 +79,7 @@ void setTrafficLightY(TrafficLight s, double y){
     tLight->y = y;
 }
 
-void freeTrafficLight(TrafficLight s){
+void destroyTrafficLight(TrafficLight s){
     TrafficLightImp tLight = (TrafficLightImp) s;
 
     free(tLight);

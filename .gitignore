@@ -1,5 +1,7 @@
 #Objetos
 *.o
+objects/*.o
+data_structs/*.o
 
 #Diretórios de Entrada e Saida
 entrada

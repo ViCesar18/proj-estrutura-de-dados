@@ -40,6 +40,6 @@ void setBlockStrokeColor(Block b, char strokeColor[]);
 /*Fim getters e setters*/
 
 /*Libera memoria de uma quadra*/
-void freeBlock(Block b);
+void destroyBlock(Block b);
 
 #endif

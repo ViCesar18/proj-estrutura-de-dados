@@ -26,6 +26,6 @@ double getWallX2(Wall w);
 double getWallY2(Wall w);
 
 /*Libera memoria de um muro*/
-void freeWall(Wall w);
+void destroyWall(Wall w);
 
 #endif

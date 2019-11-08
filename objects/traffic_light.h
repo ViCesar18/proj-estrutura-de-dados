@@ -34,6 +34,6 @@ void setTrafficLightY(TrafficLight s, double y);
 /*Fim getters e setters*/
 
 /*Libera memoria de um semaforo*/
-void freeTrafficLight(TrafficLight s);
+void destroyTrafficLight(TrafficLight s);
 
 #endif

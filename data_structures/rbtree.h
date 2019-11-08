@@ -13,7 +13,7 @@ typedef void *Tree;
 typedef void *Node;;
 
 /*Aloca memoria para uma arvore vazia e retorna essa arvore*/
-Tree createRBTree(int (*comparator)(Element, Element));
+Tree createRBTree(int (*comparator)(Element, Element), void (*destroy)(Element));
 
 /*Retorna o elemento armazenado pelo no n*/
 Element getElement(Tree t, Node n);

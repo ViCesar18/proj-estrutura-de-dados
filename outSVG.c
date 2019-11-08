@@ -170,7 +170,7 @@ void printBuilding(FILE *arqOut, Building building){
     sprintf(text, "%d", getBuildingNum(building));
     printText(arqOut, getBuildingX(building) + getBuildingW(building) / 2, getBuildingY(building) + getBuildingH(building) / 2 + 4, text, "black");
 
-    freeForm(rect);
+    destroyForm(rect);
 }
 
 void printWall(FILE *arqOut, Wall wall){

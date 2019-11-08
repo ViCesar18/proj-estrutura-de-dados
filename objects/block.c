@@ -99,7 +99,7 @@ void setBlockStrokeColor(Block b, char strokeColor[]){
     strcpy(block->strokeColor, strokeColor);
 }
 
-void freeBlock(Block b){
+void destroyBlock(Block b){
     BlockImp block = (BlockImp) b;
 
     free(block);   

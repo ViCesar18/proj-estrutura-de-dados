@@ -52,6 +52,6 @@ void setBuildingH(Building b, double h);
 /*Fim getters e setters*/
 
 /*Libera memoria de um predio*/
-void freeBuilding(Building b);
+void destroyBuilding(Building b);
 
 #endif

@@ -10,3 +10,4 @@ siguel: $(OBJECTS)
 clean:
 		rm -rf ./*.o
 		rm -rf objects/*.o
+		rm -rf data_structures/*.o

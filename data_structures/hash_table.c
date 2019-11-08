@@ -9,13 +9,15 @@ typedef struct ListNodeSt{
 typedef struct HashTableSt{
 	int size;
 	ListNodeImp *list;
+	void (*destroy)(Element);
 } *HashTableImp;
 
-HashTable createHashTable(int size){
+HashTable createHashTable(int size, void (*destroy)(Element)){
 	HashTableImp hash = (HashTableImp) malloc(sizeof(struct HashTableSt));
 	hash->size = size;
 	hash->list = (ListNodeImp *) malloc(size * sizeof(ListNodeImp));
 	memset(hash->list, 0, size * sizeof(ListNodeImp));
+	hash->destroy = destroy;
 
 	return hash;
 }
@@ -108,7 +110,10 @@ void destroyHashTable(HashTable h){
 		ListNodeImp node = hash->list[i];
 
 		while(node != NULL){
-			free(node->element);
+			if(hash->destroy != NULL){
+				hash->destroy(node->element);
+				node->element = NULL;
+			}
 			ListNodeImp nextNode = node->next;
 			free(node);
 			node = nextNode;

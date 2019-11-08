@@ -79,7 +79,7 @@ void setHydrantY(Hydrant h, double y){
     hydrant->y = y;
 }
 
-void freeHydrant(Hydrant h){
+void destroyHydrant(Hydrant h){
     HydrantImp hydrant = (HydrantImp) h;
 
     free(hydrant);

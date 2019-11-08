@@ -14,15 +14,17 @@ typedef struct stTree{
 	NodeImp root;
 	NodeImp nil;
 	int (*comparator)(Element, Element);
+	void (*destroy)(Element);
 } *TreeImp;
 
-Tree createRBTree(int (*comparator)(Element, Element)){
+Tree createRBTree(int (*comparator)(Element, Element), void (*destroy)(Element)){
 	TreeImp tree = (TreeImp) malloc(sizeof(struct stTree));
 	tree->nil = (NodeImp) malloc(sizeof(struct stNode));
 	tree->nil->color = BLACK;
 	tree->nil->element = NULL;
 	tree->root = tree->nil;
 	tree->comparator = comparator;
+	tree->destroy = destroy;
 	return tree;
 }
 
@@ -356,7 +358,12 @@ void destroyNodes(TreeImp tree, NodeImp node){
 
 	if(node->left != tree->nil)
 		destroyNodes(tree, node->left);
-	free(node->element);
+
+	if(tree->destroy != NULL){
+		tree->destroy(node->element);
+		node->element = NULL;
+	}
+
 	if(node->right != tree->nil)
 		destroyNodes(tree, node->right);
 

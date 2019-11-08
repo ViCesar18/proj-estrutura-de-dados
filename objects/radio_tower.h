@@ -34,6 +34,6 @@ void setRadioTowerY(RadioTower r, double y);
 /*Fim getters e setters*/
 
 /*Libera memoria de uma quadra*/
-void freeRadioTower(RadioTower r);
+void destroyRadioTower(RadioTower r);
 
 #endif
