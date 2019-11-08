@@ -33,9 +33,6 @@ void removeNode(Tree t, Element element);
 /*Desalcoa a memoria armazenada para a arvore, seus nos e seus elementos*/
 void destroyRBTree(Tree t);
 
-/*Retorna o no identificado pelo id*/
-Element getElementById(Tree t, char id[], char *(getID)(Element));
-
 /*Escreve a arvore t no terminal*/
 void printTree(Node n, int level);
 

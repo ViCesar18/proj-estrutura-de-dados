@@ -218,7 +218,7 @@ Element getElementByIndex(List listAux, int i){
     return list->node[i].element;
 }
 
-Element getElementById(List listAux, char id[], char type[]){
+/*Element getElementById(List listAux, char id[], char type[]){
     ListImp list = (ListImp) listAux;
 
     for(int i = list->start; i != NULO; i = list->node[i].next){
@@ -229,7 +229,7 @@ Element getElementById(List listAux, char id[], char type[]){
     }
 
     return NULL;
-}
+}/*
 
 Element getElementByIdInLists(List list1, List list2, List list3, List list4, char id[], char type[]){
     Element element;

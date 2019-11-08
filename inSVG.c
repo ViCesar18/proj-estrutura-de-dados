@@ -131,7 +131,7 @@ void scanRect(FILE *arqIn, Tree figures, char rw[]){
     insertNode(figures, rect);
 }
 
-void scanBlock(FILE *arqIn, Tree blocks, char fillColor[], char strokeColor[], char sw[]){
+void scanBlock(FILE *arqIn, Tree blocks, HashTable blocksTable, char fillColor[], char strokeColor[], char sw[]){
     char cep[64];
     double x, y, w, h;
 
@@ -144,6 +144,7 @@ void scanBlock(FILE *arqIn, Tree blocks, char fillColor[], char strokeColor[], c
     Block block = createBlock(cep, x, y, w, h, strokeColor, fillColor, sw);
 
     insertNode(blocks, block);
+    insertHashTable(blocksTable, getBlockCep(block), block);
 }
 
 void scanHydrant(FILE *arqIn, Tree hydrants, char fillColor[], char strokeColor[], char sw[]){
@@ -198,7 +199,7 @@ void changeThickness(FILE *arqIn, char cw[], char rw[]){
     fscanf(arqIn, "%s", rw);
 }
 
-void scanBuilding(FILE *arqIn, Tree buildings, Tree blocks){
+void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable){
     char cep[32], face[2];
     int num;
     double faceSize, depth, margin;
@@ -210,7 +211,9 @@ void scanBuilding(FILE *arqIn, Tree buildings, Tree blocks){
     fscanf(arqIn, "%lf", &depth);
     fscanf(arqIn, "%lf", &margin);
 
-    Building building = createBuilding(cep, face, num, faceSize, depth, margin, blocks);
+    Block block = searchHashTable(blocksTable, cep);
+
+    Building building = createBuilding(cep, face, num, faceSize, depth, margin, block);
 
     insertNode(buildings, building);
 }

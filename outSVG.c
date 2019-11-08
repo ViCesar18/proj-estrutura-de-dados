@@ -76,7 +76,7 @@ void printRect(FILE *arqOut, Form rect){
 /*Printa as informacoes de texto armazenadas em variaveis locais no vetor de struct e formatadas para SVG no arquivo SVG*/
 void printText(FILE *arqOut, double x, double y, char text[], char fillColor[]){
 
-    fprintf(arqOut, "\n<text x=\"%lf\" y=\"%lf\" fill=\"%s\">%s</text>\n", x, y, fillColor, text);
+    fprintf(arqOut, "\n<text x=\"%lf\" y=\"%lf\" fill=\"%s\" dominant-baseline=\"baseline\" text-anchor=\"middle\" font-family=\"Arial\" style=\"stroke-width:0.2px;\">%s</text>\n", x, y, fillColor, text);
 }
 
 void printLine(FILE *arqOut, double x1, double y1, double x2, double y2, char color[]){
@@ -94,28 +94,32 @@ void printBlock(FILE *arqOut, Block block){
     fprintf(arqOut, "\n<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\" stroke-dasharray=\"0\" stroke-width=\"%s\"/>\n",
     getBlockX(block), getBlockY(block), getBlockW(block), getBlockH(block), getBlockStrokeColor(block), 
     getBlockFillColor(block), getBlockSw(block));
+
+    printText(arqOut, getBlockX(block) + 18, getBlockY(block) + 12, getBlockCep(block), getBlockStrokeColor(block));
 }
 
 void printHydrant(FILE *arqOut, Hydrant hydrant){
     fprintf(arqOut, "\n<circle cx=\"%lf\" cy=\"%lf\" r=\"6\" stroke=\"%s\" fill=\"%s\" stroke-width=\"%s\"/>\n", getHydrantX(hydrant), 
     getHydrantY(hydrant), getHydrantStrokeColor(hydrant), getHydrantFillColor(hydrant), getHydrantSw(hydrant));
 
-    printText(arqOut, getHydrantX(hydrant) - 4.5, getHydrantY(hydrant) + 4, "H", getHydrantStrokeColor(hydrant));
+    printText(arqOut, getHydrantX(hydrant), getHydrantY(hydrant) + 4, "H", getHydrantStrokeColor(hydrant));
 }
 
 void printTrafficLight(FILE *arqOut, TrafficLight tLight){
     fprintf(arqOut, "\n<rect x=\"%lf\" y=\"%lf\" width=\"10\" height=\"10\" stroke=\"%s\" fill=\"%s\" stroke-width=\"%s\"/>\n", 
     getTrafficLightX(tLight) - 5, getTrafficLightY(tLight) - 5, getTrafficLightStrokeColor(tLight), getTrafficLightFillColor(tLight), getTrafficLightSw(tLight));
 
-    printText(arqOut, getTrafficLightX(tLight) - 3.5, getTrafficLightY(tLight) + 4, "S", getTrafficLightStrokeColor(tLight));
+    printText(arqOut, getTrafficLightX(tLight), getTrafficLightY(tLight) + 4, "S", getTrafficLightStrokeColor(tLight));
 }
 
 void printRadioTower(FILE *arqOut, RadioTower rTower){
     fprintf(arqOut, "\n<circle cx=\"%lf\" cy=\"%lf\" r=\"9\" stroke=\"%s\" fill=\"%s\" stroke-width=\"%s\"/>\n", 
     getRadioTowerX(rTower), getRadioTowerY(rTower), getRadioTowerStrokeColor(rTower), getRadioTowerFillColor(rTower), getRadioTowerSw(rTower));
 
-    printText(arqOut, getRadioTowerX(rTower) - 7.5, getRadioTowerY(rTower) + 4, "RB", getRadioTowerStrokeColor(rTower));
+    printText(arqOut, getRadioTowerX(rTower), getRadioTowerY(rTower) + 4, "RB", getRadioTowerStrokeColor(rTower));
 }
+
+int i = 0;
 
 void printBuilding(FILE *arqOut, Building building){
     Form rect;
@@ -125,6 +129,7 @@ void printBuilding(FILE *arqOut, Building building){
     Block block = getBuildingBlock(building);
     double faceSize = getBuildingFaceSize(building), depth = getBuildingDepth(building), margin = getBuildingMargin(building);
     double xB = getBlockX(block), yB = getBlockY(block), wB = getBlockW(block), hB = getBlockH(block);
+    i++;
     double x, y, w, h;
 
     char text[4];
@@ -163,7 +168,7 @@ void printBuilding(FILE *arqOut, Building building){
     printRect(arqOut, rect);
 
     sprintf(text, "%d", getBuildingNum(building));
-    printText(arqOut, getBuildingX(building), getBuildingY(building) + 9, text, "black");
+    printText(arqOut, getBuildingX(building) + getBuildingW(building) / 2, getBuildingY(building) + getBuildingH(building) / 2 + 4, text, "black");
 
     freeForm(rect);
 }

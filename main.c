@@ -13,6 +13,7 @@
 #include "segment.h"
 #include "vertex.h"
 #include "point.h"
+#include "./data_structures/hash_table.h"
 
 int main(int argc, char *argv[]){
     int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000, np = 1000, nm = 1000;  //Número máximo padrão das formas
@@ -128,7 +129,7 @@ int main(int argc, char *argv[]){
     /*Retorna ao início do arquivo .geo*/
     rewind(arqGeo);
 
-    /*Cria as listas*/
+    /*Cria as arvores rubro-negras*/
     figures = createRBTree(comparatorForm);
     blocks = createRBTree(comparatorBlock);
     hydrants = createRBTree(comparatorHydrant);
@@ -138,6 +139,8 @@ int main(int argc, char *argv[]){
     walls = createRBTree(comparatorWall);
     //auxList = createRBTree();
 
+    /*Cria as tabelas hash*/
+    HashTable blocksTable = createHashTable(nq);
     
     /*Le os dados das formas do arquivo de entrada*/
     while(1){
@@ -156,7 +159,7 @@ int main(int argc, char *argv[]){
             scanText(arqGeo, arqSvg, arqSvgQ);
         }
         else if(!strcmp(command, "q")){
-            scanBlock(arqGeo, blocks, cfillQ, cstrkQ, swQ);
+            scanBlock(arqGeo, blocks, blocksTable, cfillQ, cstrkQ, swQ);
         }
         else if(!strcmp(command, "h")){
             scanHydrant(arqGeo, hydrants, cfillH, cstrkH, swH);
@@ -183,13 +186,12 @@ int main(int argc, char *argv[]){
             changeThickness(arqGeo, cw, rw);
         }
         else if(!strcmp(command, "prd")){
-            scanBuilding(arqGeo, buildings, blocks);
+            scanBuilding(arqGeo, buildings, blocksTable);
         }
         else if(!strcmp(command, "mur")){
             scanWall(arqGeo, walls);
         }
     }
-    
     /*Imprime todo o conteudo das listas no arquivo .svg(1)*/
     printTreeElements(figures, getTreeRoot(figures), arqSvg, printRect);
     printTreeElements(figures, getTreeRoot(figures), arqSvg, printCircle);
@@ -200,19 +202,18 @@ int main(int argc, char *argv[]){
     printTreeElements(buildings, getTreeRoot(buildings), arqSvg, printBuilding);
     printTreeElements(walls, getTreeRoot(walls), arqSvg, printWall);
     
-    
     /*Le os dados de consulta(se existir)*/
-    /*if(nameQuery != NULL){
+    if(nameQuery != NULL){
         while(1){
             fscanf(arqQuery, "%s", command);
 
-            if(feof(arqQuery))
+            /*if(feof(arqQuery))
                 break;
 
             if(!strcmp(command, "o?")){
                 scanO(arqQuery, id1, id2);
-                //figure1 = getElementById(figures, id1, type1);
-                //figure2 = getElementById(figures, id2, type2);
+                figure1 = getElementById(figures, id1, type1);
+                figure2 = getElementById(figures, id2, type2);
                 treatO(arqText, arqSvgQ, figure1, figure2, type1, type2);
             }
             else if(!strcmp(command, "i?")){
@@ -237,8 +238,8 @@ int main(int argc, char *argv[]){
                 fclose(arqSvgBB);
                 free(nameOutBB);
                 free(arqOutBB);
-            }
-            else if(!strcmp(command, "dq")){
+            }*/
+            /*else if(!strcmp(command, "dq")){
                 scanDQ(arqQuery, metric, id1, &r);
                 figure1 = getElementByIdInLists(blocks, hydrants, tLights, rTowers, id1);
                 if(!strcmp(type1, "h")){
@@ -349,9 +350,9 @@ int main(int argc, char *argv[]){
                 insertNode(auxList, circle, comparatorForm);
                 int capacitySegments = nm + np * 4 + 4;
                 //bombAreaRadiation(x, y, capacitySegments, walls, buildings, auxList, arqAux);
-            }
+            }*/
         }
-    }*/
+    }
 
     /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
     if(arqSvgQ != NULL){
@@ -409,7 +410,7 @@ int main(int argc, char *argv[]){
         free(arqQry);
     }
 
-    //Liberação da memória das listas
+    //Liberação da memória das asvores
     destroyRBTree(figures);
     destroyRBTree(blocks);
     destroyRBTree(hydrants);
@@ -418,6 +419,9 @@ int main(int argc, char *argv[]){
     destroyRBTree(buildings);
     destroyRBTree(walls);
     //freeRBTree(auxList);
+
+    //Liberação da memória das tabelas hash
+    //destroyHashTable(blocksTable);
 
     return 0;
 }

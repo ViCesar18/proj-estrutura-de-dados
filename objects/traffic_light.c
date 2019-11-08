@@ -22,7 +22,13 @@ int comparatorTrafficLight(TrafficLight tf1, TrafficLight tf2){
     TrafficLightImp tLight1 = (TrafficLightImp) tf1;
     TrafficLightImp tLight2 = (TrafficLightImp) tf2;
 
-    return strcmp(tLight1->id, tLight2->id);
+    if(tLight1->x < tLight2->x) return -1;
+    else if(tLight1->x > tLight2->x) return 1;
+    else{
+        if(tLight1->y < tLight2->y) return -1;
+        else if(tLight1->y > tLight2->y) return 1;
+        else return 0;
+    }
 }
 
 char *getTrafficLightId(TrafficLight s){

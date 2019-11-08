@@ -24,7 +24,13 @@ int comparatorBlock(Block b1, Block b2){
     BlockImp block1 = (BlockImp) b1;
     BlockImp block2 = (BlockImp) b2;
 
-    return strcmp(block1->cep, block2->cep);
+    if(block1->x < block2->x) return -1;
+    else if(block1->x > block2->x) return 1;
+    else{
+        if(block1->y < block2->y) return -1;
+        else if(block1->y > block2->y) return 1;
+        else return 0;
+    }
 }
 
 char *getBlockCep(Block b){

@@ -7,7 +7,7 @@ typedef struct stBuilding{
     Block *block;
 }*BuildingImp;
 
-Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin, Tree blocks){
+Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin, Block block){
     BuildingImp building = (BuildingImp)malloc(sizeof(struct stBuilding));
 
     strcpy(building->cep, cep);
@@ -16,7 +16,8 @@ Building createBuilding(char cep[], char face[], double num, double faceSize, do
     building->faceSize = faceSize;
     building->depth =  depth;
     building->margin = margin;
-    setBuildingBlock(building, blocks);
+
+    setBuildingBlock(building, block);
 
     return building;
 }
@@ -25,7 +26,13 @@ int comparatorBuilding(Building b1, Building b2){
     BuildingImp building1 = (BuildingImp) b1;
     BuildingImp building2 = (BuildingImp) b2;
 
-    return strcmp(building1->cep, building2->cep);
+    if(building1->x < building2->x) return -1;
+    else if(building1->x > building2->x) return 1;
+    else{
+        if(building1->y < building2->y) return -1;
+        else if(building1->y > building2->y) return 1;
+        else return 0;
+    }
 }
 
 char *getBuildingCep(Building b){
@@ -100,10 +107,8 @@ Block getBuildingBlock(Building b){
     return building->block;
 }
 
-void setBuildingBlock(Building b, Tree blocks){
+void setBuildingBlock(Building b, Block block){
     BuildingImp building = (BuildingImp) b;
-
-    Block block = getElementById(blocks, getBuildingCep(building), getBuildingCep);
 
     building->block = block;
 }

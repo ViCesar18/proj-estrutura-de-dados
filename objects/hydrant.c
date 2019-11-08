@@ -22,7 +22,13 @@ int comparatorHydrant(Hydrant h1, Hydrant h2){
     HydrantImp hydrant1 = (HydrantImp) h1;
     HydrantImp hydrant2 = (HydrantImp) h2;
 
-    return strcmp(hydrant1->id, hydrant2->id);
+    if(hydrant1->x < hydrant2->x) return -1;
+    else if(hydrant1->x > hydrant2->x) return 1;
+    else{
+        if(hydrant1->y < hydrant2->y) return -1;
+        else if(hydrant1->y > hydrant2->y) return 1;
+        else return 0;
+    }
 }
 
 char *getHydrantId(Hydrant h){

@@ -22,7 +22,13 @@ int comparatorRadioTower(RadioTower rb1, RadioTower rb2){
     RadioTowerImp radioTower1 = (RadioTowerImp) rb1;
     RadioTowerImp radioTower2 = (RadioTowerImp) rb2;
 
-    return strcmp(radioTower1->id, radioTower2->id);
+    if(radioTower1->x < radioTower2->x) return -1;
+    else if(radioTower1->x > radioTower2->x) return 1;
+    else{
+        if(radioTower1->y < radioTower2->y) return -1;
+        else if(radioTower1->y > radioTower2->y) return 1;
+        else return 0;
+    }
 }
 
 char *getRadioTowerId(RadioTower r){

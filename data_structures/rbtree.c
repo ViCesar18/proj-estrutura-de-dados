@@ -373,38 +373,6 @@ void destroyRBTree(Tree t){
     free(tree);
 }
 
-Element getElementById(Tree t, char id[], char *(getID)(Element)){
-    TreeImp tree = (TreeImp) t;
-    NodeImp node = tree->root;
-
-    while(node != tree->nil){
-		int result = strcmp(id, getID(node->element));
-		
-    	if(result < 0)
-    		node = node->left;
-    	else if(result > 0)
-    		node = node->right;
-    	else
-    		return node->element;
-    }
-    
-    return NULL;
-}
-
-/*Element getElementByIdInLists(Node t1, Node t2, Node t3, Node t4, char id[]){
-    Element element;
-
-    element = getElementById(t1, id);
-    if(element == NULL)
-        element = getElementById(t2, id);
-    if(element == NULL)
-        element = getElementById(t3, id);
-    if(element == NULL)
-        element = getElementById(t4, id);
-
-    return element;
-}*/
-
 /*void printTree(Node n, int level){
 	NodeImp node = (NodeImp) n;
 

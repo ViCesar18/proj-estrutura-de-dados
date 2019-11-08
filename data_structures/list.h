@@ -59,7 +59,7 @@ void deleteElement2(List l, Element element);
 Element getElementByIndex(List ListaAux, int i);
 
 /*Retorna o elemento da lista cujo id é igual ao id passado como parametro*/
-Element getElementById(List ListaAux, char id[], char type[]);
+//Element getElementById(List ListaAux, char id[], char type[]);
 
 /*Retorna o elemento pertencente a uma das quatro listas passadas como parametro cujo o id é igual ao passado como parametro*/
 Element getElementByIdInLists(List lista1, List lista2, List lista3, List lista4, char id[], char type[]);

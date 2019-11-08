@@ -88,12 +88,12 @@ bool removeHashTable(HashTable h, char *key){
 
 Element searchHashTable(HashTable h, char *key){
 	HashTableImp hash = (HashTableImp) h;
-
 	int position = hashFunction(key) % hash->size;
 	ListNodeImp currentNode = hash->list[position];
 
-	while(currentNode != NULL && strcmp(key, currentNode->key) != 0)
+	while(currentNode != NULL && strcmp(key, currentNode->key) != 0){
 		currentNode = currentNode->next;
+	}
 
 	if(currentNode == NULL)
 		return NULL;

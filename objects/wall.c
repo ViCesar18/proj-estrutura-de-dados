@@ -18,15 +18,14 @@ Wall createWall(double x1, double y1, double x2, double y2){
 int comparatorWall(Wall w1, Wall w2){
     WallImp wall1 = (WallImp) w1;
     WallImp wall2 = (WallImp) w2;
-    int dist1 = distEuclid(wall1->x1, wall1->y1, wall1->x2, wall1->y2);
-    int dist2 = distEuclid(wall1->x2, wall2->y1, wall2->x2, wall2->y2);
-
-    if(dist1 > dist2)
-        return 1;
-    else if(dist1 < dist2)
-        return -1;
-    else
-        return 0;
+    
+    if(wall1->x1 < wall2->x1) return -1;
+    else if(wall1->x1 > wall2->x1) return 1;
+    else{
+        if(wall1->y1 < wall2->y1) return -1;
+        else if(wall1->y1 > wall2->y1) return 1;
+        else return 0;
+    }
 }
 
 double getWallX1(Wall w){

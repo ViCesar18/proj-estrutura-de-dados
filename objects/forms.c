@@ -56,7 +56,13 @@ int comparatorForm(Form f1, Form f2){
     FormImp form1 = (FormImp) f1;
     FormImp form2 = (FormImp) f2;
 
-    return strcmp(form1->id, form2->id);
+    if(form1->x < form2->x) return -1;
+    else if(form1->x > form2->x) return 1;
+    else{
+        if(form1->y < form2->y) return -1;
+        else if(form1->y < form2->y) return 1;
+        else return 0;
+    }
 }
 
 char  *getFormId(Form f){

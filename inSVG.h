@@ -14,6 +14,7 @@
 #include "./objects/radio_tower.h"
 #include "./objects/building.h"
 #include "./objects/wall.h"
+#include "./data_structures/hash_table.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a entrada/leitura de dados*/
 
@@ -39,7 +40,7 @@ void scanCircle(FILE *arqIn, Tree figures, char cw[]);
 void scanRect(FILE *arqIn, Tree figures, char rw[]);
 
 /*Le as informacoes de quadra do arquivo .geo e armazena na lista blocks*/
-void scanBlock(FILE *arqIn, Tree blocks, char strokeColor[], char fillColor[], char sw[]);
+void scanBlock(FILE *arqIn, Tree blocks, HashTable blocksTable, char strokeColor[], char fillColor[], char sw[]);
 
 /*Le as informacoes de hidrante do arquivo .geo e armazena na lista hydrants*/
 void scanHydrant(FILE *arqIn, Tree hydrants, char fillColor[], char strokeColor[], char sw[]);
@@ -57,7 +58,7 @@ void changeColor(FILE *arqIn, char fillColor[], char strokeColor[], char sw[]);
 void changeThickness(FILE *arqIn, char cw[], char rw[]);
 
 /*Le as informacoes de predio do arquivo .geo e armazena na lista buildings*/
-void scanBuilding(FILE *arqIn, Tree buildings, Tree blocks);
+void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable);
 
 /*Le as informacoes de muro do arquivo .geo e armazena na lista walls*/
 void scanWall(FILE *arqIn, Tree walls);
