@@ -21,6 +21,7 @@ void createOutputQryFileName(char **nameOut, char nameIn[], char nameQuery[]){
         i++;
         j++;
     }
+    (*nameOut)[j] = '\0';
     strcat(*nameOut, "-");
     i = 0;
     j++;
@@ -42,6 +43,7 @@ void createOutputBBFileName(char **nameOut, char nameIn[], char nameQuery[], cha
         i++;
         j++;
     }
+    (*nameOut)[j] = '\0';
     strcat(*nameOut, "-");
     i = 0;
     j++;
@@ -50,6 +52,7 @@ void createOutputBBFileName(char **nameOut, char nameIn[], char nameQuery[], cha
         i++;
         j++;
     }
+    (*nameOut)[j] = '\0';
     strcat(*nameOut, "-");
     i = 0;
     j++;

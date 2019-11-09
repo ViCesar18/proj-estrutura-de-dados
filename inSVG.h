@@ -43,13 +43,13 @@ void scanRect(FILE *arqIn, Tree figures, HashTable formsTable, char rw[]);
 void scanBlock(FILE *arqIn, Tree blocks, HashTable blocksTable, char strokeColor[], char fillColor[], char sw[]);
 
 /*Le as informacoes de hidrante do arquivo .geo e armazena na lista hydrants*/
-void scanHydrant(FILE *arqIn, Tree hydrants, char fillColor[], char strokeColor[], char sw[]);
+void scanHydrant(FILE *arqIn, Tree hydrants, HashTable hydrantsTable, char fillColor[], char strokeColor[], char sw[]);
 
 /*Le as informacoes de semaforo do arquivo .geo e armazena na lista tLights*/
-void scanTrafficLight(FILE *arqIn, Tree tLights, char fillColor[], char strokeColor[], char sw[]);
+void scanTrafficLight(FILE *arqIn, Tree tLights, HashTable tLightsTable, char fillColor[], char strokeColor[], char sw[]);
 
 /*Le as informacoes de radio-base do arquivo .geo e armazena na lista radios*/
-void scanRadioTower(FILE *arqIn, Tree rTowers, char fillColor[], char strokeColor[], char sw[]);
+void scanRadioTower(FILE *arqIn, Tree rTowers, HashTable rTowersTable, char fillColor[], char strokeColor[], char sw[]);
 
 /*Muda a cor de todos os elementos que vierem abaixo do comando ch do arquivo .geo*/
 void changeColor(FILE *arqIn, char fillColor[], char strokeColor[], char sw[]);

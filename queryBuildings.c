@@ -1,7 +1,35 @@
 #include "queryBuildings.h"
 
-/*void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blockRoot, char metric[], Form circle){
-    Block block;
+void treatDQ_Util(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, char *metric, Form circle){
+    Block block = getElement(blocks, node);
+
+    if(!strcmp(metric, "L1")){
+        if(node == getNil(blocks)) return;
+
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), metric, circle);
+
+        if(quadInsideCirc(block, circle, "L1")){
+            fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
+            removeNode(blocks, block);
+        }
+
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), metric, circle);
+    }
+    else if(!strcmp(metric, "L2")){
+        if(node == getNil(blocks)) return;
+
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), metric, circle);
+
+        if(quadInsideCirc(block, circle, "L2")){
+            fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
+            removeNode(blocks, block);
+        }
+
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), metric, circle);
+    }
+}
+
+void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, char metric[], Form circle){
     Form ring1 = createCircle("0", getFormX(circle), getFormY(circle), 18, "green", "none", "5");
     Form ring2 = createCircle("0", getFormX(circle), getFormY(circle), 13, "lightgreen", "none", "5");
 
@@ -13,32 +41,10 @@
     free(ring1);
     free(ring2);
 
-    block = getElement(blockRoot);
-
-    if(!strcmp(metric, "L1")){
-        if(quadInsideCirc(block, circle, "L1")){
-            fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
-            removeNode(blockRoot, block, comparatorBlock);
-        }
-        if(getLeft(blockRoot) != NULL)
-            treatDQ(arqTxt, arqSvgQ, getLeft(blockRoot), metric, circle);
-        if(getRight(blockRoot) != NULL)
-        treatDQ(arqTxt, arqSvgQ, getRight(blockRoot), metric, circle);
-    }
-    else if(!strcmp(metric, "L2")){
-        if(quadInsideCirc(getElement(blockRoot), circle, "L2")){
-            block = getElement(blockRoot);
-            fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
-            removeNode(blockRoot, block, comparatorBlock);
-        }
-        if(getLeft(blockRoot) != NULL)
-            treatDQ(arqTxt, arqSvgQ, getLeft(blockRoot), metric, circle);
-        if(getRight(blockRoot) != NULL)
-            treatDQ(arqTxt, arqSvgQ, getRight(blockRoot), metric, circle);
-    }
+    treatDQ_Util(arqTxt, arqSvgQ, blocks, node, metric, circle);
 }
 
-void treatCBQ(FILE *arqTxt, Tree blockRoot, Form circle, char cstrk[]){
+/*void treatCBQ(FILE *arqTxt, Tree blockRoot, Form circle, char cstrk[]){
     Block block;
     
     fprintf(arqTxt, "cbq %lf %lf %lf %s\n", getFormX(circle), getFormY(circle), getFormR(circle), cstrk);

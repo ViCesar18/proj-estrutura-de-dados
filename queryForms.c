@@ -61,6 +61,10 @@ void treatO(FILE *arqTxt, FILE *arqSvgQ, Form figure1, Form figure2){
             double auxR = r1;
             r1 = r2;
             r2 = auxR;
+
+            Form aux = figure1;
+            figure1 = figure2;
+            figure2 = aux;
         }
 
         xProx = clamp(x1, x2, x2 + w2);

@@ -149,7 +149,7 @@ void scanBlock(FILE *arqIn, Tree blocks, HashTable blocksTable, char fillColor[]
     insertHashTable(blocksTable, getBlockCep(block), block);
 }
 
-void scanHydrant(FILE *arqIn, Tree hydrants, char fillColor[], char strokeColor[], char sw[]){
+void scanHydrant(FILE *arqIn, Tree hydrants, HashTable hydrantsTable, char fillColor[], char strokeColor[], char sw[]){
     char id[32];
     double x, y;
 
@@ -160,9 +160,10 @@ void scanHydrant(FILE *arqIn, Tree hydrants, char fillColor[], char strokeColor[
     Hydrant hydrant = createHydrant(id, x, y, strokeColor, fillColor, sw);
 
     insertNode(hydrants, hydrant);
+    insertHashTable(hydrantsTable, getHydrantId(hydrant), hydrant);
 }
 
-void scanTrafficLight(FILE *arqIn, Tree tLights, char fillColor[], char strokeColor[], char sw[]){
+void scanTrafficLight(FILE *arqIn, Tree tLights, HashTable tLightsTable, char fillColor[], char strokeColor[], char sw[]){
     char id[32];
     double x, y;
 
@@ -173,9 +174,10 @@ void scanTrafficLight(FILE *arqIn, Tree tLights, char fillColor[], char strokeCo
     TrafficLight tLight = createTrafficLight(id, x, y, strokeColor, fillColor, sw);
 
     insertNode(tLights, tLight);
+    insertHashTable(tLightsTable, getTrafficLightId(tLight), tLight);
 }
 
-void scanRadioTower(FILE *arqIn, Tree rTowers, char fillColor[], char strokeColor[], char sw[]){
+void scanRadioTower(FILE *arqIn, Tree rTowers, HashTable rTowersTable, char fillColor[], char strokeColor[], char sw[]){
     char id[32];
     double x, y;
 
@@ -186,6 +188,7 @@ void scanRadioTower(FILE *arqIn, Tree rTowers, char fillColor[], char strokeColo
     RadioTower rTower = createRadioTower(id, x, y, strokeColor, fillColor, sw);
 
     insertNode(rTowers, rTower);
+    insertHashTable(rTowersTable, getRadioTowerId(rTower), rTower);
 }
 
 void changeColor(FILE *arqIn, char fillColor[], char strokeColor[], char sw[]){

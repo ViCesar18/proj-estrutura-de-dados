@@ -22,8 +22,8 @@ HashTable createHashTable(int size, void (*destroy)(Element)){
 	return hash;
 }
 
-int hashFunction(char *key){
-	int position = 197;
+unsigned long long hashFunction(char *key){
+	unsigned long long position = 197;
 	int len = strlen(key);
 
 	for(int i = 0; i < len; i++){
@@ -36,7 +36,7 @@ int hashFunction(char *key){
 bool insertHashTable(HashTable h, char *key, Element element){
 	HashTableImp hash = (HashTableImp) h;
 
-	int position = hashFunction(key) % hash->size;
+	unsigned long long position = hashFunction(key) % hash->size;
 
 	ListNodeImp node = (ListNodeImp) malloc(sizeof(struct ListNodeSt));
 	node->element = element;
