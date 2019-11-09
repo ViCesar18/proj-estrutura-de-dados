@@ -8,24 +8,24 @@ void treatDQ_Util(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, char *met
 
         treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), metric, circle);
 
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), metric, circle);
+
         if(quadInsideCirc(block, circle, "L1")){
             fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
             removeNode(blocks, block);
         }
-
-        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), metric, circle);
     }
     else if(!strcmp(metric, "L2")){
         if(node == getNil(blocks)) return;
 
         treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), metric, circle);
 
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), metric, circle);
+
         if(quadInsideCirc(block, circle, "L2")){
             fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
             removeNode(blocks, block);
         }
-
-        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), metric, circle);
     }
 }
 
