@@ -162,7 +162,6 @@ void rectSurroundsRects(FILE *arqSvgQ, Form figure1, Form figure2, bool collisio
 
 void rectSurroundsCircleAndRect(FILE *arqSvgQ, Form figure1, Form figure2, bool collision){
     double xSmaller, xBigger, ySmaller, yBigger;
-
     double x1 = getFormX(figure1);
     double x2 = getFormX(figure2);
     double y1 = getFormY(figure1);

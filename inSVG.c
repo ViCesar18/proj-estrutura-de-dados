@@ -8,7 +8,7 @@ void checkFile(FILE *arq, char fname[]){
     }
 }
 
-void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **pathOut){
+void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **nameEC, char **namePM, char **pathOut, char **isInteractive){
     int i = 1;
 
     while(i < argc){
@@ -31,6 +31,21 @@ void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, cha
             i++;
             *pathOut = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
             strcpy(*pathOut, argv[i]);
+        }
+        else if (strcmp("-ec", argv[i]) == 0){
+            i++;
+            *nameEC = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy (*nameEC, argv[i]);
+        }
+        else if (strcmp("-pm", argv[i]) == 0){
+            i++;
+            *namePM = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy (*namePM, argv[i]);
+        }
+        else if (strcmp ("-i", argv[i]) == 0){
+            i++;
+            *isInteractive = (char *) malloc (6 * sizeof(char));
+            strcpy (*isInteractive, "true");
         }
         i++;
     }
@@ -205,7 +220,58 @@ void changeThickness(FILE *arqIn, char cw[], char rw[]){
     fscanf(arqIn, "%s", rw);
 }
 
-void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable){
+/*void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable){*/
+void scanStoreType (FILE *arqEst, List storeTypes){
+    char codt[32], descricao[128];
+    fscanf (arqEst, "%s", codt);
+    fscanf (arqEst, "%s", descricao);
+
+    Store store = createCodtStore (codt, descricao);
+    insertElement (storeTypes, store, "codtEc");
+}
+
+void scanPerson (FILE *arqPes, List persons){
+    char cpf[32], nome[32], sobrenome[32], sexo[2], nascimento[16];
+    fscanf (arqPes, "%s", cpf);
+    fscanf (arqPes, "%s", nome);
+    fscanf (arqPes, "%s", sobrenome);
+    fscanf (arqPes, "%s", sexo);
+    fscanf (arqPes, "%s", nascimento);
+
+    Person person = createPerson (cpf, nome, sobrenome, sexo, nascimento);
+    insertElement (persons, person, "pp");
+}
+
+void scanResident (FILE *arqPes, List residents){
+    char cpf[32], cep[32], face[2], compl[16];
+    int num;
+    fscanf (arqPes, "%s", cpf);
+    fscanf (arqPes, "%s", cep);
+    fscanf (arqPes, "%s", face);
+    fscanf (arqPes, "%d", &num);
+    fscanf (arqPes, "%s", compl);
+
+    Resident resident = createResident (cpf, cep, face, compl, num);
+    insertElement (residents, resident, "pm");
+}
+
+void scanStore (FILE *arqEst, List stores){
+    char cnpj[32], cpf [32], codt [32], cep[32], face[2], nome[32];
+    int num;
+
+    fscanf (arqEst, "%s", cnpj);
+    fscanf (arqEst, "%s", cpf);
+    fscanf (arqEst, "%s", codt);
+    fscanf (arqEst, "%s", cep);
+    fscanf (arqEst, "%s", face);
+    fscanf (arqEst, "%d", &num);
+    fscanf (arqEst, "%s", nome);
+
+    Store store = createStore (cnpj, cpf, codt, cep, face, num, nome);
+    insertElement (stores, store, "ec");
+}
+
+void scanBuilding(FILE *arqIn, List buildings){
     char cep[32], face[2];
     int num;
     double faceSize, depth, margin;
@@ -330,4 +396,24 @@ void scanBRL(FILE *arqQuery, double *x, double *y){
 
     fscanf(arqQuery, "%lf", x);
     fscanf(arqQuery, "%lf", y);
+}
+
+void scanM (FILE *arqQuery, char cep[]){
+    fscanf (arqQuery, "%s", cep);
+}
+
+void scanDM (FILE *arqQuery, char cpf[]){
+    fscanf (arqQuery, "%s", cpf);
+}
+
+void scanDE (FILE *arqQuery, char cnpj[]){
+    fscanf (arqQuery, "%s", cnpj);
+}
+
+void scanMud (FILE *arqQuery, char cpf[], char cep[], char face[], int *num, char compl[]){
+    fscanf (arqQuery, "%s", cpf);
+    fscanf (arqQuery, "%s", cep);
+    fscanf (arqQuery, "%s", face);
+    fscanf (arqQuery, "%d", num);
+    fscanf (arqQuery, "%s", compl);
 }

@@ -20,16 +20,19 @@ int main(int argc, char *argv[]){
     int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000, np = 1000, nm = 1000;  //Número máximo padrão das formas
     char *pathIn = NULL;    //Diretório de entrada
     char *nameIn = NULL, *nameInT = NULL, *arqIn = NULL;   //Dados para o arquivo de entrada (.geo)
+    char *nameEC = NULL, *nameECT = NULL, *arqEC = NULL;
+    char *namePM = NULL, *namePMT = NULL, *arqPM = NULL;
+    char *isInteractive = NULL;
     char *nameQuery = NULL, *nameQueryT = NULL, *arqQry = NULL; //Dados para o arquivo de entrada (.qry)
     char *pathOut = NULL;   //Diretório de saída
     char *nameOut = NULL, *arqOut = NULL;   //Dados para o arquivo de saída (.svg)
     char *nameOutQ = NULL, *arqOutQ = NULL; //Dados para o segundo arquivo de saida (.svg com .qry aplicado)
     char *nameTxt = NULL, *arqTxt = NULL;   //Dados para o arquivo de saída (.txt)
     char *nameOutBB = NULL, *arqOutBB = NULL; //Dados para o terceiro arquivo de saida (.svg com o bb aplicado)
-    FILE *arqGeo = NULL, *arqQuery = NULL, *arqSvg = NULL, *arqSvgQ = NULL, *arqText = NULL, *arqSvgBB = NULL, *arqAux = NULL; //Arquivos
+    FILE *arqGeo = NULL, *arqQuery = NULL, *arqSvg = NULL, *arqSvgQ = NULL, *arqText = NULL, *arqSvgBB = NULL, *arqEst = NULL, *arqPes = NULL; //Arquivos
 
     char command[8];   //Armazena o comando lido do arquivo .qry
-    char sufixo[32], cor[32], id1[32], id2[32], metric[4];  //Armazena os parametros do arquivo .qry (string)
+    char sufixo[32], cor[32], id1[32], id2[32], metric[4], cep[32], cpf[32], cnpj[32], face[2], compl[32];//Armazena os parametros do arquivo .qry (string)
     double x, y, r;        //Armazena os parametros do arquivo .qry (coordenadas)
     int n, k, vectSize = 0;                //Armazena os parametros do arquivo .qry
 
@@ -55,7 +58,7 @@ int main(int argc, char *argv[]){
     Vertex vertices;
 
     /*Recebe os parametros da main (argv)*/
-    receiveParameters(argc, argv, &pathIn, &nameIn, &nameQuery, &pathOut);
+    receiveParameters(argc, argv, &pathIn, &nameIn, &nameQuery, &nameEC, &namePM, &pathOut, &isInteractive);
 
     /*Trata o nome do arquivo de entrada se ele for um diretorio relativo*/
     treatFileName(nameIn, &nameInT);
@@ -84,6 +87,34 @@ int main(int argc, char *argv[]){
         else{
             arqQuery = fopen(nameQuery, "r");
             checkFile(arqQuery, nameQuery);
+        }
+    }
+
+    if (nameEC != NULL){
+        treatFileName (nameEC, &nameECT);
+
+        if (pathIn != NULL){
+            allocateFileMamory (nameEC, pathIn, &arqEC);
+            arqEst = fopen (arqEC, "r");
+            checkFile (arqEst, nameEC);
+        }
+        else{
+            arqEst = fopen (nameEC, "r");
+            checkFile (arqEst, nameEC);
+        }
+    }
+
+    if (namePM != NULL){
+        treatFileName (namePM, &namePMT);
+
+        if (pathIn != NULL){
+            allocateFileMamory (namePM, pathIn, &arqPM);
+            arqPes = fopen (arqPM, "r");
+            checkFile (arqPes, namePM);
+        }
+        else{
+            arqPes = fopen (namePM, "r");
+            checkFile (arqPes, namePM);
         }
     }
     
@@ -158,6 +189,33 @@ int main(int argc, char *argv[]){
         }
         else if(!strcmp(command, "r")){
             scanRect(arqGeo, figures, formsTable, rw);
+    /*Cria as listas*/
+    /*figures = createList(nx);
+    blocks = createList(nq);
+    hydrants = createList(nh);
+    tLights = createList(ns);
+    rTowers = createList(nr);
+    buildings = createList(np);
+    walls = createList(nm);
+    stores = createList (100000);
+    persons = createList (100000);
+    residents = createList (100000);
+    storeTypes = createList (100000);
+    auxList = createList(100000);*/
+
+    
+    /*Le os dados das formas do arquivo de entrada*/
+    /*while(1){
+        if(feof(arqGeo))
+            break;
+
+        fscanf(arqGeo, "%s", command);
+
+        if(!strcmp(command, "c")){
+            scanCircle(arqGeo, figures, cw);
+        }
+        else if(!strcmp(command, "r")){
+            scanRect(arqGeo, figures, rw);*/
         }
         else if(!strcmp(command, "t")){
             scanText(arqGeo, arqSvg, arqSvgQ);
@@ -206,6 +264,47 @@ int main(int argc, char *argv[]){
     printTreeElements(rTowers, getTreeRoot(rTowers), arqSvg, printRadioTower);
     printTreeElements(buildings, getTreeRoot(buildings), arqSvg, printBuilding);
     printTreeElements(walls, getTreeRoot(walls), arqSvg, printWall);
+    
+    /*Imprime todo o conteudo das listas no arquivo .svg(1)*/
+    /*printList(figures, arqSvg);
+    printList(blocks, arqSvg);
+    printList(hydrants, arqSvg);
+    printList(tLights, arqSvg);
+    printList(rTowers, arqSvg);
+    printBuildingList(blocks, buildings, arqSvg);
+    printList(walls, arqSvg);
+
+    if (nameEC != NULL){
+        while (1){
+            fscanf (arqEst, "%s", command);
+
+            if (feof (arqEst))
+                break;
+            
+            if (!strcmp (command, "t")){
+                scanStoreType (arqEst, storeTypes);
+            }
+            if (!strcmp (command, "e")){
+                scanStore (arqEst, stores);
+            }
+        }
+    }
+
+    if (namePM != NULL){
+        while (1){
+            fscanf (arqPes, "%s", command);
+
+            if (feof (arqPes))
+                break;
+
+            if (!strcmp (command, "p")){
+                scanPerson (arqPes, persons);
+            }
+            else if (!strcmp (command, "m")){
+                scanResident (arqPes, residents);
+            }
+        }
+    }*/
     
     /*Le os dados de consulta(se existir)*/
     if(nameQuery != NULL){
@@ -397,10 +496,69 @@ int main(int argc, char *argv[]){
         char c;
         while((c = fgetc(arqAux)) != EOF)
             fputc(c, arqSvgQ);
+                /*treatFI(arqSvgQ, arqText, auxList, x, y, n, r, tLights, hydrants);
+            }
+            else if(!strcmp(command, "fh")){
+                scanFHFS(arqQuery, &k, id1, id2, &n);
+                getAddress(id1, id2, n, &x, &y, blocks);
+                treatFH(arqText, arqSvgQ, hydrants, k, x, y, auxList);
+            }
+            else if(!strcmp(command, "fs")){
+                scanFHFS(arqQuery, &k, id1, id2, &n);
+                getAddress(id1, id2, n, &x, &y, blocks);
+                treatFS(arqText, arqSvgQ, tLights, k, x, y, auxList);
+            }
+            else if(!strcmp(command, "brl")){
+                scanBRL(arqQuery, &x, &y);
+                Form circle = createCircle("", x, y, 5, "black", "red", "2");
+                insertElement(auxList, circle, "c");
+                int capacitySegments = nm + np * 4 + 4;
+                bombAreaRadiation(x, y, capacitySegments, walls, buildings, auxList, arqSvgQ);
+            }
+            else if (!strcmp (command, "m?")){
+                scanM (arqQuery, cep);
+                treatM (arqText, persons, residents, cep);    
+            }
+            else if (!strcmp (command, "dm?")){
+                scanDM (arqQuery, cpf);
+                fprintf (arqText,"dm? %s\n", cpf);
+                printResidentData (cpf, residents, persons, arqText);
+                fprintf (arqText, "\n");
+            }
+            else if (!strcmp (command, "de?")){
+                scanDE (arqQuery, cnpj);
+                fprintf (arqText, "de? %s\n", cnpj);
+                printStoreData (cnpj, stores, persons, storeTypes, arqText);
+                fprintf (arqText, "\n");
+            }
+            else if (!strcmp (command, "mud")){
+                scanMud (arqQuery, cpf, cep, face, &n, compl);
+                fprintf (arqText, "mud %s %s %s %d %s\n", cpf, cep, face, n, compl);
+
+                treatMud (arqText, persons, residents, cpf, cep, face, n, compl);
+                fprintf (arqText, "\n");
+            }
+        }
+    }*/
+
+    /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
+    /*if(arqSvgQ != NULL){
+        printList(figures, arqSvgQ);
+        printList(blocks, arqSvgQ);
+        printList(hydrants, arqSvgQ);
+        printList(tLights, arqSvgQ);
+        printList(rTowers, arqSvgQ);
+        printBuildingList(blocks, buildings, arqSvgQ);
+        printList(walls, arqSvgQ);
+        printList(auxList, arqSvgQ);*/
     }
 
     /*Finalização, libreracao de memoria e fechamento dos arquivos*/
     fputs("\n</svg>\n", arqSvg);
+
+    if (isInteractive != NULL){
+        console ();
+    }
 
     //Fecha os arquivos .geo e .svg(1)
     fclose(arqSvg);
@@ -455,3 +613,33 @@ int main(int argc, char *argv[]){
 }
 
 #endif
+
+    /*if (nameEC != NULL){
+        free (nameEC);
+        free (nameECT);
+        free (arqEC);
+    }
+
+    if (namePM != NULL){
+        free (namePM);
+        free (namePMT);
+        free (arqPM);
+    }
+
+    if (isInteractive != NULL){
+        free (isInteractive);
+    }
+
+    //Liberação da memória das listas
+    deallocateList(figures, freeForm);
+    deallocateList(blocks, freeBlock);
+    deallocateList(hydrants, freeHydrant);
+    deallocateList(tLights, freeTrafficLight);
+    deallocateList(rTowers, freeRadioTower);
+    deallocateList(buildings, freeBuilding);
+    deallocateList(walls, freeWall);
+    deallocateList(auxList, freeForm);
+    //deallocateList(auxList, freeWall);
+
+    return 0;
+}*/

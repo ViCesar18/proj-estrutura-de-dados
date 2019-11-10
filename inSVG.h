@@ -22,7 +22,7 @@
 void checkFile(FILE *arq, char fname[]);
 
 /*Função que recebe os parâmetros digitados do terminal*/
-void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **pathOut);
+void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **nameEC, char **namePM, char **pathOut, char **isInteractive);
 
 /*Trata o nome do arquivo geo/qry caso ele seja passado como parametro junto com um diretorio relativo*/
 void treatFileName(char nameIn[], char **nameInT);
@@ -62,6 +62,19 @@ void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable);
 
 /*Le as informacoes de muro do arquivo .geo e armazena na lista walls*/
 void scanWall(FILE *arqIn, Tree walls);
+void scanBuilding(FILE *arqIn, List buildings);
+
+/*Le as informacoes de muro do arquivo .geo e armazena na lista walls*/
+/*void scanWall(FILE *arqIn, List walls);
+
+void scanStoreType (FILE *arqEst, List storeTypes);
+
+void scanStore (FILE *arqEst, List stores);
+
+void scanPerson (FILE *arqPes, List persons);
+
+void scanResident (FILE *arqPes, List residents);*/
+
 
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
 void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2);
@@ -95,5 +108,14 @@ void scanFHFS(FILE *arqQuery, int *k, char cep[], char face[], int *num);
 
 /*Le os parametros de consulta do comando "brl"*/
 void scanBRL(FILE *arqQuery, double *x, double *y);
+
+void scanM (FILE *arqQuery, char cep[]);
+void scanDM (FILE *arqQuery, char cpf[]);
+void scanDE (FILE *arqQuery, char cnpj[]);
+void scanMud (FILE *arqQuery, char cpf[], char cep[], char face[], int *num, char compl[]);
+
+
+
+
 
 #endif
