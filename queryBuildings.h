@@ -20,7 +20,7 @@ typedef void* Tree;
 typedef void* Element;
 
 /*Remove todas as quadras que estiverem inteiramente dentro do circulo dependendo da metrica (L1 ou L2)*/
-void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, char metric[], Form circle);
+void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, HashTable blocksTable, char metric[], Form circle);
 
 /*Muda a cor da borda de todas as quadras que estiverem inteiramente dentro do circulo*/
 void treatCBQ(FILE *arqTxt, Tree blocks, Node node, Form circle, char *cstrk);

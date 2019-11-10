@@ -1,37 +1,39 @@
 #include "queryBuildings.h"
 
-void treatDQ_Util(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, char *metric, Form circle){
+void treatDQ_Util(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, HashTable blocksTable, char *metric, Form circle){
     Block block = getElement(blocks, node);
 
     if(!strcmp(metric, "L1")){
         if(node == getNil(blocks)) return;
 
-        treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), metric, circle);
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), blocksTable, metric, circle);
 
-        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), metric, circle);
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), blocksTable, metric, circle);
 
         if(quadInsideCirc(block, circle, "L1")){
             fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
             removeNode(blocks, block);
+            removeHashTable(blocksTable, getBlockCep(block));
             destroyBlock(block);
         }
     }
     else if(!strcmp(metric, "L2")){
         if(node == getNil(blocks)) return;
 
-        treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), metric, circle);
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), blocksTable, metric, circle);
 
-        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), metric, circle);
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), blocksTable, metric, circle);
 
         if(quadInsideCirc(block, circle, "L2")){
             fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
             removeNode(blocks, block);
+            removeHashTable(blocksTable, getBlockCep(block));
             destroyBlock(block);
         }
     }
 }
 
-void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, char metric[], Form circle){
+void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, HashTable blocksTable, char metric[], Form circle){
     Form ring1 = createCircle("0", getFormX(circle), getFormY(circle), 18, "green", "none", "5");
     Form ring2 = createCircle("0", getFormX(circle), getFormY(circle), 13, "lightgreen", "none", "5");
 
@@ -43,7 +45,7 @@ void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, char metric[],
     free(ring1);
     free(ring2);
 
-    treatDQ_Util(arqTxt, arqSvgQ, blocks, node, metric, circle);
+    treatDQ_Util(arqTxt, arqSvgQ, blocks, getTreeRoot(blocks), blocksTable, metric, circle);
 }
 
 void treatCBQ(FILE *arqTxt, Tree blocks, Node node, Form circle, char *cstrk){

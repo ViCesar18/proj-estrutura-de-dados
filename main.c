@@ -270,7 +270,7 @@ int main(int argc, char *argv[]){
                 }
 
                 Form circle = createCircle(id1, x, y, r, "black", "none", "1");
-                treatDQ(arqText, arqSvgQ, blocks, getTreeRoot(blocks), metric, circle);
+                treatDQ(arqText, arqSvgQ, blocks, blocksTable, metric, circle);
                 fprintf(arqText, "\n");
                 free(circle);
             }
