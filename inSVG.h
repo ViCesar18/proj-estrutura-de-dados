@@ -24,7 +24,7 @@
 void checkFile(FILE *arq, char fname[]);
 
 /*Função que recebe os parâmetros digitados do terminal*/
-void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **nameEC, char **namePM, char **pathOut);
+void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **nameEC, char **namePM, char **pathOut, char **isInteractive);
 
 /*Trata o nome do arquivo geo/qry caso ele seja passado como parametro junto com um diretorio relativo*/
 void treatFileName(char nameIn[], char **nameInT);

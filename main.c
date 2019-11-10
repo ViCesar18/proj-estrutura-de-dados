@@ -13,6 +13,7 @@
 #include "vertex.h"
 #include "point.h"
 #include "bomb.h"
+#include "interactive.h"
 
 int main(int argc, char *argv[]){
     int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000, np = 1000, nm = 1000;  //Número máximo padrão das formas
@@ -20,6 +21,7 @@ int main(int argc, char *argv[]){
     char *nameIn = NULL, *nameInT = NULL, *arqIn = NULL;   //Dados para o arquivo de entrada (.geo)
     char *nameEC = NULL, *nameECT = NULL, *arqEC = NULL;
     char *namePM = NULL, *namePMT = NULL, *arqPM = NULL;
+    char *isInteractive = NULL;
     char *nameQuery = NULL, *nameQueryT = NULL, *arqQry = NULL; //Dados para o arquivo de entrada (.qry)
     char *pathOut = NULL;   //Diretório de saída
     char *nameOut = NULL, *arqOut = NULL;   //Dados para o arquivo de saída (.svg)
@@ -55,7 +57,7 @@ int main(int argc, char *argv[]){
     Vertex vertices;
 
     /*Recebe os parametros da main (argv)*/
-    receiveParameters(argc, argv, &pathIn, &nameIn, &nameQuery, &nameEC, &namePM, &pathOut);
+    receiveParameters(argc, argv, &pathIn, &nameIn, &nameQuery, &nameEC, &namePM, &pathOut, &isInteractive);
 
     /*Trata o nome do arquivo de entrada se ele for um diretorio relativo*/
     treatFileName(nameIn, &nameInT);
@@ -452,6 +454,10 @@ int main(int argc, char *argv[]){
     /*Finalização, libreracao de memoria e fechamento dos arquivos*/
     fputs("\n</svg>\n", arqSvg);
 
+    if (isInteractive != NULL){
+        console ();
+    }
+
     //Fecha os arquivos .geo e .svg(1)
     fclose(arqSvg);
     fclose(arqGeo);
@@ -494,6 +500,10 @@ int main(int argc, char *argv[]){
         free (namePM);
         free (namePMT);
         free (arqPM);
+    }
+
+    if (isInteractive != NULL){
+        free (isInteractive);
     }
 
     //Liberação da memória das listas

@@ -8,7 +8,7 @@ void checkFile(FILE *arq, char fname[]){
     }
 }
 
-void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **nameEC, char **namePM, char **pathOut){
+void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **nameEC, char **namePM, char **pathOut, char **isInteractive){
     int i = 1;
 
     while(i < argc){
@@ -41,6 +41,11 @@ void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, cha
             i++;
             *namePM = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
             strcpy (*namePM, argv[i]);
+        }
+        else if (strcmp ("-i", argv[i]) == 0){
+            i++;
+            *isInteractive = (char *) malloc (6 * sizeof(char));
+            strcpy (*isInteractive, "true");
         }
         i++;
     }
