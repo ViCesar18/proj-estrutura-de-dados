@@ -27,6 +27,8 @@ Node getLeft(Tree t, Node n);
 
 Node getRight(Tree t, Node n);
 
+int getSize(Tree t);
+
 /*Retorna o no que contem o elemento element*/
 Node findNode(Tree t, Element element);
 

@@ -88,26 +88,22 @@ Segment buscarSegmentoFormadoComVertice(double xc, double yc, Vertex v, Point po
 	return createSegment(vc, vq);
 }
 
-void bombAreaRadiation(double x, double y, int capacity, List walls, List buildings, List auxList, FILE *arq){
-    Segment *segments = (Segment *) malloc(capacity * sizeof(Segment));
-    Point pMin = createPoint(x, y);
-    Point pMax = createPoint(x, y);
-    int index = 0;
+void wallsToSegmentList(Tree walls, Node node, Segment *segments, Point pMin, Point pMax, double x, double y, int *index){
+    Wall wall = getElement(walls, node);
 
-    for(int i = getFirst(walls); i != getNulo(); i = getNext(walls, i)){
-        Wall wall = getElementByIndex(walls, i);
-        
-        Point p1 = createPoint(getWallX1(wall), getWallY1(wall));
-        Point p2 = createPoint(getWallX2(wall), getWallY2(wall));
+    if(node == getNil(walls)) return;
 
-        setPointMin(pMin, getPointX(p1), getPointY(p1));
-        setPointMin(pMin, getPointX(p2), getPointY(p2));
-        setPointMax(pMax, getPointX(p1), getPointY(p1));
-        setPointMax(pMax, getPointX(p2), getPointY(p2));
+    wallsToSegmentList(walls, getLeft(walls, node), segments, pMin, pMax, x, y, &(*index));
 
-        if(getPointX(p1) == x && getPointY(p2) == x || getPointY(p1) == y && getPointY(p2) == y)
-            continue;
+    Point p1 = createPoint(getWallX1(wall), getWallY1(wall));
+    Point p2 = createPoint(getWallX2(wall), getWallY2(wall));
 
+    setPointMin(pMin, getPointX(p1), getPointY(p1));
+    setPointMin(pMin, getPointX(p2), getPointY(p2));
+    setPointMax(pMax, getPointX(p1), getPointY(p1));
+    setPointMax(pMax, getPointX(p2), getPointY(p2));
+
+    if(getPointX(p1) != x && getPointY(p2) != x && getPointY(p1) != y && getPointY(p2) != y){
         Vertex v1 = createVertex(p1, x, y);
         Vertex v2 = createVertex(p2, x, y);
 
@@ -115,59 +111,101 @@ void bombAreaRadiation(double x, double y, int capacity, List walls, List buildi
 
         setSegmentStartVertex(s);
 
-        segments[index] = s;
-        index++;
+        segments[*index] = s;
+        (*index)++;
     }
+
+    wallsToSegmentList(walls, getRight(walls, node), segments, pMin, pMax, x, y, &(*index));
+}
+
+void buildingsToSegmentList(Tree buildings, Node node, Segment *segments, Point pMin, Point pMax, double x, double y, int *index){
+    Building building = getElement(buildings, node);
+
+    if(node == getNil(buildings)) return;
+
+    buildingsToSegmentList(buildings, getLeft(buildings, node), segments, pMin, pMax, x, y, &(*index));
+
+    Point pXY1 = createPoint(getBuildingX(building), getBuildingY(building));
+    Point pXY2 = createPoint(getBuildingX(building), getBuildingY(building));
+    Point pXWY1 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building));
+    Point pXWY2 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building));
+    Point pXYH1 = createPoint(getBuildingX(building), getBuildingY(building) + getBuildingH(building));
+    Point pXYH2 = createPoint(getBuildingX(building), getBuildingY(building) + getBuildingH(building));
+    Point pXWYH1 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building) + getBuildingH(building));
+    Point pXWYH2 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building) + getBuildingH(building));
+
+    setPointMin(pMin, getPointX(pXY1), getPointY(pXY1));
+    setPointMin(pMin, getPointX(pXWY1), getPointY(pXWY1));
+    setPointMin(pMin, getPointX(pXYH1), getPointY(pXYH1));
+    setPointMin(pMin, getPointX(pXWYH1), getPointY(pXWYH1));
+    setPointMax(pMax, getPointX(pXY2), getPointY(pXY2));
+    setPointMax(pMax, getPointX(pXWY2), getPointY(pXWY2));
+    setPointMax(pMax, getPointX(pXYH2), getPointY(pXYH2));
+    setPointMax(pMax, getPointX(pXWYH2), getPointY(pXWYH2));
+
+    Vertex vXY1 = createVertex(pXY1, x, y);
+    Vertex vXY2 = createVertex(pXY2, x, y);
+    Vertex vXWY1 = createVertex(pXWY1, x, y);
+    Vertex vXWY2 = createVertex(pXWY2, x, y);
+    Vertex vXYH1 = createVertex(pXYH1, x, y);
+    Vertex vXYH2 = createVertex(pXYH2, x, y);
+    Vertex vXWYH1 = createVertex(pXWYH1, x, y);
+    Vertex vXWYH2 = createVertex(pXWYH2, x, y);
+
+    Segment sC = createSegment(vXY1, vXWY1);
+    Segment sD = createSegment(vXWY2, vXWYH1);
+    Segment sB = createSegment(vXWYH2, vXYH1);
+    Segment sE = createSegment(vXYH2, vXY2);
+
+    setSegmentStartVertex(sC);
+    setSegmentStartVertex(sD);
+    setSegmentStartVertex(sB);
+    setSegmentStartVertex(sE);
+
+    segments[*index] = sC;
+    (*index)++;
+    segments[*index] = sD;
+    (*index)++;
+    segments[*index] = sB;
+    (*index)++;
+    segments[*index] = sE;
+    (*index)++;
+
+    buildingsToSegmentList(buildings, getRight(buildings, node), segments, pMin, pMax, x, y, &(*index));
+}
+
+void goThroughActiveSegments(Tree activeSegments, Node node, Segment sv, Segment s_v, Segment closerSegment, int dMin, double x, double y){
+    Segment s = getElement(activeSegments, node);
+
+    if(node == getNil(activeSegments)) return;
+
+    goThroughActiveSegments(activeSegments, getLeft(activeSegments, node), sv, s_v, closerSegment, dMin, x, y);
+
+    if(s != sv){
+        if(checkSegmentsIntersection(s_v, s)){
+            double xInter, yInter;
+            segmentIntersection(s_v, s, &xInter, &yInter);
+
+            double distBombInter = distEuclid(x, y, xInter, yInter);
+            if(distBombInter < dMin){
+                dMin = distBombInter;
+                closerSegment = s;
+            }
+        }
+    }
+
+    goThroughActiveSegments(activeSegments, getRight(activeSegments, node), sv, s_v, closerSegment, dMin, x, y);
+}
+
+void bombAreaRadiation(double x, double y, int capacity, Tree walls, Tree buildings, FILE *arq){
+    Segment *segments = (Segment *) malloc(capacity * sizeof(Segment));
+    Point pMin = createPoint(x, y);
+    Point pMax = createPoint(x, y);
+    int index = 0;
+
+    wallsToSegmentList(walls, getTreeRoot(walls), segments, pMin, pMax, x, y, &index);
     
-    for(int i = getFirst(buildings); i != getNulo(); i = getNext(buildings, i)){
-        Building building = getElementByIndex(buildings, i);
-
-        Point pXY1 = createPoint(getBuildingX(building), getBuildingY(building));
-        Point pXY2 = createPoint(getBuildingX(building), getBuildingY(building));
-        Point pXWY1 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building));
-        Point pXWY2 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building));
-        Point pXYH1 = createPoint(getBuildingX(building), getBuildingY(building) + getBuildingH(building));
-        Point pXYH2 = createPoint(getBuildingX(building), getBuildingY(building) + getBuildingH(building));
-        Point pXWYH1 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building) + getBuildingH(building));
-        Point pXWYH2 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building) + getBuildingH(building));
-
-        setPointMin(pMin, getPointX(pXY1), getPointY(pXY1));
-        setPointMin(pMin, getPointX(pXWY1), getPointY(pXWY1));
-        setPointMin(pMin, getPointX(pXYH1), getPointY(pXYH1));
-        setPointMin(pMin, getPointX(pXWYH1), getPointY(pXWYH1));
-        setPointMax(pMax, getPointX(pXY2), getPointY(pXY2));
-        setPointMax(pMax, getPointX(pXWY2), getPointY(pXWY2));
-        setPointMax(pMax, getPointX(pXYH2), getPointY(pXYH2));
-        setPointMax(pMax, getPointX(pXWYH2), getPointY(pXWYH2));
-
-        Vertex vXY1 = createVertex(pXY1, x, y);
-        Vertex vXY2 = createVertex(pXY2, x, y);
-        Vertex vXWY1 = createVertex(pXWY1, x, y);
-        Vertex vXWY2 = createVertex(pXWY2, x, y);
-        Vertex vXYH1 = createVertex(pXYH1, x, y);
-        Vertex vXYH2 = createVertex(pXYH2, x, y);
-        Vertex vXWYH1 = createVertex(pXWYH1, x, y);
-        Vertex vXWYH2 = createVertex(pXWYH2, x, y);
-
-        Segment sC = createSegment(vXY1, vXWY1);
-        Segment sD = createSegment(vXWY2, vXWYH1);
-        Segment sB = createSegment(vXWYH2, vXYH1);
-        Segment sE = createSegment(vXYH2, vXY2);
-
-        setSegmentStartVertex(sC);
-        setSegmentStartVertex(sD);
-        setSegmentStartVertex(sB);
-        setSegmentStartVertex(sE);
-
-        segments[index] = sC;
-        index++;
-        segments[index] = sD;
-        index++;
-        segments[index] = sB;
-        index++;
-        segments[index] = sE;
-        index++;
-    }
+    buildingsToSegmentList(buildings, getTreeRoot(buildings), segments, pMin, pMax, x, y, &index);
 
     /*Criacao do retangulo que envolve todos os segmentos(borda)*/
     capacity += 4;
@@ -283,7 +321,9 @@ void bombAreaRadiation(double x, double y, int capacity, List walls, List buildi
 
     qsort(vertices, verticesSize, sizeof(Vertex), cmpVertex);
 
-    List activeSegments = createList((int) verticesSize / 2);
+    Tree activeSegments = createRBTree(comparatorSegment, freeSegment);
+
+    //List activeSegments = createList((int) verticesSize / 2);
     Vertex biombo = createVertex(createPoint(getPointX(getVertexV(vertices[0])), getPointY(getVertexV(vertices[0]))), x, y);
     setVertexSegment(biombo, getVertexSegment(vertices[0]));
 
@@ -295,22 +335,7 @@ void bombAreaRadiation(double x, double y, int capacity, List walls, List buildi
 
         double dMin = __INT_MAX__;
 
-        for(int j = getFirst(activeSegments); j != getNulo(); j = getNext(activeSegments, j)){
-            Segment s = getElementByIndex(activeSegments, j);
-
-            if(s == sv) continue;
-
-            if(checkSegmentsIntersection(s_v, s)){
-                double xInter, yInter;
-                segmentIntersection(s_v, s, &xInter, &yInter);
-
-                double distBombInter = distEuclid(x, y, xInter, yInter);
-                if(distBombInter < dMin){
-                    dMin = distBombInter;
-                    closerSegment = s;
-                }
-            }
-        }
+        goThroughActiveSegments(activeSegments, getTreeRoot(activeSegments), sv, s_v, closerSegment, dMin, x, y);
 
         if(getVertexStart(v)){
             bool itsCloserSegment;
@@ -328,14 +353,14 @@ void bombAreaRadiation(double x, double y, int capacity, List walls, List buildi
                 Segment s1 = createSegment(biombo, vInter);
                 Segment s2 = createSegment(vInter, v);
 
-                Form triangle = createTriangle(x, y, biombo, vInter);
+                //Form triangle = createTriangle(x, y, biombo, vInter);
                 //insertElement(auxList, triangle, "t");
 
                 printTriangle2(arq, x, y, biombo, vInter);
 
                 biombo = v;
             }
-            insertElement(activeSegments, sv, "seg");
+            insertNode(activeSegments, sv);
         }
         else{
             bool itsCloserSegment;
@@ -354,11 +379,11 @@ void bombAreaRadiation(double x, double y, int capacity, List walls, List buildi
                     Segment s1 = createSegment(biombo, v);
                     Segment s2 = createSegment(v, vInter);
 
-                    Form triangle = createTriangle(x, y, v, vInter);
+                    //Form triangle = createTriangle(x, y, v, vInter);
                     //insertElement(auxList, triangle, "t");
                     printTriangle2(arq, x, y, v, vInter);
 
-                    Form triangle2 = createTriangle(x, y, biombo, v);
+                    //Form triangle2 = createTriangle(x, y, biombo, v);
                     //insertElement(auxList, triangle2, "t");
                     printTriangle2(arq, x, y, biombo, v);
 
@@ -367,13 +392,13 @@ void bombAreaRadiation(double x, double y, int capacity, List walls, List buildi
                 }
                 else{
                     Segment s = createSegment(biombo, v);
-                    Form triangle = createTriangle(x, y, biombo, v);
+                    //Form triangle = createTriangle(x, y, biombo, v);
                     //insertElement(auxList, triangle, "t");
                     printTriangle2(arq, x, y, biombo, v);
                     biombo = v;
                 }
             }
-            deleteElement2(activeSegments, sv);
+            removeNode(activeSegments, sv);
         }
     }
 

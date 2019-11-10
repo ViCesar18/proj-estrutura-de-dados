@@ -70,6 +70,7 @@ void treatFileName(char nameIn[], char **nameInT){
         j++;
         save++;
     }
+    (*nameInT)[j] = '\0';
 }
 
 void allocateFileMamory(char fname[], char path[], char **arq){

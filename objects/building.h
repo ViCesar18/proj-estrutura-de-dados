@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../data_structures/rbtree.h"
+#include "block.h"
 
 typedef void *Building;
 typedef void *Block;
@@ -41,14 +42,6 @@ double getBuildingH(Building b);
 Block getBuildingBlock(Building b);
 
 void setBuildingBlock(Building b, Tree blocks);
-
-void setBuildingX(Building b, double x);
-
-void setBuildingY(Building b, double y);
-
-void setBuildingW(Building b, double w);
-
-void setBuildingH(Building b, double h);
 /*Fim getters e setters*/
 
 /*Libera memoria de um predio*/

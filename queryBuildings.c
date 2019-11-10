@@ -132,11 +132,12 @@ double getDist(Dist distAux){
     return dist->dist;
 }
 
-/*void treeToListDists(double x, double y, Tree root, Dist lD, int *cont, double getX(Element), double getY(Element)){
-    Element element;
-    DistImp* listDists = (DistImp*) lD;
+void treeToListDists(double x, double y, Tree tree, Node node, DistImp *listDists, int *cont, double (getX)(Element), double (getY)(Element)){
+    Element element = getElement(tree, node);
 
-    element = getElement(root);
+    if(node == getNil(tree)) return;
+
+    treeToListDists(x, y, tree, getLeft(tree, node), listDists, &(*cont), getX, getY);
 
     listDists[*cont] = (DistImp) malloc(sizeof(struct stDist));
     listDists[*cont]->element = element;
@@ -144,39 +145,34 @@ double getDist(Dist distAux){
 
     (*cont)++;
 
-    if(getLeft(root) != NULL)
-        treeToListDists(x, y, getLeft(root), &listDists, &(*cont), getX, getY);
-    if(getRight(root) != NULL)
-        treeToListDists(x, y, getRight(root), &listDists, &(*cont), getX, getY);
+    treeToListDists(x, y, tree, getRight(tree, node), listDists, &(*cont), getX, getY);
 
 }
 
-void treatFI(FILE *arqSvg, FILE *arqTxt, Tree auxTree, double x, double y, int ns, double r, Tree tLightRoot, Tree hydrantRoot){
+void treatFI(FILE *arqSvg, FILE *arqTxt, double x, double y, int ns, double r, Tree tLights, Tree hydrants){
     Form ring;
     Wall line;
     double dist;
-    int cont = 0, ntLights = 0;;
+    int cont = 0, ntLights;
 
-    nNodes(tLightRoot, &ntLights);
+    ntLights = getSize(tLights);
 
     DistImp *tLightDists = (DistImp *) malloc(ntLights * sizeof(DistImp));
 
     printFire(arqSvg, x, y);
 
-    treeToListDists(x, y, tLightRoot, &tLightDists, &cont, getTrafficLightX, getTrafficLightY);
+    treeToListDists(x, y, tLights, getTreeRoot(tLights), tLightDists, &cont, getTrafficLightX, getTrafficLightY);
 
     min_heap_sort((void *) tLightDists, ntLights - 1, ns);
     reverseVector((void *) tLightDists, ntLights - 1);
 
     Hydrant hydrant;
-    int nHydrants = 0;
-
-    nNodes(hydrantRoot, &nHydrants);
+    int nHydrants = getSize(hydrants);
 
     DistImp *hydrantDists = (DistImp *) malloc(nHydrants * sizeof(DistImp));
     cont = 0;
 
-    treeToListDists(x, y, hydrantRoot, &hydrantDists, &cont, getHydrantX, getHydrantY);
+    treeToListDists(x, y, hydrants, getTreeRoot(hydrants), hydrantDists, &cont, getHydrantX, getHydrantY);
 
     min_heap_sort((void *) hydrantDists, nHydrants - 1, nHydrants);
     reverseVector((void *) hydrantDists, nHydrants - 1);
@@ -188,10 +184,13 @@ void treatFI(FILE *arqSvg, FILE *arqTxt, Tree auxTree, double x, double y, int n
         ring = createCircle("", getTrafficLightX(tLightDists[i]->element), getTrafficLightY(tLightDists[i]->element), 9, "green", "none", "3");
         line = createWall(x, y, getTrafficLightX(tLightDists[i]->element), getTrafficLightY(tLightDists[i]->element));
 
-        insertNode(auxTree, ring, comparatorForm);
-        insertNode(auxTree, line, comparatorWall);
+        printCircle(arqSvg, ring);
+        printWall(arqSvg, line);
+
+        destroyForm(ring);
+        destroyWall(line);
     }
-    
+
     fprintf(arqTxt, "\n\nHidrantes ativados:\n");
     for(int i = 0; i < nHydrants; i++){
         if(hydrantDists[i]->dist <= r){
@@ -199,8 +198,11 @@ void treatFI(FILE *arqSvg, FILE *arqTxt, Tree auxTree, double x, double y, int n
             ring = createCircle("", getHydrantX(hydrantDists[i]->element), getHydrantY(hydrantDists[i]->element), 9, "green", "none", "3");
             line = createWall(x, y, getHydrantX(hydrantDists[i]->element), getHydrantY(hydrantDists[i]->element));
 
-            insertNode(&auxTree, ring, comparatorForm);
-            insertNode(&auxTree, line, comparatorWall);
+            printCircle(arqSvg, ring);
+            printWall(arqSvg, line);
+
+            destroyForm(ring);
+            destroyWall(line);
         }
         else{
             break;
@@ -208,22 +210,19 @@ void treatFI(FILE *arqSvg, FILE *arqTxt, Tree auxTree, double x, double y, int n
     }
     fprintf(arqTxt, "\n\n");
 
-    for(int i = 0; i < ntLights; i++){
+    for(int i = 0; i < ntLights; i++)
         free(tLightDists[i]);
-    }
     free(tLightDists);
 
-    for(int i = 0; i < nHydrants; i++){
+    for(int i = 0; i < nHydrants; i++)
         free(hydrantDists[i]);
-    }
     free(hydrantDists);
 }
 
-void getAddress(char cep[], char face[], int num, double *x, double *y, Tree blockRoot){
-    Block block;
+void getAddress(char cep[], char face[], int num, double *x, double *y, HashTable blocksTable){
     char type[4];
 
-    block = getElementById(blockRoot, cep);
+    Block block = searchHashTable(blocksTable, cep);
 
     if(!strcmp(face, "N")){
         *x = getBlockX(block) + num;
@@ -243,19 +242,17 @@ void getAddress(char cep[], char face[], int num, double *x, double *y, Tree blo
     }
 }
 
-void treatFH(FILE *arqTxt, FILE *arqSvg, Tree hydrantRoot, int k, double x, double y, Tree auxTree){
-    int i, cont = 0, nHydrants = 0;
+void treatFH(FILE *arqTxt, FILE *arqSvg, Tree hydrants, int k, double x, double y){
+    int i, cont = 0, nHydrants = getSize(hydrants);
     Form ring;
     Wall line;
 
-    nNodes(hydrantRoot, &nHydrants);
-
     DistImp *hydrantDists = (DistImp *) malloc(nHydrants * sizeof(DistImp));
 
-    treeToListDists(x, y, hydrantRoot, &hydrantDists, &cont, getHydrantX, getHydrantY);
+    treeToListDists(x, y, hydrants, getTreeRoot(hydrants), hydrantDists, &cont, getHydrantX, getHydrantY);
 
     if(k < 0){
-        k *= -1;
+        k = -k;
         min_heap_sort((void *)hydrantDists, nHydrants - 1, k);
         fprintf(arqTxt, "Hidrantes mais próximos do endeço:\n");
     }
@@ -271,8 +268,11 @@ void treatFH(FILE *arqTxt, FILE *arqSvg, Tree hydrantRoot, int k, double x, doub
         ring = createCircle("", getHydrantX(hydrantDists[i]->element), getHydrantY(hydrantDists[i]->element), 9, "green", "none", "3");
         line = createWall(x, y, getHydrantX(hydrantDists[i]->element), getHydrantY(hydrantDists[i]->element));
 
-        insertNode(&auxTree, ring, comparatorForm);
-        insertNode(&auxTree, line, comparatorWall);
+        printCircle(arqSvg, ring);
+        printWall(arqSvg, line);
+
+        destroyForm(ring);
+        destroyWall(line);
     }
     fprintf(arqTxt, "\n\n");
 
@@ -282,16 +282,14 @@ void treatFH(FILE *arqTxt, FILE *arqSvg, Tree hydrantRoot, int k, double x, doub
     free(hydrantDists);
 }
 
-void treatFS(FILE *arqTxt, FILE *arqSvg, Tree tLightRoot, int k, double x, double y, Tree auxTree){
-    int i, cont = 0, ntLights = 0;
+void treatFS(FILE *arqTxt, FILE *arqSvg, Tree tLights, int k, double x, double y){
+    int i, cont = 0, ntLights = getSize(tLights);
     Form ring;
     Wall line;
 
-    nNodes(tLightRoot, &ntLights);
-
     DistImp *tLightDists = (DistImp *) malloc(ntLights * sizeof(DistImp));
 
-    treeToListDists(x, y, tLightRoot, &tLightDists, &cont, getTrafficLightX, getTrafficLightY);
+    treeToListDists(x, y, tLights, getTreeRoot(tLights), tLightDists, &cont, getTrafficLightX, getTrafficLightY);
 
     min_heap_sort((void *)tLightDists, ntLights - 1, k);
     fprintf(arqTxt, "Semáforos mais próximos do endeço:\n");
@@ -303,8 +301,11 @@ void treatFS(FILE *arqTxt, FILE *arqSvg, Tree tLightRoot, int k, double x, doubl
         ring = createCircle("", getTrafficLightX(tLightDists[i]->element), getTrafficLightY(tLightDists[i]->element), 9, "green", "none", "3");
         line = createWall(x, y, getTrafficLightX(tLightDists[i]->element), getTrafficLightY(tLightDists[i]->element));
 
-        insertNode(&auxTree, ring, comparatorForm);
-        insertNode(&auxTree, line, comparatorWall);
+        printCircle(arqSvg, ring);
+        printWall(arqSvg, line);
+
+        destroyForm(ring);
+        destroyWall(line);
     }
     fprintf(arqTxt, "\n\n");
 
@@ -312,4 +313,4 @@ void treatFS(FILE *arqTxt, FILE *arqSvg, Tree tLightRoot, int k, double x, doubl
         free(tLightDists[i]);
     }
     free(tLightDists);
-}*/
+}

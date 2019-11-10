@@ -13,6 +13,8 @@ typedef void *Vertex;
 /*Cria um segmento*/
 Segment createSegment(Vertex v1, Vertex v2);
 
+int comparatorSegment(Segment s1, Segment s2);
+
 /*Inicio Getters e Setters de segmento*/
 Vertex getSegmentV1(Segment s);
 

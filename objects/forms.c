@@ -26,7 +26,6 @@ Form createCircle(char id[], double x, double y, double r, char strokeColor[], c
 Form createRect(char id[], double x, double y, double w, double h, char strokeColor[], char fillColor[], int stroke, char sw[]){
     FormImp rect = (FormImp)malloc(sizeof(struct stForm));
 
-    //printf("AA %s\n", id);
     strcpy(rect->id, id);
     rect->stroke = stroke;
     rect->x = x;

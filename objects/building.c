@@ -10,15 +10,38 @@ typedef struct stBuilding{
 Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin, Block block){
     BuildingImp building = (BuildingImp)malloc(sizeof(struct stBuilding));
 
-    building->x = 0;
-    building->y = 0;
+    double xB = getBlockX(block), yB = getBlockY(block), wB = getBlockW(block), hB = getBlockH(block);
+
+    if(!strcmp(face, "N")){
+        building->x = xB + num - faceSize / 2;
+        building->y = yB + hB - margin - depth;
+        building->w = faceSize;
+        building->h = depth;
+    }
+    else if(!strcmp(face, "S")){
+        building->x = xB + num - faceSize / 2;
+        building->y = yB + margin;
+        building->w = faceSize;
+        building->h = depth;
+    }
+    else if(!strcmp(face, "O")){
+        building->x = xB + wB - margin - depth;
+        building->y = yB + num - faceSize / 2;
+        building->w = depth;
+        building->h = faceSize;
+    }
+    else if(!strcmp(face, "L")){
+        building->x = xB + margin;
+        building->y = yB + num - faceSize / 2;
+        building->w = depth;
+        building->h = faceSize;
+    }
     strcpy(building->cep, cep);
     strcpy(building->face, face);
     building->num = num;
     building->faceSize = faceSize;
     building->depth =  depth;
     building->margin = margin;
-
     setBuildingBlock(building, block);
 
     return building;
@@ -113,28 +136,4 @@ void setBuildingBlock(Building b, Block block){
     BuildingImp building = (BuildingImp) b;
 
     building->block = block;
-}
-
-void setBuildingX(Building b, double x){
-    BuildingImp building = (BuildingImp) b;
-
-    building->x = x;
-}
-
-void setBuildingY(Building b, double y){
-    BuildingImp building = (BuildingImp) b;
-
-    building->y = y;
-}
-
-void setBuildingW(Building b, double w){
-    BuildingImp building = (BuildingImp) b;
-
-    building->w = w;
-}
-
-void setBuildingH(Building b, double h){
-    BuildingImp building = (BuildingImp) b;
-
-    building->h = h;
 }

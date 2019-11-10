@@ -11,6 +11,8 @@ typedef void *Point;
 /*Cria um ponto*/
 Point createPoint(double x, double y);
 
+int comparatorPoint(Point p1, Point p2);
+
 /*Inicio Getters e Setters de ponto*/
 double getPointX(Point p);
 

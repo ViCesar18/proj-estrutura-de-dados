@@ -14,6 +14,7 @@
 #include "vertex.h"
 #include "point.h"
 #include "./data_structures/hash_table.h"
+#include "bomb.h"
 
 int main(int argc, char *argv[]){
     int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000, np = 1000, nm = 1000;  //Número máximo padrão das formas
@@ -46,7 +47,7 @@ int main(int argc, char *argv[]){
     strcpy(cfillR, "gray");
     strcpy(cstrkR, "black");
 
-    Tree figures, blocks, hydrants, tLights, rTowers, buildings, walls, auxList;    //Arvpre rubro negra de cada objeto urbano
+    Tree figures, blocks, hydrants, tLights, rTowers, buildings, walls;    //Arvore rubro negra de cada objeto urbano
     Element element1, element2;  //Armazena uma forma
     char type1[4], type2[4];    //Armazena o tipo do objeto urbano em questão
 
@@ -137,7 +138,6 @@ int main(int argc, char *argv[]){
     rTowers = createRBTree(comparatorRadioTower, destroyRadioTower);
     buildings = createRBTree(comparatorBuilding, destroyBuilding);
     walls = createRBTree(comparatorWall, destroyWall);
-    //auxList = createRBTree();
 
     /*Cria as tabelas hash*/
     HashTable blocksTable = createHashTable(nq, NULL);
@@ -360,27 +360,25 @@ int main(int argc, char *argv[]){
                 treatTRNS_rTower(arqText, rTowers, getTreeRoot(rTowers), rect, x, y, arqSvgQ);
                 free(rect);
             }
-            /*else if(!strcmp(command, "fi")){
+            else if(!strcmp(command, "fi")){
                 scanFI(arqQuery, &x, &y, &n, &r);
-                treatFI(arqAux, arqText, auxList, x, y, n, r, tLights, hydrants);
+                treatFI(arqAux, arqText, x, y, n, r, tLights, hydrants);
             }
             else if(!strcmp(command, "fh")){
                 scanFHFS(arqQuery, &k, id1, id2, &n);
-                getAddress(id1, id2, n, &x, &y, blocks);
-                treatFH(arqText, arqSvgQ, hydrants, k, x, y, auxList);
+                getAddress(id1, id2, n, &x, &y, blocksTable);
+                treatFH(arqText, arqAux, hydrants, k, x, y);
             }
             else if(!strcmp(command, "fs")){
                 scanFHFS(arqQuery, &k, id1, id2, &n);
-                getAddress(id1, id2, n, &x, &y, blocks);
-                treatFS(arqText, arqSvgQ, tLights, k, x, y, auxList);
+                getAddress(id1, id2, n, &x, &y, blocksTable);
+                treatFS(arqText, arqSvgQ, tLights, k, x, y);
             }
             else if(!strcmp(command, "brl")){
                 scanBRL(arqQuery, &x, &y);
-                Form circle = createCircle("", x, y, 5, "black", "red", "2");
-                insertNode(auxList, circle, comparatorForm);
                 int capacitySegments = nm + np * 4 + 4;
-                //bombAreaRadiation(x, y, capacitySegments, walls, buildings, auxList, arqAux);
-            }*/
+                bombAreaRadiation(x, y, capacitySegments, walls, buildings, arqAux);
+            }
         }
     }
     /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
@@ -393,7 +391,6 @@ int main(int argc, char *argv[]){
         printTreeElements(rTowers, getTreeRoot(rTowers), arqSvgQ, printRadioTower);
         printTreeElements(buildings, getTreeRoot(buildings), arqSvgQ, printBuilding);
         printTreeElements(walls, getTreeRoot(walls), arqSvgQ, printWall);
-        //printTree(auxList, arqSvgQ, printWall);
 
         /*Tratamento para desenhar a radiacao luminosa da bomba acima de tudo*/
         rewind(arqAux);
@@ -446,7 +443,6 @@ int main(int argc, char *argv[]){
     destroyRBTree(rTowers);
     destroyRBTree(buildings);
     destroyRBTree(walls);
-    //freeRBTree(auxList);
 
     //Liberação da memória das tabelas hash
     destroyHashTable(blocksTable);

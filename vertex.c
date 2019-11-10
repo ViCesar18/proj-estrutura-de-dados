@@ -17,6 +17,13 @@ Vertex createVertex(Point p, double xB, double yB){
     return vertex;
 }
 
+int comparatorVertex(Vertex v1, Vertex v2){
+    VertexImp vertex1 = (VertexImp) v1;
+    VertexImp vertex2 = (VertexImp) v2;
+
+    return comparatorPoint(vertex1->v, vertex2->v);
+}
+
 Point getVertexV(Vertex v){
     VertexImp vertex = (VertexImp) v;
 

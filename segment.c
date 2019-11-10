@@ -16,6 +16,16 @@ Segment createSegment(Vertex v1, Vertex v2){
     return segment;
 }
 
+int comparatorSegment(Segment s1, Segment s2){
+    SegmentImp segment1 = (SegmentImp) s1;
+    SegmentImp segment2 = (SegmentImp) s2;
+    int r1 = comparatorVertex(segment1->v1, segment2->v1);
+    int r2 = comparatorVertex(segment1->v2, segment2->v2);
+
+    if(r1 != 0) return r1;
+    else return r2;
+}
+
 Vertex getSegmentV1(Segment s){
     SegmentImp segment = (SegmentImp) s;
 

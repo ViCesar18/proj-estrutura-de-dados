@@ -16,6 +16,8 @@ typedef void *Segment;
 /*Cria um vertice*/
 Vertex createVertex(Point p, double xB, double yB);
 
+int comparatorVertex(Vertex v1, Vertex v2);
+
 /*Inicio Getters e Setters de vertice*/
 Point getVertexV(Vertex v);
 

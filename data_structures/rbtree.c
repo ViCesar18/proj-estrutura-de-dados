@@ -15,6 +15,7 @@ typedef struct stTree{
 	NodeImp nil;
 	int (*comparator)(Element, Element);
 	void (*destroy)(Element);
+	int size;
 } *TreeImp;
 
 Tree createRBTree(int (*comparator)(Element, Element), void (*destroy)(Element)){
@@ -25,6 +26,7 @@ Tree createRBTree(int (*comparator)(Element, Element), void (*destroy)(Element))
 	tree->root = tree->nil;
 	tree->comparator = comparator;
 	tree->destroy = destroy;
+	tree->size = 0;
 	return tree;
 }
 
@@ -65,6 +67,12 @@ Node getRight(Tree t, Node n){
 	if(node == tree->nil) return NULL;
 
 	return node->right;
+}
+
+int getSize(Tree t){
+	TreeImp tree = (TreeImp) t;
+
+	return tree->size;
 }
 
 void rotateRight(TreeImp tree, NodeImp node){
@@ -180,6 +188,7 @@ void insertNode(Tree t, Element element){
 	node->right = tree->nil;
 	node->color = RED;
 	node->element = element;
+	tree->size++;
 
 	if(tree->root == tree->nil){
 		node->parent = tree->nil;
@@ -374,6 +383,7 @@ void removeNode(Tree t, Element element){
 
 	fixRemove(tree, node);
 	
+	tree->size--;
 	free(node);
 }
 
