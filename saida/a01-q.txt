@@ -1,8 +1,0 @@
-de? 00000120/0001-38
--Toldos_M4-0:
-	Codt: tld
-	Descricao: Toldos
-	CNPJ: 00000120/0001-38
-	CEP: b09.6, Face: N, Numero: 80
-	Nome do proprietario: Larz_Mert Testa_Caputo, CPF: 000.001.331-59
-
