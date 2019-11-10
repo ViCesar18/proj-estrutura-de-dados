@@ -1,17 +1,8 @@
-m? b02.1
-Moradores do cep fornecido: 
-
-m? b01.1
-Moradores do cep fornecido: 
-
-dm? cpf1
-
-de? cnpj1
-
-mud cpf1 b02.1 s 9 ola
-Dados antigos: 
-Dados novos: 
-
-m? b02.1
-Moradores do cep fornecido: 
+de? 00000120/0001-38
+-Toldos_M4-0:
+	Codt: tld
+	Descricao: Toldos
+	CNPJ: 00000120/0001-38
+	CEP: b09.6, Face: N, Numero: 80
+	Nome do proprietario: Larz_Mert Testa_Caputo, CPF: 000.001.331-59
 
