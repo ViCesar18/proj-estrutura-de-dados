@@ -274,28 +274,46 @@ int main(int argc, char *argv[]){
                 fprintf(arqText, "\n");
                 free(circle);
             }
-            /*else if(!strcmp(command, "del")){
+            else if(!strcmp(command, "del")){
                 fscanf(arqQuery, "%s", id1);
-                element1 = getElementByIdInLists(blocks, hydrants, tLights, rTowers, id1);
-                if(!strcmp(type1, "h")){
-                    x = getHydrantX(element1);
-                    y = getHydrantY(element1);
-                    removeNode(&hydrants, getElementById(hydrants, id1), comparatorHydrant);
-                }
-                else if(!strcmp(type1, "s")){
-                    x = getTrafficLightX(element1);
-                    y = getTrafficLightY(element1);
-                    removeNode(&tLights, getElementById(tLights, id1), comparatorTrafficLight);
-                }
-                else if(!strcmp(type1, "rb")){
-                    x = getRadioTowerX(element1);
-                    y = getRadioTowerY(element1);
-                    removeNode(&rTowers, getElementById(rTowers, id1), comparatorRadioTower);
-                }
-                else if(!strcmp(type1, "q")){
+
+                element1 = searchHashTable(blocksTable, id1);
+                if(element1 != NULL){
                     x = getBlockX(element1);
                     y = getBlockY(element1);
-                    removeNode(&blocks, getElementById(blocks, id1), comparatorBlock);
+                    removeNode(blocks, element1);
+                    removeHashTable(blocksTable, getBlockCep(element1));
+                    destroyBlock(element1);
+                }
+                else{
+                    element1 = searchHashTable(hydrantsTable, id1);
+                    if(element1 != NULL){
+                        x = getHydrantX(element1);
+                        y = getHydrantY(element1);
+                        removeNode(hydrants, element1);
+                        removeHashTable(hydrantsTable, getHydrantId(element1));
+                        destroyHydrant(element1);
+                    }
+                    else{
+                        element1 = searchHashTable(tLightsTable, id1);
+                        if(element1 != NULL){
+                            x = getTrafficLightX(element1);
+                            y = getTrafficLightY(element1);
+                            removeNode(tLights, element1);
+                            removeHashTable(tLightsTable, getTrafficLightId(element1));
+                            destroyTrafficLight(element1);
+                        }
+                        else{
+                            element1 = searchHashTable(rTowersTable, id1);
+                            if(element1 != NULL){
+                                x = getRadioTowerX(element1);
+                                y = getRadioTowerY(element1);
+                                removeNode(rTowers, element1);
+                                removeHashTable(rTowersTable, getRadioTowerId(element1));
+                                destroyRadioTower(element1);
+                            }
+                        }
+                    }
                 }
                 fprintf(arqText, "del %s\n", id1);
                 fprintf(arqText, "\tEquipamento Urbano Removido: %s (%lf %lf)\n\n", id1, x, y);
@@ -303,7 +321,8 @@ int main(int argc, char *argv[]){
             else if(!strcmp(command, "cbq")){
                 element1 = scanCBQ(arqQuery, cstrkQ);
 
-                treatCBQ(arqText, blocks, element1, cstrkQ);
+                fprintf(arqText, "cbq %lf %lf %lf %s\n", getFormX(element1), getFormY(element1), getFormR(element1), cstrkQ);
+                treatCBQ(arqText, blocks, getTreeRoot(blocks), element1, cstrkQ);
                 fprintf(arqText, "\n");
 
                 free(element1);
@@ -311,38 +330,37 @@ int main(int argc, char *argv[]){
             else if(!strcmp(command, "crd?")){
                 fscanf(arqQuery, "%s", id1);
 
-                element1 = getElementByIdInLists(blocks, hydrants, tLights, rTowers, id1);
-                fprintf(arqText, "crd? %s\n", id1);
-
-                if(element1 != NULL){
-                    if(!strcmp(type1, "q")){
-                        fprintf(arqText, "\tQuadra %s: (%lf, %lf)\n", id1, getBlockX(element1), getBlockY(element1));
-                    }
-                    else if(!strcmp(type1, "h")){
-                        fprintf(arqText, "\tHidrante %s: (%lf, %lf)\n", id1, getHydrantX(element1), getHydrantY(element1));
-                    }
-                    else if(!strcmp(type1, "s")){
-                        fprintf(arqText, "\tSemáforo %s: (%lf, %lf)\n", id1, getTrafficLightX(element1), getTrafficLightY(element1));
-                    }
-                    else if(!strcmp(type1, "rb")){
-                        fprintf(arqText, "\tRadio-Base %s: (%lf, %lf)\n", id1, getRadioTowerX(element1), getRadioTowerY(element1));
-                    }
-                }
+                element1 = searchHashTable(blocksTable, id1);
+                if(element1 != NULL)
+                    fprintf(arqText, "\tQuadra %s: (%lf, %lf)\n", id1, getBlockX(element1), getBlockY(element1));
                 else{
-                    fprintf(arqText, "\tEquipamento Urbano não encontrado!\n");
+                    element1 = searchHashTable(hydrantsTable, id1);
+                    if(element1 != NULL)
+                        fprintf(arqText, "\tHidrante %s: (%lf, %lf)\n", id1, getHydrantX(element1), getHydrantY(element1));
+                    else{
+                        element1 = searchHashTable(tLightsTable, id1);
+                        if(element1 != NULL)
+                            fprintf(arqText, "\tSemáforo %s: (%lf, %lf)\n", id1, getTrafficLightX(element1), getTrafficLightY(element1));
+                        else{
+                            element1 = searchHashTable(rTowersTable, id1);
+                            if(element1 != NULL)
+                                fprintf(arqText, "\tRadio-Base %s: (%lf, %lf)\n", id1, getRadioTowerX(element1), getRadioTowerY(element1));
+                            else
+                                fprintf(arqText, "\tEquipamento Urbano não encontrado!\n");
+                        }
+                    }
                 }
-                fprintf(arqText, "\n");
             }
             else if(!strcmp(command, "trns")){
                 Form rect = scanTRNS(arqQuery, &x, &y);
 
-                treatTRNS_block(arqText, blocks, rect, x, y, arqSvgQ);
-                treatTRNS_hydrant(arqText, hydrants, rect, x, y, arqSvgQ);
-                treatTRNS_tLight(arqText, tLights, rect, x, y, arqSvgQ);
-                treatTRNS_rTower(arqText, rTowers, rect, x, y, arqSvgQ);
+                treatTRNS_block(arqText, blocks, getTreeRoot(blocks), rect, x, y, arqSvgQ);
+                treatTRNS_hydrant(arqText, hydrants, getTreeRoot(hydrants), rect, x, y, arqSvgQ);
+                treatTRNS_tLight(arqText, tLights, getTreeRoot(tLights), rect, x, y, arqSvgQ);
+                treatTRNS_rTower(arqText, rTowers, getTreeRoot(rTowers), rect, x, y, arqSvgQ);
                 free(rect);
             }
-            else if(!strcmp(command, "fi")){
+            /*else if(!strcmp(command, "fi")){
                 scanFI(arqQuery, &x, &y, &n, &r);
                 treatFI(arqAux, arqText, auxList, x, y, n, r, tLights, hydrants);
             }
@@ -365,7 +383,6 @@ int main(int argc, char *argv[]){
             }*/
         }
     }
-    
     /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
     if(arqSvgQ != NULL){
         printTreeElements(figures, getTreeRoot(figures), arqSvgQ, printCircle);

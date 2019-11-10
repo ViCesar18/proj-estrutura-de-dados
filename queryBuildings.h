@@ -22,19 +22,19 @@ typedef void* Element;
 void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, char metric[], Form circle);
 
 /*Muda a cor da borda de todas as quadras que estiverem inteiramente dentro do circulo*/
-void treatCBQ(FILE *arqTxt, Tree blockRoot, Form circle, char cstrk[]);
+void treatCBQ(FILE *arqTxt, Tree blocks, Node node, Form circle, char *cstrk);
 
 /*Move todas as quadras que estão inteiramente dentro do retangulo em dx no eixo X e dy no eixo Y*/
-void treatTRNS_block(FILE *arqTxt, Tree blockRoot, Form rect, double dx, double dy, FILE *arqSvgQ);
+void treatTRNS_block(FILE *arqTxt, Tree blocks, Node node, Form rect, double dx, double dy, FILE *arqSvgQ);
 
 /*Move todos os hidrantes que estão inteiramente dentro do retangulo em dx no eixo X e dy no eixo Y*/
-void treatTRNS_hydrant(FILE *arqTxt, Tree hydrantRoot, Form rect, double dx, double dy, FILE *arqSvgQ);
+void treatTRNS_hydrant(FILE *arqTxt, Tree hydrants, Node node, Form rect, double dx, double dy, FILE *arqSvgQ);
 
 /*Move todos semaforos que estão inteiramente dentro do retangulo em dx no eixo X e dy no eixo Y*/
-void treatTRNS_tLight(FILE *arqTxt, Tree tLightRoot, Form rect, double dx, double dy, FILE *arqSvgQ);
+void treatTRNS_tLight(FILE *arqTxt, Tree tLights, Node node, Form rect, double dx, double dy, FILE *arqSvgQ);
 
 /*Move todas as torres de radio que estão inteiramente dentro do retangulo em dx no eixo X e dy no eixo Y*/
-void treatTRNS_rTower(FILE *arqTxt, Tree rTowerRoot, Form rect, double dx, double dy, FILE *arqSvgQ);
+void treatTRNS_rTower(FILE *arqTxt, Tree rTowers, Node node, Form rect, double dx, double dy, FILE *arqSvgQ);
 
 /*Retorna a distancia armazenada em uma na estrutura*/
 double getDist(Dist distAux);

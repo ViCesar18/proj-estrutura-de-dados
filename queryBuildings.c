@@ -13,6 +13,7 @@ void treatDQ_Util(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, char *met
         if(quadInsideCirc(block, circle, "L1")){
             fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
             removeNode(blocks, block);
+            destroyBlock(block);
         }
     }
     else if(!strcmp(metric, "L2")){
@@ -25,6 +26,7 @@ void treatDQ_Util(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, char *met
         if(quadInsideCirc(block, circle, "L2")){
             fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
             removeNode(blocks, block);
+            destroyBlock(block);
         }
     }
 }
@@ -44,82 +46,80 @@ void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, char metric[],
     treatDQ_Util(arqTxt, arqSvgQ, blocks, node, metric, circle);
 }
 
-/*void treatCBQ(FILE *arqTxt, Tree blockRoot, Form circle, char cstrk[]){
-    Block block;
+void treatCBQ(FILE *arqTxt, Tree blocks, Node node, Form circle, char *cstrk){
+    Block block = getElement(blocks, node);
     
-    fprintf(arqTxt, "cbq %lf %lf %lf %s\n", getFormX(circle), getFormY(circle), getFormR(circle), cstrk);
+    if(node == getNil(blocks)) return;
 
-    block = getElement(blockRoot);
+    treatCBQ(arqTxt, blocks, getLeft(blocks, node), circle, cstrk);
+
     if(quadInsideCirc(block, circle, "L2")){
         setBlockStrokeColor(block, cstrk);
         fprintf(arqTxt, "\tCor da borda da quadra alterada: %s\n", getBlockCep(block));
     }
-    
-    if(getLeft(blockRoot) != NULL)
-        treatCBQ(arqTxt, getLeft(blockRoot), circle, cstrk);
-    if(getRight(blockRoot) != NULL)
-        treatCBQ(arqTxt, getLeft(blockRoot), circle, cstrk);
+
+    treatCBQ(arqTxt, blocks, getRight(blocks, node), circle, cstrk);
 }
 
-void treatTRNS_block(FILE *arqTxt, Tree blockRoot, Form rect, double dx, double dy, FILE *arqSvgQ){
-    Block block;
+void treatTRNS_block(FILE *arqTxt, Tree blocks, Node node, Form rect, double dx, double dy, FILE *arqSvgQ){
+    Block block = getElement(blocks, node);
 
-    block = getElement(blockRoot);
+    if(node == getNil(blocks)) return;
+
+    treatTRNS_block(arqTxt, blocks, getLeft(blocks, node), rect, dx, dy, arqSvgQ);
+
     if(quadInsideRect(block, rect)){
         setBlockX(block, getBlockX(block) + dx);
         setBlockY(block, getBlockY(block) + dy);
     }
 
-    if(getLeft(blockRoot) != NULL)
-        treatTRNS_block(arqTxt, getLeft(blockRoot), rect, dx, dy, arqSvgQ);
-    if(getRight(blockRoot) != NULL)
-        treatTRNS_block(arqTxt, getRight(blockRoot), rect, dx, dy, arqSvgQ);
+    treatTRNS_block(arqTxt, blocks, getRight(blocks, node), rect, dx, dy, arqSvgQ);
 }
 
-void treatTRNS_hydrant(FILE *arqTxt, Tree hydrantRoot, Form rect, double dx, double dy, FILE *arqSvgQ){
-    Hydrant hydrant;
+void treatTRNS_hydrant(FILE *arqTxt, Tree hydrants, Node node, Form rect, double dx, double dy, FILE *arqSvgQ){
+    Hydrant hydrant = getElement(hydrants, node);
 
-    hydrant = getElement(hydrantRoot);
+    if(node == getNil(hydrants)) return;
+
+    treatTRNS_hydrant(arqTxt, hydrants, getLeft(hydrants, node), rect, dx, dy, arqSvgQ);
+
     if(pointInsideFigure(getHydrantX(hydrant), getHydrantY(hydrant), rect, "r", "L2")){
         setHydrantX(hydrant, getHydrantX(hydrant) + dx);
         setHydrantY(hydrant, getHydrantY(hydrant) + dy);
     }
 
-    if(getLeft(hydrantRoot) != NULL)
-        treatTRNS_hydrant(arqTxt, getLeft(hydrantRoot), rect, dx, dy, arqSvgQ);
-    if(getRight(hydrantRoot) != NULL)
-        treatTRNS_hydrant(arqTxt, getRight(hydrantRoot), rect, dx, dy, arqSvgQ);
+    treatTRNS_hydrant(arqTxt, hydrants, getRight(hydrants, node), rect, dx, dy, arqSvgQ);
 }
 
-void treatTRNS_tLight(FILE *arqTxt, Tree tLightRoot, Form rect, double dx, double dy, FILE *arqSvgQ){
-    TrafficLight tLight;
+void treatTRNS_tLight(FILE *arqTxt, Tree tLights, Node node, Form rect, double dx, double dy, FILE *arqSvgQ){
+    TrafficLight tLight = getElement(tLights, node);
 
-    tLight = getElement(tLightRoot);
+    if(node == getNil(tLights)) return;
+
+    treatTRNS_tLight(arqTxt, tLights, getLeft(tLights, node), rect, dx, dy, arqSvgQ);
+
     if(pointInsideFigure(getHydrantX(tLight), getHydrantY(tLight), rect, "r", "L2")){
         setHydrantX(tLight, getTrafficLightX(tLight) + dx);
         setHydrantY(tLight, getTrafficLightY(tLight) + dy);
     }
 
-    if(getLeft(tLightRoot) != NULL)
-        treatTRNS_tLight(arqTxt, getLeft(tLightRoot), rect, dx, dy, arqSvgQ);
-    if(getRight(tLightRoot) != NULL)
-        treatTRNS_tLight(arqTxt, getRight(tLightRoot), rect, dx, dy, arqSvgQ);
+    treatTRNS_tLight(arqTxt, tLights, getRight(tLights, node), rect, dx, dy, arqSvgQ);
 }
 
-void treatTRNS_rTower(FILE *arqTxt, Tree rTowerRoot, Form rect, double dx, double dy, FILE *arqSvgQ){
-    RadioTower rTower;
+void treatTRNS_rTower(FILE *arqTxt, Tree rTowers, Node node, Form rect, double dx, double dy, FILE *arqSvgQ){
+    RadioTower rTower = getElement(rTowers, node);
 
-    rTower = getElement(rTowerRoot);
+    if(node == getNil(rTowers)) return;
+
+    treatTRNS_rTower(arqTxt, rTowers, getLeft(rTowers, node), rect, dx, dy, arqSvgQ);
+
     if(pointInsideFigure(getHydrantX(rTower), getHydrantY(rTower), rect, "r", "L2")){
         setHydrantX(rTower, getRadioTowerX(rTower) + dx);
         setHydrantY(rTower, getRadioTowerY(rTower) + dy);
     }
 
-    if(getLeft(rTowerRoot) != NULL)
-        treatTRNS_rTower(arqTxt, getLeft(rTowerRoot), rect, dx, dy, arqSvgQ);
-    if(getRight(rTowerRoot) != NULL)
-        treatTRNS_rTower(arqTxt, getRight(rTowerRoot), rect, dx, dy, arqSvgQ);
-}*/
+    treatTRNS_rTower(arqTxt, rTowers, getRight(rTowers, node), rect, dx, dy, arqSvgQ);
+}
 
 typedef struct stDist{
     Element *element;

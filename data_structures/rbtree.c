@@ -373,8 +373,7 @@ void removeNode(Tree t, Element element){
 		return;
 
 	fixRemove(tree, node);
-
-	free(node->element);
+	
 	free(node);
 }
 

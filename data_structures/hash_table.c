@@ -64,11 +64,10 @@ bool insertHashTable(HashTable h, char *key, Element element){
 bool removeHashTable(HashTable h, char *key){
 	HashTableImp hash = (HashTableImp) h;
 
-	int position = hashFunction(key) % hash->size;
+	unsigned long long position = hashFunction(key) % hash->size;
 	ListNodeImp previousNode = NULL;
 	ListNodeImp currentNode = hash->list[position];
-
-	while(currentNode != NULL && strcmp(currentNode->key, key) != 0){
+	while(currentNode->next != NULL && strcmp(currentNode->key, key) != 0){
 		previousNode = currentNode;
 		currentNode = currentNode->next;
 	}
@@ -82,8 +81,7 @@ bool removeHashTable(HashTable h, char *key){
 	else{
 		previousNode->next = currentNode->next;
 	}
-
-	free(currentNode->element);
+	
 	free(currentNode);
 	return true;
 }
