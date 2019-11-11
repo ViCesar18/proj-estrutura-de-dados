@@ -5,13 +5,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "list.h"
-#include "./Objetos/person.h"
-#include "./Objetos/resident.h"
+#include "./objects/person.h"
+#include "./objects/resident.h"
+#include "data_structures/hash_table.h"
 
-void printResidentData (char cpf[], List residents, List persons, FILE* arq);
-void treatM (FILE *arqTxt, List persons, List residents, char cep[]);
-void treatMud (FILE *arqTxt, List persons, List residents, char cpf[], char cep[], char face[], int num, char compl[]);
+void treatM (FILE *arqTxt, HashTable persons, HashTable residents, char cep[]);
+
+void printResidentData(char *cpf, HashTable residents, FILE *arqTxt);
+
+void treatMud (FILE *arqTxt, HashTable residents, char cpf[], char cep[], char face[], int num, char compl[]);
 
     
 #endif

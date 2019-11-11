@@ -22,13 +22,13 @@ char* getPersonCpf (Person p){
     return person->cpf;
 }
 
-char* getPersonNome (Person p){ 
+char* getPersonName (Person p){ 
     PersonImp person = (PersonImp) p;
 
     return person->nome;
 }
 
-char* getPersonSobrenome (Person p){ 
+char* getPersonLastName (Person p){ 
     PersonImp person = (PersonImp) p;
 
     return person->sobrenome;
@@ -46,3 +46,7 @@ char* getPersonNascimento (Person p){
     return person->nascimento;
 }
 
+void destroyPerson(Person p){
+    
+    free(p);
+}

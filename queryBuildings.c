@@ -256,11 +256,11 @@ void treatFH(FILE *arqTxt, FILE *arqSvg, Tree hydrants, int k, double x, double 
     if(k < 0){
         k = -k;
         min_heap_sort((void *)hydrantDists, nHydrants - 1, k);
-        fprintf(arqTxt, "Hidrantes mais próximos do endeço:\n");
+        fprintf(arqTxt, "Hidrantes mais próximos do endereço:\n");
     }
     else if(k > 0){
         max_heap_sort((void *)hydrantDists, nHydrants - 1, k);
-        fprintf(arqTxt, "Hidrantes mais distantes do endeço:\n");
+        fprintf(arqTxt, "Hidrantes mais distantes do endereço:\n");
     }
     
     reverseVector((void *)hydrantDists, nHydrants - 1);

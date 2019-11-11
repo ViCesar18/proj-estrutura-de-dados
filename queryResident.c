@@ -1,54 +1,78 @@
 #include"queryResident.h"
 
-void printResidentData (char cpf[], List residents, List persons, FILE* arq){
-    Resident resident;
-    Person person;
+void treatM (FILE *arqTxt, HashTable persons, HashTable residents, char cep[]){
 
-    for (int i = getFirst (residents); i != getNulo(); i = getNext (residents, i)){
-        resident = getElementByIndex (residents, i);
-        char* cpfResident = getResidentCpf (resident);
+    fprintf (arqTxt, "m? %s\nMoradores do CEP fornecido: \n", cep);
 
-        for (int i = getFirst (persons); i != getNulo(); i = getNext (persons, i)){
-            person = getElementByIndex (persons, i);
-            char* cpfPerson = getPersonCpf (person);
+    for(int i = 0; i < getHashTableSize(residents); i++){
+        ListNode node = getHashNode(residents, i);
+        while(node != NULL){
+            Resident resident = getHashNodeElement(node);
+            char *cepResident = getResidentCep(resident);
 
-            if (strcmp (cpfPerson, cpfResident) == 0) break;
+            if(!strcmp(cepResident, cep)){
+                Person person = getResidentPerson(resident);
+                fprintf (arqTxt, "-%s %s:\n\tCPF: %s\n\tSexo: %s\n\tNascimento: %s\n\tCEP: %s, Face: %s, Número: %d, Complemento: %s\n", getPersonName (person), getPersonLastName(person), getPersonCpf (person), getPersonSexo (person), getPersonNascimento(person), getResidentCep (resident), getResidentFace(resident), getResidentNum (resident), getResidentCompl (resident));
+            }
+            
+            node = getHashNodeNext(node);
         }
-
-        if (strcmp(cpf, getResidentCpf (resident)) == 0)
-            fprintf (arq, "-%s %s:\n\tCPF: %s\n\tSexo: %s\n\tNascimento: %s\n\tCEP: %s, Face: %s, Numero: %d, Complemento: %s\n", getPersonNome (person), getPersonSobrenome(person), getPersonCpf (person), getPersonSexo (person), getPersonNascimento(person), getResidentCep (resident), getResidentFace(resident), getResidentNum (resident), getResidentCompl (resident));
     }
-}
 
-void treatM (FILE *arqTxt, List persons, List residents, char cep[]){
-    Resident resident;
-    Person person;
-    fprintf (arqTxt, "m? %s\nMoradores do cep fornecido: \n", cep);
-
-    for (int i = getFirst (residents); i != getNulo(); i = getNext (residents, i)){
-        resident = getElementByIndex (residents, i);
-        char* cepResident = getResidentCep (resident);
-
-        if (strcmp (cepResident, cep) == 0)
-            printResidentData (getResidentCpf (resident), residents, persons, arqTxt);
-    }
     fprintf (arqTxt,"\n");
 }
 
-void treatMud (FILE *arqTxt, List persons, List residents, char cpf[], char cep[], char face[], int num, char compl[]){
-    Resident resident;
+void printResidentData(char *cpf, HashTable residents, FILE *arqTxt){
+    bool found = false;
 
-    for (int i = getFirst (residents); i != getNulo (); i = getNext (residents, i)){
-        resident = getElementByIndex (residents, i);
-        char* cpfResident = getResidentCpf (resident);
+    for(int i = 0; i < getHashTableSize(residents); i++){
+        ListNode node = getHashNode(residents, i);
+        while(node != NULL){
+            Resident resident = getHashNodeElement(node);
 
-        if (strcmp (cpfResident, cpf) == 0) break;
+            if(!strcmp(cpf, getResidentCpf(resident))){
+                found = true;
+                Person person = getResidentPerson(resident);
+                fprintf (arqTxt, "-%s %s:\n\tCPF: %s\n\tSexo: %s\n\tNascimento: %s\n\tCEP: %s, Face: %s, Número: %d, Complemento: %s\n", getPersonName (person), getPersonLastName(person), getPersonCpf (person), getPersonSexo (person), getPersonNascimento(person), getResidentCep (resident), getResidentFace(resident), getResidentNum (resident), getResidentCompl (resident));
+                break;
+            }
+
+            node = getHashNodeNext(node);
+        }
+
+        if(found) break;
     }
 
-    fprintf (arqTxt, "Dados antigos: \n");
-    printResidentData (cpf, residents, persons, arqTxt);
-    changeResidentAdress (resident, cep, face, num, compl);
-    fprintf (arqTxt, "Dados novos: \n");
-    printResidentData (cpf, residents, persons, arqTxt);
+    if(!found)
+        fprintf(arqTxt, "-A pessoa do CPF indicado não é um morador ou não existe!");
 }
 
+void treatMud (FILE *arqTxt, HashTable residents, char cpf[], char cep[], char face[], int num, char compl[]){
+    Resident resident;
+
+    bool found = false;
+    for(int i = 0; i < getHashTableSize(residents); i++){
+        ListNode node = getHashNode(residents, i);
+        while(node != NULL){
+            resident = getHashNodeElement(node);
+
+            if(!strcmp(cpf, getResidentCpf(resident))){
+                found = true;
+                break;
+            }
+
+            node = getHashNodeNext(node);
+        }
+        
+        if(found) break;
+    }
+
+    Person person = getResidentPerson(resident);
+
+    fprintf (arqTxt, "-%s %s:\n\tCPF: %s\n\tSexo: %s\n\tNascimento: %s\n", getPersonName (person), getPersonLastName(person), getPersonCpf (person), getPersonSexo (person), getPersonNascimento(person));
+    fprintf (arqTxt, "\tEndereço antigo:\n");
+    fprintf(arqTxt, "\t-CEP: %s, Face: %s, Número: %d, Complemento: %s\n", getResidentCep(resident), getResidentFace(resident), getResidentNum(resident), getResidentCompl(resident));
+    changeResidentAdress (resident, cep, face, num, compl);
+    fprintf (arqTxt, "\tEndereço novo: \n");
+    fprintf(arqTxt, "\t-CEP: %s, Face: %s, Número: %d, Complemento: %s\n", getResidentCep(resident), getResidentFace(resident), getResidentNum(resident), getResidentCompl(resident));
+}

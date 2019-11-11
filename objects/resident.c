@@ -1,18 +1,37 @@
 #include "resident.h"
 
 typedef struct stResident {
-    char cpf[32], cep[32], face[2], compl[16];
+    char cep[32], face[2], compl[16];
     int num;
+    Person person;
 } *ResidentImp;
 
-Resident createResident (char cpf[], char cep[], char face[], char compl[], int num){
+Resident createResident (char cpf[], char cep[], char face[], char compl[], int num, HashTable persons){
     ResidentImp rResident = (ResidentImp) malloc (sizeof (struct stResident));
 
-    strcpy (rResident->cpf, cpf);
     strcpy (rResident->cep, cep);
     strcpy (rResident->face, face);
     strcpy (rResident->compl, compl);
     rResident->num = num;
+
+    Person person = NULL;
+    bool found = false;
+    for(int i = 0; i < getHashTableSize(persons); i++){
+        ListNode node = getHashNode(persons, i);
+        while(node != NULL){
+            person = getHashNodeElement(node);
+            if(!strcmp(getPersonCpf(person), cpf)){
+                found = true;
+                break;
+            }
+
+            node = getHashNodeNext(node);
+        }
+
+        if(found) break;
+    }
+
+    rResident->person = person;
 
     return rResident;
 }
@@ -20,7 +39,7 @@ Resident createResident (char cpf[], char cep[], char face[], char compl[], int 
 char* getResidentCpf (Resident r){
     ResidentImp resident = (ResidentImp) r;
 
-    return resident->cpf;
+    return getPersonCpf(resident->person);
 }
 char* getResidentCep (Resident r){
     ResidentImp resident = (ResidentImp) r;
@@ -73,4 +92,15 @@ void changeResidentAdress (Resident r, char cep[], char face[], int num, char co
     setResidentFace (r, face);
     setResidentNum (r, num);
     setResidentCompl (r, compl);
+}
+
+Person getResidentPerson(Resident r){
+    ResidentImp resident = (ResidentImp) r;
+
+    return resident->person;
+}
+
+void destroyResident(Resident r){
+    
+    free(r);
 }

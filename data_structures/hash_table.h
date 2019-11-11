@@ -7,7 +7,16 @@
 #include <stdbool.h>
 
 typedef void *HashTable;
+typedef void *ListNode;
 typedef void *Element;
+
+int getHashTableSize(HashTable h);
+
+ListNode getHashNode(HashTable h, int i);
+
+ListNode getHashNodeNext(ListNode n);
+
+Element getHashNodeElement(ListNode n);
 
 /*Cria e retorna uma tabela de espalhamento*/
 HashTable createHashTable(int size, void (*destroy)(Element));

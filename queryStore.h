@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "list.h"
-#include "./Objetos/store.h"
-#include "./Objetos/person.h"
+#include "./objects/store.h"
+#include "./objects/person.h"
+#include "./objects/storeType.h"
+#include "data_structures/hash_table.h"
 
-void printStoreData (char cnpj[], List stores, List persons, List storeTypes, FILE* arq);
-
+void printStoreData (char cnpj[], HashTable stores, FILE* arq);
 
 #endif

@@ -15,6 +15,10 @@
 #include "./objects/building.h"
 #include "./objects/wall.h"
 #include "./data_structures/hash_table.h"
+#include "objects/store.h"
+#include "objects/person.h"
+#include "objects/resident.h"
+#include "objects/storeType.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a entrada/leitura de dados*/
 
@@ -62,19 +66,14 @@ void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable);
 
 /*Le as informacoes de muro do arquivo .geo e armazena na lista walls*/
 void scanWall(FILE *arqIn, Tree walls);
-void scanBuilding(FILE *arqIn, List buildings);
 
-/*Le as informacoes de muro do arquivo .geo e armazena na lista walls*/
-/*void scanWall(FILE *arqIn, List walls);
+void scanStoreType (FILE *arqEst, HashTable storeTypes);
 
-void scanStoreType (FILE *arqEst, List storeTypes);
+void scanStore (FILE *arqEst, HashTable stores, HashTable storeTypes, HashTable persons);
 
-void scanStore (FILE *arqEst, List stores);
+void scanPerson (FILE *arqPes, HashTable persons);
 
-void scanPerson (FILE *arqPes, List persons);
-
-void scanResident (FILE *arqPes, List residents);*/
-
+void scanResident (FILE *arqPes, HashTable residents, HashTable persons);
 
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
 void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2);

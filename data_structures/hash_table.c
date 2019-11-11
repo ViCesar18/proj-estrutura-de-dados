@@ -12,6 +12,30 @@ typedef struct HashTableSt{
 	void (*destroy)(Element);
 } *HashTableImp;
 
+int getHashTableSize(HashTable h){
+	HashTableImp hash = (HashTableImp) h;
+
+	return hash->size;
+}
+
+ListNode getHashNode(HashTable h, int i){
+	HashTableImp hash = (HashTableImp) h;
+
+	return hash->list[i];
+}
+
+ListNode getHashNodeNext(ListNode n){
+	ListNodeImp node = (ListNodeImp) n;
+
+	return node->next;
+}
+
+Element getHashNodeElement(ListNode n){
+	ListNodeImp node = (ListNodeImp) n;
+
+	return node->element;
+}
+
 HashTable createHashTable(int size, void (*destroy)(Element)){
 	HashTableImp hash = (HashTableImp) malloc(sizeof(struct HashTableSt));
 	hash->size = size;

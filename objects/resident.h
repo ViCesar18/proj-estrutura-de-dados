@@ -4,9 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include "person.h"
+#include "../data_structures/hash_table.h"
 
 typedef void *Resident;
-Resident createResident (char cpf[], char cep[], char face[], char compl[], int num);
+Resident createResident (char cpf[], char cep[], char face[], char compl[], int num, HashTable persons);
 char* getResidentCep (Resident r);
 char* getResidentCpf (Resident r);
 char* getResidentFace (Resident r);
@@ -18,8 +21,8 @@ void setResidentFace (Resident r, char face[]);
 void setResidentNum (Resident r, int num);
 void setResidentCompl (Resident r, char compl[]);
 void changeResidentAdress (Resident r, char cep[], char face[], int num, char compl[]);
-
-
+Person getResidentPerson(Resident r);
+void destroyResident(Resident r);
 
 
 #endif

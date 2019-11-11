@@ -220,17 +220,16 @@ void changeThickness(FILE *arqIn, char cw[], char rw[]){
     fscanf(arqIn, "%s", rw);
 }
 
-/*void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable){*/
-void scanStoreType (FILE *arqEst, List storeTypes){
+void scanStoreType (FILE *arqEst, HashTable storeTypes){
     char codt[32], descricao[128];
     fscanf (arqEst, "%s", codt);
     fscanf (arqEst, "%s", descricao);
 
-    Store store = createCodtStore (codt, descricao);
-    insertElement (storeTypes, store, "codtEc");
+    StoreType storeType = createStoreType (codt, descricao);
+    insertHashTable(storeTypes, getStoreTypeCodt(storeType), storeType);
 }
 
-void scanPerson (FILE *arqPes, List persons){
+void scanPerson (FILE *arqPes, HashTable persons){
     char cpf[32], nome[32], sobrenome[32], sexo[2], nascimento[16];
     fscanf (arqPes, "%s", cpf);
     fscanf (arqPes, "%s", nome);
@@ -239,10 +238,10 @@ void scanPerson (FILE *arqPes, List persons){
     fscanf (arqPes, "%s", nascimento);
 
     Person person = createPerson (cpf, nome, sobrenome, sexo, nascimento);
-    insertElement (persons, person, "pp");
+    insertHashTable(persons, getPersonCpf(person), person);
 }
 
-void scanResident (FILE *arqPes, List residents){
+void scanResident (FILE *arqPes, HashTable residents, HashTable persons){
     char cpf[32], cep[32], face[2], compl[16];
     int num;
     fscanf (arqPes, "%s", cpf);
@@ -251,11 +250,11 @@ void scanResident (FILE *arqPes, List residents){
     fscanf (arqPes, "%d", &num);
     fscanf (arqPes, "%s", compl);
 
-    Resident resident = createResident (cpf, cep, face, compl, num);
-    insertElement (residents, resident, "pm");
+    Resident resident = createResident (cpf, cep, face, compl, num, persons);
+    insertHashTable(residents, getResidentCpf(resident), resident);
 }
 
-void scanStore (FILE *arqEst, List stores){
+void scanStore (FILE *arqEst, HashTable stores, HashTable storeTypes, HashTable persons){
     char cnpj[32], cpf [32], codt [32], cep[32], face[2], nome[32];
     int num;
 
@@ -267,11 +266,11 @@ void scanStore (FILE *arqEst, List stores){
     fscanf (arqEst, "%d", &num);
     fscanf (arqEst, "%s", nome);
 
-    Store store = createStore (cnpj, cpf, codt, cep, face, num, nome);
-    insertElement (stores, store, "ec");
+    Store store = createStore (cnpj, cpf, codt, cep, face, num, nome, storeTypes, persons);
+    insertHashTable(stores, getStoreCnpj(store), store);
 }
 
-void scanBuilding(FILE *arqIn, List buildings){
+void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable){
     char cep[32], face[2];
     int num;
     double faceSize, depth, margin;
