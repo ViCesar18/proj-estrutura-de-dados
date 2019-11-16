@@ -3,9 +3,9 @@
 void createOutputFileName(char **nameOut, char nameIn[]){
     int i = 0;
 
-    *nameOut = (char *)malloc((strlen(nameIn) + 1) * sizeof(char));
+    *nameOut = (char *)malloc((strlen(nameIn) + 5) * sizeof(char));
 
-    while(nameIn[i] != '.'){
+    while(nameIn[i] != '.' && nameIn[i] != '\0'){
         (*nameOut)[i] = nameIn[i];
         i++;
     }

@@ -18,6 +18,8 @@ int comparatorHydrant(Hydrant h1, Hydrant h2);
 /*Getters e setters para o hidrante*/
 char *getHydrantId(Hydrant h);
 
+char *getHydrantInformation(Hydrant h, char *info);
+
 double getHydrantX(Hydrant h);
 
 double getHydrantY(Hydrant h);

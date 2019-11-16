@@ -18,6 +18,8 @@ int comparatorBlock(Block b1, Block b2);
 /*Getters e setters para a quadra*/
 char *getBlockCep(Block b);
 
+void getBlockInformation(Block b, char *info, char *posic);
+
 double getBlockX(Block b);
 
 double getBlockY(Block b);

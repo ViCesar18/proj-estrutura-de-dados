@@ -255,7 +255,6 @@ bool checkLeftTurn(Point a, Point b, Point c){
 }
 
 bool checkSegmentsIntersection(Segment s1, Segment s2){
-
 	if(s1 == NULL || s2 == NULL) return false;
 	
 	Segment a = getVertexV(getSegmentV1(s1));

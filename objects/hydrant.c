@@ -37,6 +37,13 @@ char *getHydrantId(Hydrant h){
     return hydrant->id;
 }
 
+char *getHydrantInformation(Hydrant h, char *info){
+    HydrantImp hydrant = (HydrantImp) h;
+    sprintf(info, "%s\n(%.2lf, %.2lf)", hydrant->id, hydrant->x, hydrant->y);
+
+    return info;
+}
+
 double getHydrantX(Hydrant h){
     HydrantImp hydrant = (HydrantImp) h;
 

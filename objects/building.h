@@ -21,6 +21,8 @@ int comparatorBuilding(Building b1, Building b2);
 /*Getters e setters para a quadra*/
 char *getBuildingCep(Building b);
 
+char *getBuildingInformation(Building b, char *info);
+
 char *getBuildingFace(Building b);
 
 int getBuildingNum(Building b);

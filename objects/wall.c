@@ -1,7 +1,7 @@
 #include "wall.h"
 
 typedef struct stWall{
-    double x1, y1, x2, y2;
+    double x1, y1, x2, y2, size;
 }*WallImp;
 
 Wall createWall(double x1, double y1, double x2, double y2){
@@ -11,6 +11,7 @@ Wall createWall(double x1, double y1, double x2, double y2){
     wall->y1 = y1;
     wall->x2 = x2;
     wall->y2 = y2;
+    wall->size = distEuclid(x1, y1, x2, y2);
 
     return wall;
 }
@@ -26,6 +27,19 @@ int comparatorWall(Wall w1, Wall w2){
         else if(wall1->y1 > wall2->y1) return 1;
         else return 0;
     }
+}
+
+double getWallSize(Wall w){
+    WallImp wall = (WallImp) w;
+
+    return wall->size;
+}
+
+char *getWallInformation(Wall w, char *size){
+    WallImp wall = (WallImp) w;
+    sprintf(size, "%lf\n(%.2lf, %.2lf)", wall->size, wall->x1, wall->y1);
+
+    return size;
 }
 
 double getWallX1(Wall w){

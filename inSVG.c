@@ -416,3 +416,8 @@ void scanMud (FILE *arqQuery, char cpf[], char cep[], char face[], int *num, cha
     fscanf (arqQuery, "%d", num);
     fscanf (arqQuery, "%s", compl);
 }
+
+void scanDMPRBT(FILE *arqQuery, char *type, char *fileName){
+    fscanf(arqQuery, "%s", type);
+    fscanf(arqQuery, "%s", fileName);
+}

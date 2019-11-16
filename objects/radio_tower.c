@@ -37,6 +37,13 @@ char *getRadioTowerId(RadioTower r){
     return rTower->id;
 }
 
+char *getRadioTowerInformation(RadioTower r, char *info){
+    RadioTowerImp rTower = (RadioTowerImp) r;
+    sprintf(info, "%s\n(%.2lf, %.2lf)", rTower->id, rTower->x, rTower->y);
+
+    return info;
+}
+
 double getRadioTowerX(RadioTower r){
     RadioTowerImp rTower = (RadioTowerImp) r;
 

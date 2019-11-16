@@ -427,34 +427,51 @@ void printTreeElements(Tree t, Node n, FILE *arqSVG, void (*printElement)(FILE*,
 
 }
 
-int Y_PRINT_ARVORE = 15;
+int X_PRINT_ARVORE = 20;
 
-void printTreeInSVG_util(TreeImp tree, Node n, int x, FILE* svg, char *(getId)(Element)){
+void printTreeInSVG_util(TreeImp tree, Node n, int y, FILE* svg, void (getId)(Element, char*, char*)){
 	NodeImp node = (NodeImp) n;
 
 	if(node == tree->nil) return;
 
-	x+=20;
-	printTreeInSVG_util(tree, node->left, x, svg, getId);
+	y += 20;
+	char info[32], posic[32];
 
-	fprintf(svg, "<circle cx=\"%d\" cy=\"%d\" r=\"5\" stroke=\"black\" fill=\"%s\" stroke-width=\"2\" />\n", 
-            Y_PRINT_ARVORE,
-            x,
+	printTreeInSVG_util(tree, node->left, y, svg, getId);
+
+	getId(node->element, info, posic);
+
+	if(node == node->parent->left)
+		fprintf(svg, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"black\"/>\n", X_PRINT_ARVORE, y, X_PRINT_ARVORE + 20, y - 20);
+	else if(node->right != tree->nil)
+		fprintf(svg, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"black\"/>\n", X_PRINT_ARVORE, y, X_PRINT_ARVORE + 20, y + 20);
+
+	fprintf(svg, "<circle cx=\"%d\" cy=\"%d\" r=\"8\" fill=\"%s\" stroke-width=\"2\"/>\n", 
+            X_PRINT_ARVORE,
+            y,
             node->color == RED ? "red" : "black");
-	fprintf(svg, "<text x=\"%d\" y=\"%d\" fill=\"white\" font-size=\"5\">%s</text>",
-        Y_PRINT_ARVORE, 
-        x, 
-        getId(node->element));
-	Y_PRINT_ARVORE+=13;
+	fprintf(svg, "<text x=\"%d\" y=\"%d\" fill=\"darkblue\" font-size=\"5\">"
+	"<tspan>%s</tspan>"
+    "<tspan x=\"%d\" dy=\"1.2em\">%s</tspan>"
+	"</text>\n",
+        X_PRINT_ARVORE - 10, 
+        y, 
+        info,
+		X_PRINT_ARVORE - 10,
+		posic);
 
-	printTreeInSVG_util(tree, node->right, x, svg, getId);
+	X_PRINT_ARVORE += 20;
+
+	printTreeInSVG_util(tree, node->right, y, svg, getId);
 }
 
-void printTreeInSVG(Tree t, FILE* svg, char *(getId)(Element)){
+void printTreeInSVG(Tree t, FILE* svg, void (getId)(Element, char*, char*)){
 	TreeImp tree = (TreeImp) t;
 	NodeImp node = (NodeImp) tree->root;
 
-	fprintf(svg, "<svg width=\"1000\" height=\"1000\">\n");
+	fprintf(svg, "<svg xmlns=\"http://www.w3.org/2000/svg\" weight=\"10000\" height=\"10000\">\n");
 	printTreeInSVG_util(tree, node, 0, svg, getId);
 	fprintf(svg, "</svg>\n");
+
+	X_PRINT_ARVORE = 20;
 }

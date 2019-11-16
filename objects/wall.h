@@ -17,6 +17,12 @@ Wall createWall(double x1, double y1, double x2, double y2);
 int comparatorWall(Wall w1, Wall w2);
 
 /*Getters e setters para o muro*/
+double getWallSize(Wall w);
+
+char *getTrafficLightInformation(TrafficLight s, char *info);
+
+char *getWallInformation(Wall w, char* size);
+
 double getWallX1(Wall w);
 
 double getWallY1(Wall w);

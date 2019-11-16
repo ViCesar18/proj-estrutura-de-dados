@@ -263,7 +263,7 @@ void bombAreaRadiation(double x, double y, int capacity, Tree walls, Tree buildi
     index = 0;
 
     Vertex *vertices = (Vertex *) malloc(capacityVertices * sizeof(Vertex));
-
+    int a = 0;
     for(int i = 0; i < segmentsSize; i++){
         if(checkSegmentsIntersection(startSegment, segments[i])){
             capacityVertices += 2;

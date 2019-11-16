@@ -39,6 +39,12 @@ char *getBlockCep(Block b){
     return block->cep;
 }
 
+void getBlockInformation(Block b, char *info, char *posic){
+    BlockImp block = (BlockImp) b;
+    sprintf(info, "%s", block->cep);
+    sprintf(posic, "(%.2lf, %.2lf)", block->x, block->y);
+}
+
 double getBlockX(Block b){
     BlockImp block = (BlockImp) b;
 

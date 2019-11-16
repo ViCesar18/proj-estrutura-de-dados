@@ -50,6 +50,6 @@ void printTreeElements(Tree t, Node n, FILE *arqSVG, void (*printElement)(FILE*,
 //void printTreeInSVG_util(TreeImp tree, Node n, int x, FILE* svg, char *(getId)(Element));
 
 /*Desenha a arvore t no arquivo SVG*/
-void printTreeInSVG(Tree t, FILE* svg, char *(getId)(Element));
+void printTreeInSVG(Tree t, FILE* svg, void (getId)(Element, char*, char*));
 
 #endif

@@ -113,7 +113,7 @@ void scanDM (FILE *arqQuery, char cpf[]);
 void scanDE (FILE *arqQuery, char cnpj[]);
 void scanMud (FILE *arqQuery, char cpf[], char cep[], char face[], int *num, char compl[]);
 
-
+void scanDMPRBT(FILE *arqQuery, char *type, char *fileName);
 
 
 
