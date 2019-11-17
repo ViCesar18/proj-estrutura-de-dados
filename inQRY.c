@@ -132,18 +132,18 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
             scanO(arqQuery, id1, id2);
             element1 = searchHashTable(formsTable, id1);
             element2 = searchHashTable(formsTable, id2);
-            treatO(arqText, arqSvgQ, element1, element2);
+            treatO(arqText, arqAux, element1, element2);
         }
         else if(!strcmp(command, "i?")){
             scanI(arqQuery, id1, &x, &y);
             element1 = searchHashTable(formsTable, id1);
-            treatI(arqText, arqSvgQ, element1, x, y);
+            treatI(arqText, arqAux, element1, x, y);
         }
         else if(!strcmp(command, "d?")){
             scanD(arqQuery, id1, id2);
             element1 = searchHashTable(formsTable, id1);
             element2 = searchHashTable(formsTable, id2);
-            treatD(arqText, arqSvgQ, element1, element2);
+            treatD(arqText, arqAux, element1, element2);
         }
         else if(!strcmp(command, "bb")){
             scanBB(arqQuery, sufixo, cor);
