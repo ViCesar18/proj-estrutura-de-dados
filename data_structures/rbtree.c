@@ -69,6 +69,15 @@ Node getRight(Tree t, Node n){
 	return node->right;
 }
 
+Node getParent(Tree t, Node n){
+	TreeImp tree = (TreeImp) t;
+	NodeImp node = (NodeImp) n;
+
+	if(node == tree->root) return tree->nil;
+
+	return node->parent;
+}
+
 int getSize(Tree t){
 	TreeImp tree = (TreeImp) t;
 
@@ -129,6 +138,12 @@ Node findNode(Tree t, Element element){
     }
 
     return NULL;
+}
+
+int getNodeColor(Node n){
+	NodeImp node = (NodeImp) n;
+
+	return node->color;
 }
 
 void fixInsert(TreeImp tree, NodeImp node){
