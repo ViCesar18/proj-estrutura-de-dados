@@ -5,12 +5,12 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
-#include "./objects/forms.h"
-#include "queryBuildings.h"
-#include "point.h"
-#include "segment.h"
-#include "./data_structures/rbtree.h"
-#include "./objects/block.h"
+#include "../geometry/forms.h"
+#include "../queryBuildings.h"
+#include "../geometry/point.h"
+#include "../geometry/segment.h"
+#include "../data_structures/rbtree.h"
+#include "../city_elements/block.h"
 
 /*Nesse header encontram-se todas as oprecoes utilizadas por outras funcoes em todo o resto do programa*/
 

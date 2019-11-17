@@ -1,6 +1,6 @@
 #Objetos
 *.o
-objects/*.o
+city_elements/*.o
 data_structs/*.o
 
 #Diretórios de Entrada e Saida

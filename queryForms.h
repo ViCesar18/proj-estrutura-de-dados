@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include "operations.h"
+#include "utils/operations.h"
 #include "outSVG.h"
-#include "./objects/forms.h"
+#include "./geometry/forms.h"
 #include "./data_structures/rbtree.h"
 
 /*Nesse header encontram-se todas as funcoes relacionadas aos comandos de formas do arquivo de consulta(.qry), aqui são feitas as verificacoes

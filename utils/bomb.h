@@ -3,9 +3,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "point.h"
-#include "vertex.h"
-#include "segment.h"
+#include "../geometry/point.h"
+#include "../geometry/vertex.h"
+#include "../geometry/segment.h"
 
 #define PI 3.14159265359
 

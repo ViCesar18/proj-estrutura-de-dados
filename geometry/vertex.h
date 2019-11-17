@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
-#include "operations.h"
+#include "../utils/operations.h"
 #include "point.h"
 #include "segment.h"
 

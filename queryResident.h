@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "./objects/person.h"
-#include "./objects/resident.h"
+#include "./city_elements/person.h"
+#include "./city_elements/resident.h"
 #include "data_structures/hash_table.h"
 
 void treatM (FILE *arqTxt, HashTable persons, HashTable residents, char cep[]);

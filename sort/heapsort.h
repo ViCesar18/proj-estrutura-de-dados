@@ -2,8 +2,8 @@
 #define HEAP_SORT_H
 
 #include <stdio.h>
-#include "operations.h"
-#include "queryBuildings.h"
+#include "../utils/operations.h"
+#include "../queryFire.h"
 
 typedef void *Dist;
 

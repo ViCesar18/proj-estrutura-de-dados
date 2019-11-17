@@ -7,18 +7,18 @@
 #include <stdbool.h>
 #include "outSVG.h"
 #include "./data_structures/rbtree.h"
-#include "./objects/forms.h"
-#include "./objects/block.h"
-#include "./objects/hydrant.h"
-#include "./objects/traffic_light.h"
-#include "./objects/radio_tower.h"
-#include "./objects/building.h"
-#include "./objects/wall.h"
+#include "./geometry/forms.h"
+#include "./city_elements/block.h"
+#include "./city_elements/hydrant.h"
+#include "./city_elements/traffic_light.h"
+#include "./city_elements/radio_tower.h"
+#include "./city_elements/building.h"
+#include "./city_elements/wall.h"
 #include "./data_structures/hash_table.h"
-#include "objects/store.h"
-#include "objects/person.h"
-#include "objects/resident.h"
-#include "objects/storeType.h"
+#include "city_elements/store.h"
+#include "city_elements/person.h"
+#include "city_elements/resident.h"
+#include "city_elements/storeType.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a entrada/leitura de dados*/
 
@@ -77,44 +77,5 @@ void scanResident (FILE *arqPes, HashTable residents, HashTable persons);
 
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
 void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2);
-
-/*Le os parametros de consulta do comando "o?"*/
-void scanO(FILE *arqQuery, char j[], char k[]);
-
-/*Le os parametros de consulta do comando "i?"*/
-void scanI(FILE *arqQuery, char j[], double *x, double *y);
-
-/*Le os parametros de consulta do comando "d?"*/
-void scanD(FILE *arqQuery, char j[], char k[]);
-
-/*Le os parametros de consulta do comando "bb"*/
-void scanBB(FILE *arqQuery, char suffix[], char color[]);
-
-/*Le os parametros de consulta do comando "dq"*/
-void scanDQ(FILE *arqQuery, char metric[], char id[], double *r);
-
-/*Le os parametros de consulta do comando "cbq" e retorna um circulo com os parametros passados*/
-Element scanCBQ(FILE *arqQuery, char cstrk[]);
-
-/*Le os parametros de consulta do comando "trns" e retorna um retangulo com os parametros passados*/
-Element scanTRNS(FILE *arqQuery, double *dx, double *dy);
-
-/*Le os parametros de consulta do comando "fi" e retorna um retangulo com os parametros passados*/
-void scanFI(FILE *arqQuery, double *x, double *y, int *n, double *r);
-
-/*Le os parametros de consulta do comando "fh" e "fs" e retorna um retangulo com os parametros passados*/
-void scanFHFS(FILE *arqQuery, int *k, char cep[], char face[], int *num);
-
-/*Le os parametros de consulta do comando "brl"*/
-void scanBRL(FILE *arqQuery, double *x, double *y);
-
-void scanM (FILE *arqQuery, char cep[]);
-void scanDM (FILE *arqQuery, char cpf[]);
-void scanDE (FILE *arqQuery, char cnpj[]);
-void scanMud (FILE *arqQuery, char cpf[], char cep[], char face[], int *num, char compl[]);
-
-void scanDMPRBT(FILE *arqQuery, char *type, char *fileName);
-
-
 
 #endif

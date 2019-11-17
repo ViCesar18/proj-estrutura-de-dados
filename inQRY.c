@@ -1,5 +1,112 @@
 #include "inQRY.h"
 
+void scanO(FILE *arqQuery, char j[], char k[]){
+
+    fscanf(arqQuery, "%s", j);
+    fscanf(arqQuery, "%s", k);
+}
+
+void scanI(FILE *arqQuery, char j[], double *x, double *y){
+
+    fscanf(arqQuery, "%s", j);
+    fscanf(arqQuery, "%lf", x);
+    fscanf(arqQuery, "%lf", y);
+}
+
+void scanD(FILE *arqQuery, char j[], char k[]){
+
+    fscanf(arqQuery, "%s", j);
+    fscanf(arqQuery, "%s", k);
+}
+
+void scanBB(FILE *arqQuery, char suffix[], char color[]){
+
+    fscanf(arqQuery, "%s", suffix);
+    fscanf(arqQuery, "%s", color);
+}
+
+void scanDQ(FILE *arqQuery, char metric[], char id[], double *r){
+
+    fscanf(arqQuery, "%s", metric);
+    fscanf(arqQuery, "%s", id);
+    fscanf(arqQuery, "%lf", r);
+}
+
+Element scanCBQ(FILE *arqQuery, char cstrk[]){
+    double x, y, r;
+
+    fscanf(arqQuery, "%lf", &x);
+    fscanf(arqQuery, "%lf", &y);
+    fscanf(arqQuery, "%lf", &r);
+    fscanf(arqQuery, "%s", cstrk);
+
+    Form circle = createCircle("0", x, y, r, "black", "none", "1");
+
+    return circle;
+}
+
+Element scanTRNS(FILE *arqQuery, double *dx, double *dy){
+    double x, y, w, h;
+
+    fscanf(arqQuery, "%lf", &x);
+    fscanf(arqQuery, "%lf", &y);
+    fscanf(arqQuery, "%lf", &w);
+    fscanf(arqQuery, "%lf", &h);
+    fscanf(arqQuery, "%lf", dx);
+    fscanf(arqQuery, "%lf", dy);
+
+    Form rect = createRect("0", x, y, w, h, "black", "none", 0, "1");
+
+    return rect;
+}
+
+void scanFI(FILE *arqQuery, double *x, double *y, int *n, double *r){
+
+    fscanf(arqQuery, "%lf", x);
+    fscanf(arqQuery, "%lf", y);
+    fscanf(arqQuery, "%d", n);
+    fscanf(arqQuery, "%lf", r);
+}
+
+void scanFHFS(FILE *arqQuery, int *k, char cep[], char face[], int *num){
+
+    fscanf(arqQuery, "%d", k);
+    fscanf(arqQuery, "%s", cep);
+    fscanf(arqQuery, "%s", face);
+    fscanf(arqQuery, "%d", num);
+}
+
+void scanBRL(FILE *arqQuery, double *x, double *y){
+
+    fscanf(arqQuery, "%lf", x);
+    fscanf(arqQuery, "%lf", y);
+}
+
+void scanM (FILE *arqQuery, char cep[]){
+    fscanf (arqQuery, "%s", cep);
+}
+
+void scanDM (FILE *arqQuery, char cpf[]){
+    fscanf (arqQuery, "%s", cpf);
+}
+
+void scanDE (FILE *arqQuery, char cnpj[]){
+    fscanf (arqQuery, "%s", cnpj);
+}
+
+void scanMud (FILE *arqQuery, char cpf[], char cep[], char face[], int *num, char compl[]){
+    fscanf (arqQuery, "%s", cpf);
+    fscanf (arqQuery, "%s", cep);
+    fscanf (arqQuery, "%s", face);
+    fscanf (arqQuery, "%d", num);
+    fscanf (arqQuery, "%s", compl);
+}
+
+void scanDMPRBT(FILE *arqQuery, char *type, char *fileName){
+    fscanf(arqQuery, "%s", type);
+    fscanf(arqQuery, "%s", fileName);
+}
+
 void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, char *nameInT, char *nameQueryT, char *pathOut, int nm, int np, 
                 Tree figures, Tree blocks, Tree hydrants, Tree tLights, Tree rTowers, Tree walls, Tree buildings, 
                 HashTable formsTable, HashTable blocksTable, HashTable hydrantsTable, HashTable tLightsTable, HashTable rTowersTable, 

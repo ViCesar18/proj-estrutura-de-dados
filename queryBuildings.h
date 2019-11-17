@@ -5,11 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "operations.h"
+#include "utils/operations.h"
 #include "outSVG.h"
-#include "./objects/forms.h"
+#include "./geometry/forms.h"
 #include "./data_structures/rbtree.h"
-#include "heapsort.h"
 #include "./data_structures/hash_table.h"
 
 /*Nesse header encontras-se todas as funcoes relacionadas aos comandos de construcoes e objetos urbanos do arquivo de consulta(.qry), 
@@ -36,20 +35,5 @@ void treatTRNS_tLight(FILE *arqTxt, Tree tLights, Node node, Form rect, double d
 
 /*Move todas as torres de radio que estão inteiramente dentro do retangulo em dx no eixo X e dy no eixo Y*/
 void treatTRNS_rTower(FILE *arqTxt, Tree rTowers, Node node, Form rect, double dx, double dy, FILE *arqSvgQ);
-
-/*Retorna a distancia armazenada em uma na estrutura*/
-double getDist(Dist distAux);
-
-/*Identifica os ns semaforos mais proximos e os hidrantes em um raio r do foco de incendio (x, y)*/
-void treatFI(FILE *arqSvg, FILE *arqTxt, double x, double y, int ns, double r, Tree tLights, Tree hydrants);
-
-/*Retorna o ponto de endereco (x, y) de um determinado predio*/
-void getAddress(char cep[], char face[], int num, double *x, double *y, HashTable blocksTable);
-
-/*Identifica os k hidrantes mais proximos ou mais distantes de um determinado ponto (x, y)*/
-void treatFH(FILE *arqTxt, FILE *arqSvg, Tree hydrants, int k, double x, double y);
-
-/*Identifica os k semaforos mais proximos de um determinado ponto (x, y)*/
-void treatFS(FILE *arqTxt, FILE *arqSvg, Tree hydrantRoot, int k, double x, double y);
 
 #endif

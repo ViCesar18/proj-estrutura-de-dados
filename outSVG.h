@@ -5,15 +5,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include "./data_structures/rbtree.h"
-#include "./objects/forms.h"
-#include "./objects/block.h"
-#include "./objects/hydrant.h"
-#include "./objects/traffic_light.h"
-#include "./objects/radio_tower.h"
-#include "./objects/building.h"
-#include "./objects/wall.h"
-#include "vertex.h"
-#include "point.h"
+#include "./geometry/forms.h"
+#include "./city_elements/block.h"
+#include "./city_elements/hydrant.h"
+#include "./city_elements/traffic_light.h"
+#include "./city_elements/radio_tower.h"
+#include "./city_elements/building.h"
+#include "./city_elements/wall.h"
+#include "geometry/vertex.h"
+#include "geometry/point.h"
 #include "./data_structures/hash_table.h"
 
 typedef void* Vertex;

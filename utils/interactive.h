@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "inQRY.h"
-#include "queryUtils.h"
+#include "../inQRY.h"
+#include "../queryUtils.h"
 
 void console (char *pathIn, char *pathOut, char *nameInT, int nm, int np, 
             Tree figures, Tree blocks, Tree hydrants, Tree tLights, Tree rTowers, Tree walls, Tree buildings, 
