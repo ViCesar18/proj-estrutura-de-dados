@@ -302,6 +302,10 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
             printResidentData (cpf, residents, arqText);
             fprintf (arqText, "\n");
         }
+        else if(!strcmp(command, "mplg?")){
+            fscanf(arqQuery, "%s", id1);
+            treatMPLG(arqAux, arqText, id1);
+        }
         else if (!strcmp (command, "de?")){
             scanDE (arqQuery, cnpj);
             fprintf (arqText, "de? %s\n", cnpj);

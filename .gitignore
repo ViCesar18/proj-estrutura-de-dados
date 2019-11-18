@@ -6,6 +6,8 @@ data_structs/*.o
 #Diretórios de Entrada e Saida
 entrada
 saida
+in
+out
 
 #Pasta do VSCode
 .vscode

@@ -5,13 +5,15 @@
 typedef struct stSegment{
     Vertex v1;
     Vertex v2;
+    struct stSegment *prox;
 } *SegmentImp;
 
-Segment createSegment(Vertex v1, Vertex v2){
+Segment createSegment(Vertex v1, Vertex v2, Segment s){
     SegmentImp segment = (SegmentImp) malloc(sizeof(struct stSegment));
 
     segment->v1 = v1;
     segment->v2 = v2;
+    segment->prox = s;
 
     return segment;
 }
@@ -38,6 +40,12 @@ Vertex getSegmentV2(Segment s){
     return segment->v2;
 }
 
+Segment getSegmentProx(Segment s){
+    SegmentImp segment = (SegmentImp) s;
+
+    return segment->prox;
+}
+
 void setSegmentStartVertex(Segment s){
     SegmentImp segment = (SegmentImp) s;
 
@@ -57,6 +65,12 @@ void setSegmentStartVertex(Segment s){
         setVertexStart(segment->v1, false);
         setVertexStart(segment->v2, true);
     }
+}
+
+void setSegmentProx(Segment s, Segment prox){
+    SegmentImp segment = (SegmentImp) s;
+
+    segment->prox = prox;
 }
 
 void freeSegment(Segment s){

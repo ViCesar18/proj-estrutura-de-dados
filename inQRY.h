@@ -15,6 +15,7 @@
 #include "data_structures/hash_table.h"
 #include "queryUtils.h"
 #include "queryFire.h"
+#include "queryPolygon.h"
 
 /*Le os parametros de consulta do comando "o?"*/
 void scanO(FILE *arqQuery, char j[], char k[]);
