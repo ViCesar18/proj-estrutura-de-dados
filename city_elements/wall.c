@@ -38,7 +38,7 @@ double getWallSize(Wall w){
 void getWallInformation(Wall w, char *info, char *posic){
     WallImp wall = (WallImp) w;
 
-    sprintf(info, "%s", wall->size);
+    sprintf(info, "%lf", wall->size);
     sprintf(posic, "(%lf, %lf)", wall->x1, wall->y1);
 }
 
