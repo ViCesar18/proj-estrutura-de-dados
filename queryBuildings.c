@@ -71,8 +71,10 @@ void treatTRNS_block(FILE *arqTxt, Tree blocks, Node node, Form rect, double dx,
     treatTRNS_block(arqTxt, blocks, getLeft(blocks, node), rect, dx, dy, arqSvgQ);
 
     if(quadInsideRect(block, rect)){
+        fprintf(arqTxt, "\tQuadra Movida: %s\n\tPosicao Anterior: (%lf, %lf) ", getBlockCep(block), getBlockX(block), getBlockY(block));
         setBlockX(block, getBlockX(block) + dx);
         setBlockY(block, getBlockY(block) + dy);
+        fprintf(arqTxt, "Posicao Atual: (%lf, %lf)\n\n", getBlockX(block), getBlockY(block));
     }
 
     treatTRNS_block(arqTxt, blocks, getRight(blocks, node), rect, dx, dy, arqSvgQ);
@@ -86,8 +88,10 @@ void treatTRNS_hydrant(FILE *arqTxt, Tree hydrants, Node node, Form rect, double
     treatTRNS_hydrant(arqTxt, hydrants, getLeft(hydrants, node), rect, dx, dy, arqSvgQ);
 
     if(pointInsideFigure(getHydrantX(hydrant), getHydrantY(hydrant), rect, "r", "L2")){
+        fprintf(arqTxt, "\tHidrante Movido: %s\n\tPosicao Anterior: (%lf, %lf) ", getHydrantId(hydrant), getHydrantX(hydrant), getHydrantY(hydrant));
         setHydrantX(hydrant, getHydrantX(hydrant) + dx);
         setHydrantY(hydrant, getHydrantY(hydrant) + dy);
+        fprintf(arqTxt, "Posicao Atual: (%lf, %lf)\n\n", getHydrantX(hydrant), getHydrantY(hydrant));
     }
 
     treatTRNS_hydrant(arqTxt, hydrants, getRight(hydrants, node), rect, dx, dy, arqSvgQ);
@@ -101,8 +105,10 @@ void treatTRNS_tLight(FILE *arqTxt, Tree tLights, Node node, Form rect, double d
     treatTRNS_tLight(arqTxt, tLights, getLeft(tLights, node), rect, dx, dy, arqSvgQ);
 
     if(pointInsideFigure(getHydrantX(tLight), getHydrantY(tLight), rect, "r", "L2")){
+        fprintf(arqTxt, "\tSemáforo Movido: %s\n\tPosicao Anterior: (%lf, %lf) ", getTrafficLightId(tLight), getTrafficLightX(tLight), getTrafficLightY(tLight));
         setHydrantX(tLight, getTrafficLightX(tLight) + dx);
         setHydrantY(tLight, getTrafficLightY(tLight) + dy);
+        fprintf(arqTxt, "Posicao Atual: (%lf, %lf)\n\n", getTrafficLightX(tLight), getTrafficLightY(tLight));
     }
 
     treatTRNS_tLight(arqTxt, tLights, getRight(tLights, node), rect, dx, dy, arqSvgQ);
@@ -116,8 +122,10 @@ void treatTRNS_rTower(FILE *arqTxt, Tree rTowers, Node node, Form rect, double d
     treatTRNS_rTower(arqTxt, rTowers, getLeft(rTowers, node), rect, dx, dy, arqSvgQ);
 
     if(pointInsideFigure(getHydrantX(rTower), getHydrantY(rTower), rect, "r", "L2")){
+        fprintf(arqTxt, "\tTorre de Rádio Movido: %s\n\tPosicao Anterior: (%lf, %lf) ", getRadioTowerId(rTower), getRadioTowerX(rTower), getRadioTowerY(rTower));
         setHydrantX(rTower, getRadioTowerX(rTower) + dx);
         setHydrantY(rTower, getRadioTowerY(rTower) + dy);
+        fprintf(arqTxt, "Posicao Atual: (%lf, %lf)\n\n", getRadioTowerX(rTower), getRadioTowerY(rTower));
     }
 
     treatTRNS_rTower(arqTxt, rTowers, getRight(rTowers, node), rect, dx, dy, arqSvgQ);
