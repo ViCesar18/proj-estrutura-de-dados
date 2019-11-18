@@ -18,6 +18,8 @@ int comparatorTrafficLight(TrafficLight tf1, TrafficLight tf2);
 /*Getters e setters para o semaforo*/
 char *getTrafficLightId(TrafficLight s);
 
+void getTrafficLightInformation(TrafficLight s, char *info, char *posic);
+
 double getTrafficLightX(TrafficLight s);
 
 double getTrafficLightY(TrafficLight s);

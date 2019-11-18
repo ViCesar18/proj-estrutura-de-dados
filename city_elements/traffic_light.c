@@ -37,11 +37,11 @@ char *getTrafficLightId(TrafficLight s){
     return tLight->id;
 }
 
-char *getTrafficLightInformation(TrafficLight s, char *info){
+void getTrafficLightInformation(TrafficLight s, char *info, char *posic){
     TrafficLightImp tLight = (TrafficLightImp) s;
-    sprintf(info, "%s\n(.2%lf, %.2lf)", tLight->id, tLight->x, tLight->y);
 
-    return info;
+    sprintf(info, "%s", tLight->id);
+    sprintf(posic, "(%lf, %lf)", tLight->x, tLight->y);
 }
 
 double getTrafficLightX(TrafficLight s){

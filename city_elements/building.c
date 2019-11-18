@@ -66,11 +66,11 @@ char *getBuildingCep(Building b){
     return building->cep;
 }
 
-char *getBuildingInformation(Building b, char *info){
+void getBuildingInformation(Building b, char *info, char *posic){
     BuildingImp building = (BuildingImp) b;
-    sprintf(info, "%s\n(%.2lf, %.2lf)", building->cep, building->x, building->y);
 
-    return info;
+    sprintf(info, "%s", building->cep);
+    sprintf(posic, "(%lf, %lf)", building->x, building->y);
 }
 
 char *getBuildingFace(Building b){

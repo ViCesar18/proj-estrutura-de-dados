@@ -18,7 +18,7 @@ int comparatorHydrant(Hydrant h1, Hydrant h2);
 /*Getters e setters para o hidrante*/
 char *getHydrantId(Hydrant h);
 
-char *getHydrantInformation(Hydrant h, char *info);
+void getHydrantInformation(Hydrant h, char *info, char *posic);
 
 double getHydrantX(Hydrant h);
 

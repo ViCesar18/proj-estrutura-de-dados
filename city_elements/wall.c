@@ -35,11 +35,11 @@ double getWallSize(Wall w){
     return wall->size;
 }
 
-char *getWallInformation(Wall w, char *size){
+void getWallInformation(Wall w, char *info, char *posic){
     WallImp wall = (WallImp) w;
-    sprintf(size, "%lf\n(%.2lf, %.2lf)", wall->size, wall->x1, wall->y1);
 
-    return size;
+    sprintf(info, "%s", wall->size);
+    sprintf(posic, "(%lf, %lf)", wall->x1, wall->y1);
 }
 
 double getWallX1(Wall w){

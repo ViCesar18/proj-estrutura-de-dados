@@ -19,7 +19,7 @@ int comparatorWall(Wall w1, Wall w2);
 /*Getters e setters para o muro*/
 double getWallSize(Wall w);
 
-char *getTrafficLightInformation(TrafficLight s, char *info);
+void getTrafficLightInformation(TrafficLight s, char *info, char *posic);
 
 char *getWallInformation(Wall w, char* size);
 

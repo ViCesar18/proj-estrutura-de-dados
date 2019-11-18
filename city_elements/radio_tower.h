@@ -18,7 +18,7 @@ int comparatorRadioTower(RadioTower rb1, RadioTower rb2);
 /*Getters e setters para a radio-base*/
 char *getRadioTowerId(RadioTower r);
 
-char *getRadioTowerInformation(RadioTower r, char *info);
+void getRadioTowerInformation(RadioTower r, char *info, char *posic);
 
 double getRadioTowerX(RadioTower r);
 
