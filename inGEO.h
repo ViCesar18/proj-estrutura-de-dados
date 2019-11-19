@@ -62,7 +62,7 @@ void changeColor(FILE *arqIn, char fillColor[], char strokeColor[], char sw[]);
 void changeThickness(FILE *arqIn, char cw[], char rw[]);
 
 /*Le as informacoes de predio do arquivo .geo e armazena na lista buildings*/
-void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable);
+void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable, HashTable buildingsTable);
 
 /*Le as informacoes de muro do arquivo .geo e armazena na lista walls*/
 void scanWall(FILE *arqIn, Tree walls);
@@ -73,7 +73,7 @@ void scanStore (FILE *arqEst, HashTable stores, HashTable storeTypes, HashTable 
 
 void scanPerson (FILE *arqPes, HashTable persons);
 
-void scanResident (FILE *arqPes, HashTable residents, HashTable persons);
+void scanResident (FILE *arqPes, HashTable residents, HashTable persons, HashTable buildingsTable, HashTable blocksTable);
 
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
 void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2);

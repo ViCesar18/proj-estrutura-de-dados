@@ -4,6 +4,7 @@ typedef struct stBlock{
     char cep[32], strokeColor[24], fillColor[24], sw[12];
     double x, y, w, h;
     int treeX, treeY;
+    HashTable residents;
 }*BlockImp;
 
 Block createBlock(char cep[], double x, double y, double w, double h, char strokeColor[], char fillColor[], char sw[]){
@@ -20,6 +21,8 @@ Block createBlock(char cep[], double x, double y, double w, double h, char strok
 
     block->treeX = 0;
     block->treeY = 0;
+
+    block->residents = createHashTable(10000, NULL);
 
     return block;
 }
@@ -103,6 +106,12 @@ int getBlockTreeY(Block b){
     return block->treeY;
 }
 
+HashTable getBlockResidents(Block b){
+    BlockImp block = (BlockImp) b;
+
+    return block->residents;
+}
+
 void setBlockX(Block b, double x){
     BlockImp block = (BlockImp) b;
 
@@ -136,6 +145,6 @@ void setBlockTreeXY(Block b, int x, int y){
 
 void destroyBlock(Block b){
     BlockImp block = (BlockImp) b;
-
+    destroyHashTable(block->residents);
     free(block);   
 }

@@ -180,11 +180,12 @@ int main(int argc, char *argv[]){
     /*Cria as tabelas hash*/
     HashTable blocksTable = createHashTable(nq, NULL);
     HashTable formsTable = createHashTable(nx, NULL);
-    HashTable hydrantsTable = createHashTable(1000, NULL);
-    HashTable tLightsTable = createHashTable(1000, NULL);
-    HashTable rTowersTable = createHashTable(1000, NULL);
+    HashTable hydrantsTable = createHashTable(10000, NULL);
+    HashTable tLightsTable = createHashTable(10000, NULL);
+    HashTable rTowersTable = createHashTable(10000, NULL);
+    HashTable buildingsTable = createHashTable(1000, NULL);
     HashTable stores = createHashTable(10000, destroyStore);
-    HashTable storeTypes = createHashTable(1000, destroyStore);
+    HashTable storeTypes = createHashTable(10000, destroyStore);
     HashTable persons = createHashTable(10000, destroyPerson);
     HashTable residents = createHashTable(10000, destroyResident);
     
@@ -232,7 +233,7 @@ int main(int argc, char *argv[]){
             changeThickness(arqGeo, cw, rw);
         }
         else if(!strcmp(command, "prd")){
-            scanBuilding(arqGeo, buildings, blocksTable);
+            scanBuilding(arqGeo, buildings, blocksTable, buildingsTable);
         }
         else if(!strcmp(command, "mur")){
             scanWall(arqGeo, walls);
@@ -260,7 +261,7 @@ int main(int argc, char *argv[]){
                 scanPerson (arqPes, persons);
             }
             else if (!strcmp (command, "m")){
-                scanResident (arqPes, residents, persons);
+                scanResident (arqPes, residents, persons, buildingsTable, blocksTable);
             }
         }
     }

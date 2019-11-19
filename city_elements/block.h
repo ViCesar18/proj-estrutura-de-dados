@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../data_structures/hash_table.h"
 
 typedef void *Block;
 
@@ -37,6 +38,8 @@ char *getBlockSw(Block b);
 int getBlockTreeX(Block b);
 
 int getBlockTreeY(Block b);
+
+HashTable getBlockResidents(Block b);
 
 void setBlockX(Block b, double x);
 

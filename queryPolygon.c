@@ -1,9 +1,9 @@
 #include "queryPolygon.h"
 
-void treatMPLG_blocks(Tree blocks, Node node, Polygon polygon){
+void treatMPLG_blocks(FILE *arqSvg, Tree blocks, Node node, Polygon polygon){
     if(node == getNil(blocks)) return;
 
-    treatMPLG_blocks(blocks, getLeft(blocks, node), polygon);
+    treatMPLG_blocks(arqSvg, blocks, getLeft(blocks, node), polygon);
 
     Block block = getElement(blocks, node);
     Point p1 = createPoint(getBlockX(block), getBlockY(block));
@@ -13,6 +13,19 @@ void treatMPLG_blocks(Tree blocks, Node node, Polygon polygon){
     
     if(pointInsidePolygon(p1, polygon) || pointInsidePolygon(p2, polygon) || pointInsidePolygon(p3, polygon) || pointInsidePolygon(p4, polygon)){
         setBlockSW(block, "5");
+
+        HashTable residents = getBlockResidents(block);
+        int cont = 0;
+        for(int i = 0; i < getHashTableSize(residents); i++){
+            ListNode node = getHashNode(residents, i);
+            while(node != NULL){
+                cont++;
+                node = getHashNodeNext(node);
+            }
+        }
+        char nResidents[64];
+        sprintf(nResidents, "Moradores: %d", cont);
+        printText(arqSvg, getBlockX(block) + 38, getBlockY(block) + 22, nResidents, getBlockStrokeColor(block));
     }
 
     freePoint(p1);
@@ -20,13 +33,13 @@ void treatMPLG_blocks(Tree blocks, Node node, Polygon polygon){
     freePoint(p3);
     freePoint(p4);
 
-    treatMPLG_blocks(blocks, getRight(blocks, node), polygon);
+    treatMPLG_blocks(arqSvg, blocks, getRight(blocks, node), polygon);
 }
 
-void treatMPLG_buildings(Tree buildings, Node node, Polygon polygon){
+void treatMPLG_buildings(FILE *arqTxt, Tree buildings, Node node, Polygon polygon){
     if(node == getNil(buildings)) return;
 
-    treatMPLG_buildings(buildings, getLeft(buildings, node), polygon);
+    treatMPLG_buildings(arqTxt, buildings, getLeft(buildings, node), polygon);
 
     Building building = getElement(buildings, node);
     Point p11 = createPoint(getBuildingX(building), getBuildingY(building));
@@ -54,8 +67,21 @@ void treatMPLG_buildings(Tree buildings, Node node, Polygon polygon){
             }
         }
 
-        if(entirelyIn){
-            setBuildingFillCollor(building, "black");
+        if(entirelyIn && getBuildingHasResidents(building)){
+            setBuildingFillCollor(building, "yellow");
+            HashTable residents = getBuildingResidents(building);
+            
+            for(int i = 0; i < getHashTableSize(residents); i++){
+                ListNode node = getHashNode(residents, i);
+                while(node != NULL){
+                    Resident resident = getHashNodeElement(node);
+                    Person person = getResidentPerson(resident);
+
+                    fprintf (arqTxt, "-%s %s:\n\tCPF: %s\n\tSexo: %s\n\tNascimento: %s\n\tCEP: %s, Face: %s, Número: %d, Complemento: %s\n", getPersonName (person), getPersonLastName(person), getPersonCpf (person), getPersonSexo (person), getPersonNascimento(person), getResidentCep (resident), getResidentFace(resident), getResidentNum (resident), getResidentCompl (resident));
+                    
+                    node = getHashNodeNext(node);
+                }
+            }
         }
     }
 
@@ -64,7 +90,7 @@ void treatMPLG_buildings(Tree buildings, Node node, Polygon polygon){
     freeSegment(s3);
     freeSegment(s4);
 
-    treatMPLG_buildings(buildings, getRight(buildings, node), polygon);
+    treatMPLG_buildings(arqTxt, buildings, getRight(buildings, node), polygon);
 }
 
 void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree blocks, Tree buildings){
@@ -132,9 +158,10 @@ void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree block
 
     setPolygonXMax(polygon, xMax);
 
-    treatMPLG_blocks(blocks, getTreeRoot(blocks), polygon);
+    treatMPLG_blocks(arqSVG, blocks, getTreeRoot(blocks), polygon);
 
-    treatMPLG_buildings(buildings, getTreeRoot(buildings), polygon);
+    fprintf (arqTxt, "mplg? Moradores dos prédios inteiramente contidos no poligono:\n");
+    treatMPLG_buildings(arqTxt, buildings, getTreeRoot(buildings), polygon);
 
     destroyPolygon(polygon);
 }

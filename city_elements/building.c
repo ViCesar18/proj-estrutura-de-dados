@@ -6,6 +6,9 @@ typedef struct stBuilding{
     double faceSize, depth, margin, x, y, w, h;
     int treeX, treeY;
     Block *block;
+    HashTable residents;
+    char key[64];
+    bool hasResidents;
 }*BuildingImp;
 
 Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin, Block block){
@@ -49,6 +52,16 @@ Building createBuilding(char cep[], char face[], double num, double faceSize, do
 
     building->treeX = 0;
     building->treeY = 0;
+
+    building->residents = createHashTable(10000, NULL);
+    char n[8];
+    sprintf(n, "%d", building->num);
+
+    strcpy(building->key, building->cep);
+    strcat(building->key, building->face);
+    strcat(building->key, n);
+
+    building->hasResidents = false;
 
     return building;
 }
@@ -123,7 +136,7 @@ int getBuildingTreeY(Building b){
 
 void destroyBuilding(Building b){
     BuildingImp building = (BuildingImp) b;
-
+    destroyHashTable(building->residents);
     free(building);   
 }
 
@@ -163,6 +176,24 @@ char *getBuildingFillColor(Building b){
     return building->fillColor;
 }
 
+char *getBuildingKey(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    return building->key;
+}
+
+HashTable getBuildingResidents(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    return building->residents;
+}
+
+bool getBuildingHasResidents(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    return building->hasResidents;
+}
+
 void setBuildingBlock(Building b, Block block){
     BuildingImp building = (BuildingImp) b;
 
@@ -180,4 +211,10 @@ void setBuildingTreeXY(Building b, int x, int y){
 
     building->x = x;
     building->y = y;
+}
+
+void setBuildingHasResidents(Building b, bool hasResidents){
+    BuildingImp building = (BuildingImp) b;
+
+    building->hasResidents = hasResidents;
 }

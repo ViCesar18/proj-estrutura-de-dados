@@ -6,10 +6,12 @@
 #include <string.h>
 #include <stdbool.h>
 #include "person.h"
+#include "building.h"
 #include "../data_structures/hash_table.h"
 
 typedef void *Resident;
-Resident createResident (char cpf[], char cep[], char face[], char compl[], int num, HashTable persons);
+
+Resident createResident (char cpf[], char cep[], char face[], char compl[], int num, HashTable persons, HashTable buildingsTable, HashTable blocksTable);
 char* getResidentCep (Resident r);
 char* getResidentCpf (Resident r);
 char* getResidentFace (Resident r);

@@ -5,7 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../data_structures/rbtree.h"
+#include "../data_structures/hash_table.h"
 #include "block.h"
+#include "resident.h"
 
 typedef void *Building;
 typedef void *Block;
@@ -49,11 +51,19 @@ int getBuildingTreeX(Building b);
 
 int getBuildingTreeY(Building b);
 
+char *getBuildingKey(Building b);
+
+HashTable getBuildingResidents(Building b);
+
+bool getBuildingHasResidents(Building b);
+
 void setBuildingBlock(Building b, Tree blocks);
 
 void setBuildingFillCollor(Building b, char *fillColor);
 
 void setBuildingTreeXY(Building b, int x, int y);
+
+void setBuildingHasResidents(Building b, bool hasResidents);
 /*Fim getters e setters*/
 
 /*Libera memoria de um predio*/

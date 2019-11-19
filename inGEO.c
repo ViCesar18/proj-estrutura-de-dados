@@ -241,7 +241,7 @@ void scanPerson (FILE *arqPes, HashTable persons){
     insertHashTable(persons, getPersonCpf(person), person);
 }
 
-void scanResident (FILE *arqPes, HashTable residents, HashTable persons){
+void scanResident (FILE *arqPes, HashTable residents, HashTable persons, HashTable buildingsTable, HashTable blocksTable){
     char cpf[32], cep[32], face[2], compl[16];
     int num;
     fscanf (arqPes, "%s", cpf);
@@ -250,7 +250,7 @@ void scanResident (FILE *arqPes, HashTable residents, HashTable persons){
     fscanf (arqPes, "%d", &num);
     fscanf (arqPes, "%s", compl);
 
-    Resident resident = createResident (cpf, cep, face, compl, num, persons);
+    Resident resident = createResident (cpf, cep, face, compl, num, persons, buildingsTable, blocksTable);
     insertHashTable(residents, getResidentCpf(resident), resident);
 }
 
@@ -270,7 +270,7 @@ void scanStore (FILE *arqEst, HashTable stores, HashTable storeTypes, HashTable 
     insertHashTable(stores, getStoreCnpj(store), store);
 }
 
-void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable){
+void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable, HashTable buildingsTable){
     char cep[32], face[2];
     int num;
     double faceSize, depth, margin;
@@ -287,6 +287,7 @@ void scanBuilding(FILE *arqIn, Tree buildings, HashTable blocksTable){
     Building building = createBuilding(cep, face, num, faceSize, depth, margin, block);
 
     insertNode(buildings, building);
+    insertHashTable(buildingsTable, getBuildingKey(building), building);
 }
 
 void scanWall(FILE *arqIn, Tree walls){

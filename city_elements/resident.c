@@ -6,7 +6,7 @@ typedef struct stResident {
     Person person;
 } *ResidentImp;
 
-Resident createResident (char cpf[], char cep[], char face[], char compl[], int num, HashTable persons){
+Resident createResident (char cpf[], char cep[], char face[], char compl[], int num, HashTable persons, HashTable buildingsTable, HashTable blocksTable){
     ResidentImp rResident = (ResidentImp) malloc (sizeof (struct stResident));
 
     strcpy (rResident->cep, cep);
@@ -32,6 +32,25 @@ Resident createResident (char cpf[], char cep[], char face[], char compl[], int 
     }
 
     rResident->person = person;
+    char key[64];
+    char n[8];
+    sprintf(n, "%d", rResident->num);
+    strcpy(key, rResident->cep);
+    strcat(key, rResident->face);
+    strcat(key, n);
+
+    Building building = searchHashTable(buildingsTable, key);
+
+    if(building != NULL){
+        insertHashTable(getBuildingResidents(building), getPersonCpf(person), rResident);
+        setBuildingHasResidents(building, true);
+    }
+
+    Block block = searchHashTable(blocksTable, cep);
+
+    if(block != NULL){
+        insertHashTable(getBlockResidents(block), getPersonCpf(person), rResident);
+    }
 
     return rResident;
 }
