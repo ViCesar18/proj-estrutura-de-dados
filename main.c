@@ -24,7 +24,7 @@
 #include "inQRY.h"
 
 int main(int argc, char *argv[]){
-    int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000, np = 1000, nm = 1000;  //Número máximo padrão das formas
+    int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000, np = 1000, nm = 1000;  //Número máximo padrão dos elementos urbanos
     char *pathIn = NULL;    //Diretório de entrada
     char *nameIn = NULL, *nameInT = NULL, *arqIn = NULL;   //Dados para o arquivo de entrada (.geo)
     char *nameEC = NULL, *nameECT = NULL, *arqEC = NULL;
@@ -39,15 +39,12 @@ int main(int argc, char *argv[]){
     FILE *arqGeo = NULL, *arqQuery = NULL, *arqSvg = NULL, *arqSvgQ = NULL, *arqText = NULL, *arqSvgBB = NULL, *arqEst = NULL, *arqPes = NULL, *arqAux = NULL; //Arquivos
 
     char command[8];   //Armazena o comando lido do arquivo .qry
-    char sufixo[32], cor[32], id1[32], id2[32], metric[4], cep[32], cpf[32], cnpj[32], face[2], compl[32];//Armazena os parametros do arquivo .qry (string)
-    double x, y, r;        //Armazena os parametros do arquivo .qry (coordenadas)
-    int n, k, vectSize = 0;                //Armazena os parametros do arquivo .qry
 
     char cfillQ[24], cstrkQ[24], cfillH[24], cstrkH[24], cfillS[24], cstrkS[24], cfillR[24], cstrkR[24];    //Cores para quadras, hidrântes, semáforos e torres de rádio
     char swQ[12] = {"1"}, swH[12] = {"1"}, swS[12] = {"1"}, swR[12] = {"1"};    //Espessura de borda de quadras, hidrântes, semáforos e torres de rádio
     char cw[12] = {"1"}, rw[12] = {"1"};    //Espessura de borda de círculos e retângulos
 
-    //Seta cores padrões para os objetos urbanos
+    //Seta cores padrões para os elementos urbanos
     strcpy(cfillQ, "orange");
     strcpy(cstrkQ, "black");
     strcpy(cfillH, "red");
@@ -57,12 +54,7 @@ int main(int argc, char *argv[]){
     strcpy(cfillR, "gray");
     strcpy(cstrkR, "black");
 
-    Tree figures, blocks, hydrants, tLights, rTowers, buildings, walls;    //Arvore rubro negra de cada objeto urbano
-    Element element1, element2;  //Armazena uma forma
-    char type1[4], type2[4];    //Armazena o tipo do objeto urbano em questão
-
-    Segment *segments; //Vetor de segmentos que barra o a luz da bomba de radiacao luminosa
-    Vertex vertices;
+    Tree figures, blocks, hydrants, tLights, rTowers, buildings, walls;    //Arvore rubro negra de cada elemento urbano
 
     /*Recebe os parametros da main (argv)*/
     receiveParameters(argc, argv, &pathIn, &nameIn, &nameQuery, &nameEC, &namePM, &pathOut, &isInteractive);
@@ -97,6 +89,7 @@ int main(int argc, char *argv[]){
         }
     }
 
+    //.ec
     if (nameEC != NULL){
         treatFileName (nameEC, &nameECT);
 
@@ -111,6 +104,7 @@ int main(int argc, char *argv[]){
         }
     }
 
+    //.pm
     if (namePM != NULL){
         treatFileName (namePM, &namePMT);
 
@@ -125,7 +119,7 @@ int main(int argc, char *argv[]){
         }
     }
     
-    /*Prepara o diretorio para criar o arquivo de saida*/
+    /*Prepara o diretorio para criar os arquivos de saida*/
     //.svg(1)
     createOutputFileName(&nameOut, nameInT);
     strcat(nameOut, ".svg");
@@ -189,7 +183,7 @@ int main(int argc, char *argv[]){
     HashTable persons = createHashTable(10000, destroyPerson);
     HashTable residents = createHashTable(10000, destroyResident);
     
-    /*Le os dados das formas do arquivo de entrada*/
+    /*Le os dados dos elementos do arquivo de entrada .geo*/
     while(1){
         fscanf(arqGeo, "%s", command);
 
@@ -250,6 +244,7 @@ int main(int argc, char *argv[]){
     printTreeElements(buildings, getTreeRoot(buildings), arqSvg, printBuilding);
     printTreeElements(walls, getTreeRoot(walls), arqSvg, printWall);
 
+    /*Le os dados dos elementos do arquivo de entrada .pm*/
     if (namePM != NULL){
         while (1){
             fscanf (arqPes, "%s", command);
@@ -266,6 +261,7 @@ int main(int argc, char *argv[]){
         }
     }
 
+    /*Le os dados dos elementos do arquivo de entrada .ec*/
     if (nameEC != NULL){
         while (1){
             fscanf (arqEst, "%s", command);
@@ -290,21 +286,18 @@ int main(int argc, char *argv[]){
         printQuery(arqSvgQ, arqAux, figures, blocks, hydrants, tLights, rTowers, buildings, walls);
     }
 
-    /*Imprime os objetos urbanos no arquivo .svg(2) (caso exista)*/
-
-    /*Finalização, libreracao de memoria e fechamento dos arquivos*/
-    fputs("\n</svg>\n", arqSvg);
-
+    //Loop de interatividade(se existir)
     if (isInteractive != NULL){
         console(pathIn, pathOut, nameInT, nm, np, figures, blocks, hydrants, tLights, rTowers, walls, buildings, formsTable, blocksTable, 
         hydrantsTable, tLightsTable, rTowersTable, persons, residents, stores, storeTypes);
     }
 
+    /*Finalização, libreracao de memoria e fechamento dos arquivos*/
+    fputs("\n</svg>\n", arqSvg);
+
     //Fecha os arquivos .geo e .svg(1)
     fclose(arqSvg);
     fclose(arqGeo);
-
-    //Fecha os arquivos relacionados ao arquivo .qry (se existir)
     
     //Liberação da memória relacionada aos arquivos .geo e .svg(1)
     free(pathIn);
@@ -326,6 +319,7 @@ int main(int argc, char *argv[]){
         free(arqQry);
     }
 
+    //.ec
     if (nameEC != NULL){
         free (nameEC);
         free (nameECT);
@@ -333,6 +327,7 @@ int main(int argc, char *argv[]){
         fclose(arqEst);
     }
 
+    //.pm
     if (namePM != NULL){
         free (namePM);
         free (namePMT);
@@ -340,6 +335,7 @@ int main(int argc, char *argv[]){
         fclose(arqPes);
     }
 
+    //interatividade
     if (isInteractive != NULL){
         free (isInteractive);
     }

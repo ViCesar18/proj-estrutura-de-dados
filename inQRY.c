@@ -287,11 +287,6 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
             getAddress(id1, id2, n, &x, &y, blocksTable);
             treatFS(arqText, arqSvgQ, tLights, k, x, y);
         }
-        else if(!strcmp(command, "brl")){
-            scanBRL(arqQuery, &x, &y);
-            int capacitySegments = nm + np * 4 + 4;
-            bombAreaRadiation(x, y, capacitySegments, walls, buildings, arqAux);
-        }
         else if (!strcmp (command, "m?")){
             scanM (arqQuery, cep);
             treatM (arqText, persons, residents, cep);    
