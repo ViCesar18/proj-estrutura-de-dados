@@ -283,7 +283,7 @@ int main(int argc, char *argv[]){
 
     /*Le os dados de consulta(se existir)*/
     if(arqSvgQ != NULL){
-        treatQueries(arqQuery, arqText, arqSvgQ, arqAux, nameInT, nameQueryT, pathOut, nm, np, figures, blocks, hydrants, 
+        treatQueries(arqQuery, arqText, arqSvgQ, arqAux, nameInT, nameQueryT, pathIn, pathOut, nm, np, figures, blocks, hydrants, 
         tLights, rTowers, walls, buildings, formsTable, blocksTable, hydrantsTable, tLightsTable, rTowersTable, persons, residents, stores, storeTypes);
 
         printQuery(arqSvgQ, arqAux, figures, blocks, hydrants, tLights, rTowers, buildings, walls);

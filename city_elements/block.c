@@ -105,6 +105,12 @@ void setBlockStrokeColor(Block b, char strokeColor[]){
     strcpy(block->strokeColor, strokeColor);
 }
 
+void setBlockSW(Block b, char sw[]){
+    BlockImp block = (BlockImp) b;
+
+    strcpy(block->sw, sw);
+}
+
 void destroyBlock(Block b){
     BlockImp block = (BlockImp) b;
 

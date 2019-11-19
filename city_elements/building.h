@@ -43,7 +43,11 @@ double getBuildingH(Building b);
 
 Block getBuildingBlock(Building b);
 
+char *getBuildingFillColor(Building b);
+
 void setBuildingBlock(Building b, Tree blocks);
+
+void setBuildingFillCollor(Building b, char *fillColor);
 /*Fim getters e setters*/
 
 /*Libera memoria de um predio*/

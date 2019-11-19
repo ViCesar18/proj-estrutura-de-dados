@@ -39,6 +39,8 @@ void setBlockX(Block b, double x);
 void setBlockY(Block b, double y);
 
 void setBlockStrokeColor(Block b, char strokeColor[]);
+
+void setBlockSW(Block b, char sw[]);
 /*Fim getters e setters*/
 
 /*Libera memoria de uma quadra*/

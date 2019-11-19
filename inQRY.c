@@ -107,7 +107,7 @@ void scanDMPRBT(FILE *arqQuery, char *type, char *fileName){
     fscanf(arqQuery, "%s", fileName);
 }
 
-void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, char *nameInT, char *nameQueryT, char *pathOut, int nm, int np, 
+void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, char *nameInT, char *nameQueryT, char *pathIn, char *pathOut, int nm, int np, 
                 Tree figures, Tree blocks, Tree hydrants, Tree tLights, Tree rTowers, Tree walls, Tree buildings, 
                 HashTable formsTable, HashTable blocksTable, HashTable hydrantsTable, HashTable tLightsTable, HashTable rTowersTable, 
                 HashTable persons, HashTable residents, HashTable stores, HashTable storeTypes){
@@ -296,15 +296,15 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
             scanM (arqQuery, cep);
             treatM (arqText, persons, residents, cep);    
         }
+        else if(!strcmp(command, "mplg?")){
+            fscanf(arqQuery, "%s", id1);
+            treatMPLG(arqAux, arqText, id1, pathIn, blocks, buildings);
+        }
         else if (!strcmp (command, "dm?")){
             scanDM (arqQuery, cpf);
             fprintf (arqText,"dm? %s\n", cpf);
             printResidentData (cpf, residents, arqText);
             fprintf (arqText, "\n");
-        }
-        else if(!strcmp(command, "mplg?")){
-            fscanf(arqQuery, "%s", id1);
-            treatMPLG(arqAux, arqText, id1);
         }
         else if (!strcmp (command, "de?")){
             scanDE (arqQuery, cnpj);

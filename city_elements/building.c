@@ -1,7 +1,7 @@
 #include "building.h"
 
 typedef struct stBuilding{
-    char cep[32], face[2];
+    char cep[32], face[2], fillColor[24];
     int num;
     double faceSize, depth, margin, x, y, w, h;
     Block *block;
@@ -43,6 +43,8 @@ Building createBuilding(char cep[], char face[], double num, double faceSize, do
     building->depth =  depth;
     building->margin = margin;
     setBuildingBlock(building, block);
+
+    strcpy(building->fillColor, "white");
 
     return building;
 }
@@ -139,8 +141,20 @@ Block getBuildingBlock(Building b){
     return building->block;
 }
 
+char *getBuildingFillColor(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    return building->fillColor;
+}
+
 void setBuildingBlock(Building b, Block block){
     BuildingImp building = (BuildingImp) b;
 
     building->block = block;
+}
+
+void setBuildingFillCollor(Building b, char *fillColor){
+    BuildingImp building = (BuildingImp) b;
+
+    strcpy(building->fillColor, fillColor);
 }

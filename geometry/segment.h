@@ -11,7 +11,7 @@ typedef void *Segment;
 typedef void *Vertex;
 
 /*Cria um segmento*/
-Segment createSegment(Vertex v1, Vertex v2, Segment s);
+Segment createSegment(Vertex v1, Vertex v2);
 
 int comparatorSegment(Segment s1, Segment s2);
 

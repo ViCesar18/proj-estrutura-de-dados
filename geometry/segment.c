@@ -8,12 +8,12 @@ typedef struct stSegment{
     struct stSegment *prox;
 } *SegmentImp;
 
-Segment createSegment(Vertex v1, Vertex v2, Segment s){
+Segment createSegment(Vertex v1, Vertex v2){
     SegmentImp segment = (SegmentImp) malloc(sizeof(struct stSegment));
 
     segment->v1 = v1;
     segment->v2 = v2;
-    segment->prox = s;
+    segment->prox = NULL;
 
     return segment;
 }

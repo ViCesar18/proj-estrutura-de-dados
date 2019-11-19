@@ -50,7 +50,7 @@ void console (char *pathIn, char *pathOut, char *nameInT, int nm, int np,
 
             printf("Arquivo de Consulta %s lido com sucesso.\n", arg2);
 
-            treatQueries(arqQuery, arqText, arqSvgQ, arqAux, nameInT, nameQueryT, pathOut, nm, np, figures, blocks, hydrants, tLights, rTowers, walls, 
+            treatQueries(arqQuery, arqText, arqSvgQ, arqAux, nameInT, nameQueryT, pathIn, pathOut, nm, np, figures, blocks, hydrants, tLights, rTowers, walls, 
             buildings, formsTable, blocksTable, hydrantsTable, tLightsTable, rTowersTable, persons, residents, stores, storeTypes);
 
             printQuery(arqSvgQ, arqAux, figures, blocks, hydrants, tLights, rTowers, buildings, walls);

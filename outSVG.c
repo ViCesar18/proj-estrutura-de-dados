@@ -134,7 +134,7 @@ void printBuilding(FILE *arqOut, Building building){
 
     char text[4];
 
-    rect = createRect("0", getBuildingX(building), getBuildingY(building), getBuildingW(building), getBuildingH(building), "black", "white", 0, "1");
+    rect = createRect("0", getBuildingX(building), getBuildingY(building), getBuildingW(building), getBuildingH(building), "black", getBuildingFillColor(building), 0, "1");
     printRect(arqOut, rect);
 
     sprintf(text, "%d", getBuildingNum(building));

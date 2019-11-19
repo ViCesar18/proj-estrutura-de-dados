@@ -5,11 +5,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "inGEO.h"
 #include "geometry/point.h"
 #include "geometry/vertex.h"
 #include "geometry/segment.h"
 #include "geometry/polygon.h"
 
-void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fileDirectory);
+void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree blocks, Tree buildings);
 
 #endif

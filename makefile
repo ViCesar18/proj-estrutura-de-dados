@@ -11,4 +11,7 @@ clean:
 		rm -rf ./*.o
 		rm -rf city_elements/*.o
 		rm -rf data_structures/*.o
+		rm -rf geometry/*.o
+		rm -rf utils/*.o
+		rm -rf sort/*.o
 		rm siguel

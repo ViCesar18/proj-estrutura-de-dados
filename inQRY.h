@@ -57,7 +57,7 @@ void scanMud (FILE *arqQuery, char cpf[], char cep[], char face[], int *num, cha
 
 void scanDMPRBT(FILE *arqQuery, char *type, char *fileName);
 
-void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, char *nameInT, char *nameQueryT, char *pathOut, int nm, int np, 
+void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, char *nameInT, char *nameQueryT, char*PathIn, char *pathOut, int nm, int np, 
                 Tree figures, Tree blocks, Tree hydrants, Tree tLights, Tree rTowers, Tree walls, Tree buildings, 
                 HashTable formsTable, HashTable blocksTable, HashTable hydrantsTable, HashTable tLightsTable, HashTable rTowersTable, 
                 HashTable persons, HashTable residents, HashTable stores, HashTable storeTypes);

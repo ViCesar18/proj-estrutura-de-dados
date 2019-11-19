@@ -2,6 +2,7 @@
 
 typedef struct stPolygon{
     Segment firstSegment;
+    double xMax;
 } *PolygonImp;
 
 Polygon createPolygon(Segment s){
@@ -16,6 +17,18 @@ Segment getPolygonFirstSegment(Polygon p){
     PolygonImp polygon = (PolygonImp) p;
 
     return polygon->firstSegment;
+}
+
+double getPolygonXMax(Polygon p){
+    PolygonImp polygon = (PolygonImp) p;
+
+    return polygon->xMax;
+}
+
+void setPolygonXMax(Polygon p, double xMax){
+    PolygonImp polygon = (PolygonImp) p;
+
+    polygon->xMax = xMax;
 }
 
 void destroyPolygon(Polygon p){

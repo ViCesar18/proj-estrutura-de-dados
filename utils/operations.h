@@ -11,11 +11,13 @@
 #include "../geometry/segment.h"
 #include "../data_structures/rbtree.h"
 #include "../city_elements/block.h"
+#include "../geometry/polygon.h"
 
 /*Nesse header encontram-se todas as oprecoes utilizadas por outras funcoes em todo o resto do programa*/
 
 typedef void *Dist;
 typedef void *Segment;
+typedef void *Polygon;
 
 /*Calcula a distancia euclidiana entre dois pontos*/
 double distEuclid(double x1, double y1, double x2, double y2);
@@ -55,5 +57,7 @@ bool checkSegmentsIntersection(Segment s1, Segment s2);
 
 /*Retorna o ponto de intercessao*/
 void segmentIntersection(Segment s1, Segment s2, double *x, double *y);
+
+bool pointInsidePolygon(Point point, Polygon polygon);
 
 #endif
