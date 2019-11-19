@@ -30,9 +30,15 @@ char *getHydrantFillColor(Hydrant h);
 
 char *getHydrantSw(Hydrant h);
 
+int getHydrantTreeX(Hydrant h);
+
+int getHydrantTreeY(Hydrant h);
+
 void setHydrantX(Hydrant h, double x);
 
 void setHydrantY(Hydrant h, double y);
+
+void setHydrantTreeXY(Hydrant h, int x, int y);
 /*Fim getters e setters*/
 
 /*Libera memoria de um hidrante*/

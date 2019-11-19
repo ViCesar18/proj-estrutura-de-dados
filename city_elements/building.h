@@ -45,9 +45,15 @@ Block getBuildingBlock(Building b);
 
 char *getBuildingFillColor(Building b);
 
+int getBuildingTreeX(Building b);
+
+int getBuildingTreeY(Building b);
+
 void setBuildingBlock(Building b, Tree blocks);
 
 void setBuildingFillCollor(Building b, char *fillColor);
+
+void setBuildingTreeXY(Building b, int x, int y);
 /*Fim getters e setters*/
 
 /*Libera memoria de um predio*/

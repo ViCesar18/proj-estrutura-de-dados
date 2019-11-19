@@ -3,6 +3,7 @@
 typedef struct stHydrant{
     char id[32], strokeColor[24], fillColor[24], sw[12];
     double x, y;
+    int treeX, treeY;
 }*HydrantImp;
 
 Hydrant createHydrant(char id[], double x, double y, char strokeColor[], char fillColor[], char sw[]){
@@ -14,6 +15,9 @@ Hydrant createHydrant(char id[], double x, double y, char strokeColor[], char fi
     strcpy(hydrant->strokeColor, strokeColor);
     strcpy(hydrant->fillColor, fillColor);
     strcpy(hydrant->sw, sw);
+
+    hydrant->treeX = 0;
+    hydrant->treeY = 0;
 
     return hydrant;
 }
@@ -74,6 +78,18 @@ char *getHydrantSw(Hydrant h){
     return hydrant->sw;
 }
 
+int getHydrantTreeX(Hydrant h){
+    HydrantImp hydrant = (HydrantImp) h;
+
+    return hydrant->treeX;
+}
+
+int getHydrantTreeY(Hydrant h){
+    HydrantImp hydrant = (HydrantImp) h;
+
+    return hydrant->treeY;
+}
+
 void setHydrantX(Hydrant h, double x){
     HydrantImp hydrant = (HydrantImp) h;
 
@@ -83,6 +99,13 @@ void setHydrantX(Hydrant h, double x){
 void setHydrantY(Hydrant h, double y){
     HydrantImp hydrant = (HydrantImp) h;
 
+    hydrant->y = y;
+}
+
+void setHydrantTreeXY(Hydrant h, int x, int y){
+    HydrantImp hydrant = (HydrantImp) h;
+
+    hydrant->x = x;
     hydrant->y = y;
 }
 

@@ -2,7 +2,8 @@
 
 typedef struct stRadioTower{
     char id[32], strokeColor[24], fillColor[24], sw[12];
-    double x, y;    
+    double x, y;
+    int treeX, treeY;
 }*RadioTowerImp;
 
 RadioTower createRadioTower(char id[], double x, double y, char strokeColor[], char fillColor[], char sw[]){
@@ -14,6 +15,9 @@ RadioTower createRadioTower(char id[], double x, double y, char strokeColor[], c
     strcpy(rTower->strokeColor, strokeColor);
     strcpy(rTower->fillColor, fillColor);
     strcpy(rTower->sw, sw);
+
+    rTower->treeX = 0;
+    rTower->treeY = 0;
 
     return rTower;
 }
@@ -74,6 +78,18 @@ char *getRadioTowerSw(RadioTower r){
     return rTower->sw;
 }
 
+int getRadioTowerTreeX(RadioTower r){
+    RadioTowerImp rTower = (RadioTowerImp) r;
+
+    return rTower->treeX;
+}
+
+int getRadioTowerTreeY(RadioTower r){
+    RadioTowerImp rTower = (RadioTowerImp) r;
+
+    return rTower->treeY;
+}
+
 void setRadioTowerX(RadioTower r, double x){
     RadioTowerImp rTower = (RadioTowerImp) r;
 
@@ -84,6 +100,13 @@ void setRadioTowerY(RadioTower r, double y){
     RadioTowerImp rTower = (RadioTowerImp) r;
 
     rTower->y = y;
+}
+
+void setRadioTowerTreeXY(RadioTower r, int x, int y){
+    RadioTowerImp rTower = (RadioTowerImp) r;
+
+    rTower->treeX = x;
+    rTower->treeY = y;
 }
 
 void destroyRadioTower(RadioTower r){

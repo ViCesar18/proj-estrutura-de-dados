@@ -34,6 +34,10 @@ char *getBlockFillColor(Block b);
 
 char *getBlockSw(Block b);
 
+int getBlockTreeX(Block b);
+
+int getBlockTreeY(Block b);
+
 void setBlockX(Block b, double x);
 
 void setBlockY(Block b, double y);
@@ -41,6 +45,8 @@ void setBlockY(Block b, double y);
 void setBlockStrokeColor(Block b, char strokeColor[]);
 
 void setBlockSW(Block b, char sw[]);
+
+void setBlockTreeXY(Block b, int x, int y);
 /*Fim getters e setters*/
 
 /*Libera memoria de uma quadra*/

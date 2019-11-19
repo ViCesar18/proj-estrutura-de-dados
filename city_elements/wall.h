@@ -29,6 +29,11 @@ double getWallX2(Wall w);
 
 double getWallY2(Wall w);
 
+int getWallTreeX(Wall w);
+
+int getWallTreeY(Wall w);
+
+void setWallTreeXY(Wall w, int x, int y);
 /*Libera memoria de um muro*/
 void destroyWall(Wall w);
 

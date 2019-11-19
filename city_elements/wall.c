@@ -2,6 +2,7 @@
 
 typedef struct stWall{
     double x1, y1, x2, y2, size;
+    int treeX, treeY;
 }*WallImp;
 
 Wall createWall(double x1, double y1, double x2, double y2){
@@ -12,6 +13,9 @@ Wall createWall(double x1, double y1, double x2, double y2){
     wall->x2 = x2;
     wall->y2 = y2;
     wall->size = distEuclid(x1, y1, x2, y2);
+
+    wall->treeX = 0;
+    wall->treeY = 0;
 
     return wall;
 }
@@ -64,6 +68,25 @@ double getWallY2(Wall w){
     WallImp wall = (WallImp) w;
 
     return wall->y2;
+}
+
+int getWallTreeX(Wall w){
+    WallImp wall = (WallImp) w;
+
+    return wall->treeX;
+}
+
+int getWallTreeY(Wall w){
+    WallImp wall = (WallImp) w;
+
+    return wall->treeY;
+}
+
+void setWallTreeXY(Wall w, int x, int y){
+    WallImp wall = (WallImp) w;
+
+    wall->treeX = x;
+    wall->treeY = y;
 }
 
 void destroyWall(Wall w){

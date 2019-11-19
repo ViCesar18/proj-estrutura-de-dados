@@ -442,51 +442,67 @@ void printTreeElements(Tree t, Node n, FILE *arqSVG, void (*printElement)(FILE*,
 
 }
 
-int X_PRINT_ARVORE = 20;
+int X_PRINT_TREE = 20;
+int X_PREPARE_TREE_STRUCTURE = 20;
 
-void printTreeInSVG_util(TreeImp tree, Node n, int y, FILE* svg, void (getId)(Element, char*, char*)){
-	NodeImp node = (NodeImp) n;
+int prepareTreeStructure(TreeImp tree, NodeImp node, void (setElementTreeXY)(Element, int, int), int y){
+	if(node == tree->nil) return X_PREPARE_TREE_STRUCTURE;
 
+	y += 20;
+
+	prepareTreeStructure(tree, node->left, setElementTreeXY, y);
+
+	Element element = getElement(tree, node);
+	setElementTreeXY(element, X_PREPARE_TREE_STRUCTURE, y);
+	X_PREPARE_TREE_STRUCTURE += 20;
+
+	prepareTreeStructure(tree, node->right, setElementTreeXY, y);
+}
+
+void printTreeInSVG_util(TreeImp tree, NodeImp node, int y, FILE* svg, void (getInformation)(Element, char*, char*), int (getElementTreeX)(Element), int (getElementTreeY)(Element)){
 	if(node == tree->nil) return;
 
 	y += 20;
 	char info[32], posic[32];
 
-	printTreeInSVG_util(tree, node->left, y, svg, getId);
+	printTreeInSVG_util(tree, node->left, y, svg, getInformation, getElementTreeX, getElementTreeY);
 
-	getId(node->element, info, posic);
+	getInformation(node->element, info, posic);
 
-	if(node == node->parent->left)
-		fprintf(svg, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"black\"/>\n", X_PRINT_ARVORE, y, X_PRINT_ARVORE + 20, y - 20);
-	else if(node->right != tree->nil)
-		fprintf(svg, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"black\"/>\n", X_PRINT_ARVORE, y, X_PRINT_ARVORE + 20, y + 20);
+	if(node != tree->root){
+		fprintf(svg, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:black;stroke-width:2\"/>\n", 
+		getElementTreeX(node->element), getElementTreeY(node->element), 
+		getElementTreeX(node->parent->element), getElementTreeY(node->parent->element));
+	}
 
 	fprintf(svg, "<circle cx=\"%d\" cy=\"%d\" r=\"8\" fill=\"%s\" stroke-width=\"2\"/>\n", 
-            X_PRINT_ARVORE,
+            X_PRINT_TREE,
             y,
             node->color == RED ? "red" : "black");
 	fprintf(svg, "<text x=\"%d\" y=\"%d\" fill=\"darkblue\" font-size=\"5\">"
 	"<tspan>%s</tspan>"
     "<tspan x=\"%d\" dy=\"1.2em\">%s</tspan>"
 	"</text>\n",
-        X_PRINT_ARVORE - 10, 
+        X_PRINT_TREE - 10, 
         y, 
         info,
-		X_PRINT_ARVORE - 10,
+		X_PRINT_TREE - 10,
 		posic);
 
-	X_PRINT_ARVORE += 20;
+	X_PRINT_TREE += 20;
 
-	printTreeInSVG_util(tree, node->right, y, svg, getId);
+	printTreeInSVG_util(tree, node->right, y, svg, getInformation, getElementTreeX, getElementTreeY);
 }
 
-void printTreeInSVG(Tree t, FILE* svg, void (getId)(Element, char*, char*)){
+void printTreeInSVG(Tree t, FILE* svg, void (getInformation)(Element, char*, char*), int (getElementTreeX)(Element), int (getElementTreeY)(Element), void (setElementTreeXY)(Element, int, int)){
 	TreeImp tree = (TreeImp) t;
-	NodeImp node = (NodeImp) tree->root;
+
+	int maxX = prepareTreeStructure(tree, tree->root, setElementTreeXY, 0);
 
 	fprintf(svg, "<svg xmlns=\"http://www.w3.org/2000/svg\" weight=\"10000\" height=\"10000\">\n");
-	printTreeInSVG_util(tree, node, 0, svg, getId);
+	printTreeInSVG_util(tree, tree->root, 0, svg, getInformation, getElementTreeX, getElementTreeY);
 	fprintf(svg, "</svg>\n");
 
-	X_PRINT_ARVORE = 20;
+	X_PRINT_TREE = 20;
+	X_PREPARE_TREE_STRUCTURE = 20;
 }

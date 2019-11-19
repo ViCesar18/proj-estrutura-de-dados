@@ -3,6 +3,7 @@
 typedef struct stTrafficLight{
     char id[32], strokeColor[24], fillColor[24], sw[12];
     double x, y;
+    int treeX, treeY;
 }*TrafficLightImp;
 
 TrafficLight createTrafficLight(char id[], double x, double y, char strokeColor[], char fillColor[], char sw[]){
@@ -14,6 +15,9 @@ TrafficLight createTrafficLight(char id[], double x, double y, char strokeColor[
     strcpy(tLight->strokeColor, strokeColor);
     strcpy(tLight->fillColor, fillColor);
     strcpy(tLight->sw, sw);
+
+    tLight->treeX = 0;
+    tLight->treeY = 0;
 
     return tLight;
 }
@@ -74,6 +78,18 @@ char *getTrafficLightSw(TrafficLight s){
     return tLight->sw;
 }
 
+int getTrafficLightTreeX(TrafficLight s){
+    TrafficLightImp tLight = (TrafficLightImp) s;
+
+    return tLight->treeX;
+}
+
+int getTrafficLightTreeY(TrafficLight s){
+    TrafficLightImp tLight = (TrafficLightImp) s;
+
+    return tLight->treeY;
+}
+
 void setTrafficLightX(TrafficLight s, double x){
     TrafficLightImp tLight = (TrafficLightImp) s;
 
@@ -84,6 +100,13 @@ void setTrafficLightY(TrafficLight s, double y){
     TrafficLightImp tLight = (TrafficLightImp) s;
 
     tLight->y = y;
+}
+
+void setTrafficLightTreeXY(TrafficLight s, int x, int y){
+    TrafficLightImp tLight = (TrafficLightImp) s;
+
+    tLight->treeX = x;
+    tLight->treeY = y;
 }
 
 void destroyTrafficLight(TrafficLight s){

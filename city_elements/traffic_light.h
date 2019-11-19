@@ -30,9 +30,15 @@ char *getTrafficLightFillColor(TrafficLight s);
 
 char *getTrafficLightSw(TrafficLight s);
 
+int getTrafficLightTreeX(TrafficLight s);
+
+int getTrafficLightTreeY(TrafficLight s);
+
 void setTrafficLightX(TrafficLight s, double x);
 
 void setTrafficLightY(TrafficLight s, double y);
+
+void setTrafficLightTreeXY(TrafficLight s, int x, int y);
 /*Fim getters e setters*/
 
 /*Libera memoria de um semaforo*/

@@ -30,9 +30,15 @@ char *getRadioTowerFillColor(RadioTower r);
 
 char *getRadioTowerSw(RadioTower r);
 
+int getRadioTowerTreeX(RadioTower r);
+
+int getRadioTowerTreeY(RadioTower r);
+
 void setRadioTowerX(RadioTower r, double x);
 
 void setRadioTowerY(RadioTower r, double y);
+
+void setRadioTowerTreeXY(RadioTower r, int x, int y);
 /*Fim getters e setters*/
 
 /*Libera memoria de uma quadra*/

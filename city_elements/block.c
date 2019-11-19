@@ -3,6 +3,7 @@
 typedef struct stBlock{
     char cep[32], strokeColor[24], fillColor[24], sw[12];
     double x, y, w, h;
+    int treeX, treeY;
 }*BlockImp;
 
 Block createBlock(char cep[], double x, double y, double w, double h, char strokeColor[], char fillColor[], char sw[]){
@@ -16,6 +17,9 @@ Block createBlock(char cep[], double x, double y, double w, double h, char strok
     strcpy(block->strokeColor, strokeColor);
     strcpy(block->fillColor, fillColor);
     strcpy(block->sw, sw);
+
+    block->treeX = 0;
+    block->treeY = 0;
 
     return block;
 }
@@ -87,6 +91,18 @@ char *getBlockSw(Block b){
     return block->sw;
 }
 
+int getBlockTreeX(Block b){
+    BlockImp block = (BlockImp) b;
+
+    return block->treeX;
+}
+
+int getBlockTreeY(Block b){
+    BlockImp block = (BlockImp) b;
+
+    return block->treeY;
+}
+
 void setBlockX(Block b, double x){
     BlockImp block = (BlockImp) b;
 
@@ -109,6 +125,13 @@ void setBlockSW(Block b, char sw[]){
     BlockImp block = (BlockImp) b;
 
     strcpy(block->sw, sw);
+}
+
+void setBlockTreeXY(Block b, int x, int y){
+    BlockImp block = (BlockImp) b;
+
+    block->treeX = x;
+    block->treeY = y;
 }
 
 void destroyBlock(Block b){

@@ -4,6 +4,7 @@ typedef struct stBuilding{
     char cep[32], face[2], fillColor[24];
     int num;
     double faceSize, depth, margin, x, y, w, h;
+    int treeX, treeY;
     Block *block;
 }*BuildingImp;
 
@@ -45,6 +46,9 @@ Building createBuilding(char cep[], char face[], double num, double faceSize, do
     setBuildingBlock(building, block);
 
     strcpy(building->fillColor, "white");
+
+    building->treeX = 0;
+    building->treeY = 0;
 
     return building;
 }
@@ -105,6 +109,18 @@ double getBuildingMargin(Building b){
     return building->margin;
 }
 
+int getBuildingTreeX(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    return building->treeX;
+}
+
+int getBuildingTreeY(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    return building->treeY;
+}
+
 void destroyBuilding(Building b){
     BuildingImp building = (BuildingImp) b;
 
@@ -157,4 +173,11 @@ void setBuildingFillCollor(Building b, char *fillColor){
     BuildingImp building = (BuildingImp) b;
 
     strcpy(building->fillColor, fillColor);
+}
+
+void setBuildingTreeXY(Building b, int x, int y){
+    BuildingImp building = (BuildingImp) b;
+
+    building->x = x;
+    building->y = y;
 }
