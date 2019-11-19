@@ -292,12 +292,18 @@ void segmentIntersection(Segment s1, Segment s2, double *x, double *y){
 
 bool pointInsidePolygon(Point point, Polygon polygon){
     Point xMaxPoint = createPoint(getPolygonXMax(polygon), getPointY(point));
-    Segment s = createSegment(createVertex(point, 0, 0), createVertex(xMaxPoint, 0, 0));
+    Vertex v1 = createVertex(point, 0, 0), v2 = createVertex(xMaxPoint, 0, 0);
+    Segment s = createSegment(v1, v2);
 
     int cont = 0;
     for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux)){
         if(checkSegmentsIntersection(s, aux)) cont++;
     }
+
+    freePoint(xMaxPoint);
+    free(v1);
+    free(v2);
+    free(s);
 
     if(cont % 2 != 0) return true;
     else return false;

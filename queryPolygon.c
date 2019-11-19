@@ -15,6 +15,11 @@ void treatMPLG_blocks(Tree blocks, Node node, Polygon polygon){
         setBlockSW(block, "5");
     }
 
+    freePoint(p1);
+    freePoint(p2);
+    freePoint(p3);
+    freePoint(p4);
+
     treatMPLG_blocks(blocks, getRight(blocks, node), polygon);
 }
 
@@ -24,19 +29,23 @@ void treatMPLG_buildings(Tree buildings, Node node, Polygon polygon){
     treatMPLG_buildings(buildings, getLeft(buildings, node), polygon);
 
     Building building = getElement(buildings, node);
-    Point p1 = createPoint(getBuildingX(building), getBuildingY(building));
-    Point p2 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building));
-    Point p3 = createPoint(getBuildingX(building), getBuildingY(building) + getBuildingH(building));
-    Point p4 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building) + getBuildingH(building));
+    Point p11 = createPoint(getBuildingX(building), getBuildingY(building));
+    Point p12 = createPoint(getBuildingX(building), getBuildingY(building));
+    Point p21 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building));
+    Point p22 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building));
+    Point p31 = createPoint(getBuildingX(building), getBuildingY(building) + getBuildingH(building));
+    Point p32 = createPoint(getBuildingX(building), getBuildingY(building) + getBuildingH(building));
+    Point p41 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building) + getBuildingH(building));
+    Point p42 = createPoint(getBuildingX(building) + getBuildingW(building), getBuildingY(building) + getBuildingH(building));
 
-    Segment s1 = createSegment(createVertex(p1, 0, 0), createVertex(p2, 0, 0));
-    Segment s2 = createSegment(createVertex(p2, 0, 0), createVertex(p3, 0, 0));
-    Segment s3 = createSegment(createVertex(p3, 0, 0), createVertex(p4, 0, 0));
-    Segment s4 = createSegment(createVertex(p4, 0, 0), createVertex(p1, 0, 0));
+    Segment s1 = createSegment(createVertex(p11, 0, 0), createVertex(p21, 0, 0));
+    Segment s2 = createSegment(createVertex(p22, 0, 0), createVertex(p31, 0, 0));
+    Segment s3 = createSegment(createVertex(p32, 0, 0), createVertex(p41, 0, 0));
+    Segment s4 = createSegment(createVertex(p42, 0, 0), createVertex(p12, 0, 0));
 
     bool entirelyIn = true;
 
-    if(pointInsidePolygon(p1, polygon) && pointInsidePolygon(p2, polygon) && pointInsidePolygon(p3, polygon) && pointInsidePolygon(p4, polygon)){
+    if(pointInsidePolygon(p11, polygon) && pointInsidePolygon(p21, polygon) && pointInsidePolygon(p31, polygon) && pointInsidePolygon(p41, polygon)){
         for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux)){
             if(checkSegmentsIntersection(s1, aux) || checkSegmentsIntersection(s2, aux) 
             || checkSegmentsIntersection(s3, aux), checkSegmentsIntersection(s4, aux)){
@@ -49,6 +58,11 @@ void treatMPLG_buildings(Tree buildings, Node node, Polygon polygon){
             setBuildingFillCollor(building, "black");
         }
     }
+
+    freeSegment(s1);
+    freeSegment(s2);
+    freeSegment(s3);
+    freeSegment(s4);
 
     treatMPLG_buildings(buildings, getRight(buildings, node), polygon);
 }
@@ -66,6 +80,7 @@ void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree block
     if(pathIn != NULL){
         allocateFileMamory(fName, pathIn, &fDirectory);
         pFile = fopen(fDirectory, "r");
+        free(fDirectory);
         checkFile(pFile, fDirectory);
     }
     else{
