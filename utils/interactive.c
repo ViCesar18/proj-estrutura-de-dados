@@ -2,7 +2,7 @@
 
 void console (char *pathIn, char *pathOut, char *nameInT, int nm, int np, 
             Tree figures, Tree blocks, Tree hydrants, Tree tLights, Tree rTowers, Tree walls, Tree buildings, 
-            HashTable formsTable, HashTable blocksTable, HashTable hydrantsTable, HashTable tLightsTable, HashTable rTowersTable, 
+            HashTable formsTable, HashTable blocksTable, HashTable hydrantsTable, HashTable tLightsTable, HashTable rTowersTable, HashTable buildingsTable, 
             HashTable persons, HashTable residents, HashTable stores, HashTable storeTypes) {
 
     char comando[24], arg1[8], arg2[8], arg3[8];
@@ -51,7 +51,7 @@ void console (char *pathIn, char *pathOut, char *nameInT, int nm, int np,
             printf("Arquivo de Consulta %s lido com sucesso.\n", arg2);
 
             treatQueries(arqQuery, arqText, arqSvgQ, arqAux, nameInT, nameQueryT, pathIn, pathOut, nm, np, figures, blocks, hydrants, tLights, rTowers, walls, 
-            buildings, formsTable, blocksTable, hydrantsTable, tLightsTable, rTowersTable, persons, residents, stores, storeTypes);
+            buildings, formsTable, blocksTable, hydrantsTable, tLightsTable, rTowersTable, buildingsTable, persons, residents, stores, storeTypes);
 
             printQuery(arqSvgQ, arqAux, figures, blocks, hydrants, tLights, rTowers, buildings, walls);
 

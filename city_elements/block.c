@@ -130,6 +130,12 @@ void setBlockStrokeColor(Block b, char strokeColor[]){
     strcpy(block->strokeColor, strokeColor);
 }
 
+void setBlockFillColor(Block b, char fillColor[]){
+    BlockImp block = (BlockImp) b;
+
+    strcpy(block->fillColor, fillColor);
+}
+
 void setBlockSW(Block b, char sw[]){
     BlockImp block = (BlockImp) b;
 

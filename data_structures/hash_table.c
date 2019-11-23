@@ -134,7 +134,6 @@ void destroyHashTable(HashTable h){
 		while(node != NULL){
 			if(hash->destroy != NULL){
 				hash->destroy(node->element);
-				node->element = NULL;
 			}
 			ListNodeImp nextNode = node->next;
 			free(node);

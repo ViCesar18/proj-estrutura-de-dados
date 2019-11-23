@@ -67,7 +67,7 @@ void treatMPLG_buildings(FILE *arqTxt, Tree buildings, Node node, Polygon polygo
             }
         }
 
-        if(entirelyIn && getBuildingHasResidents(building)){
+        if(entirelyIn && getBuildingNResidents(building) > 0){
             setBuildingFillCollor(building, "yellow");
             HashTable residents = getBuildingResidents(building);
             
@@ -162,6 +162,119 @@ void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree block
 
     fprintf (arqTxt, "mplg? Moradores dos prédios inteiramente contidos no poligono:\n");
     treatMPLG_buildings(arqTxt, buildings, getTreeRoot(buildings), polygon);
+
+    destroyPolygon(polygon);
+}
+
+void treatEPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *codt, char *pathIn, HashTable stores){
+    double x1, y1, x2, y2;
+    bool first = true, verify = true;
+    Segment s1, s2;
+    Polygon polygon;
+    Segment aux;
+    
+    char *fDirectory;
+    FILE *pFile;
+
+    if(pathIn != NULL){
+        allocateFileMamory(fName, pathIn, &fDirectory);
+        pFile = fopen(fDirectory, "r");
+        free(fDirectory);
+        checkFile(pFile, fDirectory);
+    }
+    else{
+        pFile = fopen(fName, "r");
+        checkFile(pFile, fName);
+    }
+
+    while(1){
+        if(first){
+            fscanf(pFile, "%lf", &x1);
+            fscanf(pFile, "%lf", &y1);
+        }
+        fscanf(pFile, "%lf", &x2);
+        fscanf(pFile, "%lf", &y2);
+
+        if(verify){
+            s1 = createSegment(createVertex(createPoint(x1, y1), 0, 0), createVertex(createPoint(x2, y2), 0, 0));
+            if(first){
+                polygon = createPolygon(s1);
+                first = false;
+            }
+            else{
+                setSegmentProx(s2, s1);
+            }
+            verify = false;
+        }
+        else{
+            s2 = createSegment(createVertex(createPoint(x1, y1), 0, 0), createVertex(createPoint(x2, y2), 0, 0));
+            setSegmentProx(s1, s2);
+            verify = true;
+        }
+
+        x1 = x2;
+        y1 = y2;
+
+        if(feof(pFile)) break;
+    }
+    fclose(pFile);
+
+    double xMax = getPointX(getVertexV(getSegmentV1(getPolygonFirstSegment(polygon))));
+
+    fprintf(arqSVG, "<polygon points=\"");
+    for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux)){
+        fprintf(arqSVG, "%lf,%lf ", getPointX(getVertexV(getSegmentV1(aux))), getPointY(getVertexV(getSegmentV1(aux))));
+
+        if(getPointX(getVertexV(getSegmentV1(aux))) > xMax) xMax = getPointX(getVertexV(getSegmentV1(aux)));
+    }
+    fprintf(arqSVG, "\" opacity=\"0.5\" style=\"fill:lime;stroke:purple;stroke-width:1\" />");
+
+    setPolygonXMax(polygon, xMax);
+
+    fprintf (arqTxt, "eplg? Estabelecimentos comerciais do tipo %s inteiramente contidos no poligono:\n", codt);
+
+    for(int i = 0; i < getHashTableSize(stores); i++){
+        ListNode node = getHashNode(stores, i);
+        while(node != NULL){
+            Store store = getHashNodeElement(node);
+            Person owner = getStoreOwner(store);
+            StoreType sType = getStoreStoreType(store);
+
+            if(!strcmp(codt, "*")){
+                Point p  = createPoint(getStoreX(store), getStoreY(store));
+                if(pointInsidePolygon(p, polygon)){
+                    Block block = getStoreBlock(store);
+
+                    fprintf (arqTxt, "-%s:\n\tCNPJ: %s\n\tTipo: %s\n\tProprietário: %s %s\n\tCPF: %s\n\tCEP: %s, Face: %s, Número: %d\n\n", getStoreName(store), getStoreCnpj(store), getStoreTypeCodt(sType),getPersonName(owner), getPersonLastName(owner), getPersonCpf(owner), getStoreCep(store), getStoreFace(store), getStoreNum(store));
+
+                    setBlockFillColor(block, "yellow");
+
+                    Form circle = createCircle("", getStoreX(store), getStoreY(store), 5, "red", "none", "2");
+                    printCircle(arqSVG, circle);
+                    free(circle);
+                }
+                freePoint(p);
+            }
+            else{
+                if(!strcmp(codt, getStoreTypeCodt(getStoreStoreType(store)))){
+                    Point p  = createPoint(getStoreX(store), getStoreY(store));
+
+                    if(pointInsidePolygon(p, polygon)){
+                        Block block = getStoreBlock(store);
+                        fprintf (arqTxt, "-%s:\n\tCNPJ: %s\n\tTipo: %s\n\tProprietário: %s %s\n\tCPF: %s\n\tCEP: %s, Face: %s, Número: %d\n\n", getStoreName(store), getStoreCnpj(store), getStoreTypeCodt(sType),getPersonName(owner), getPersonLastName(owner), getPersonCpf(owner), getStoreCep(store), getStoreFace(store), getStoreNum(store));
+                        setBlockFillColor(block, "yellow");
+
+                        Form circle = createCircle("", getStoreX(store), getStoreY(store), 5, "red", "none", "2");
+                        printCircle(arqSVG, circle);
+                        free(circle);
+                    }
+                    freePoint(p);
+                }
+            }
+
+            node = getHashNodeNext(node);
+        }
+    }
 
     destroyPolygon(polygon);
 }

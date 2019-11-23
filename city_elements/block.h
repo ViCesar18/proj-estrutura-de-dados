@@ -47,6 +47,8 @@ void setBlockY(Block b, double y);
 
 void setBlockStrokeColor(Block b, char strokeColor[]);
 
+void setBlockFillColor(Block b, char fillColor[]);
+
 void setBlockSW(Block b, char sw[]);
 
 void setBlockTreeXY(Block b, int x, int y);

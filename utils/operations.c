@@ -300,9 +300,8 @@ bool pointInsidePolygon(Point point, Polygon polygon){
         if(checkSegmentsIntersection(s, aux)) cont++;
     }
 
-    freePoint(xMaxPoint);
     free(v1);
-    free(v2);
+    freeVertex(v2);
     free(s);
 
     if(cont % 2 != 0) return true;

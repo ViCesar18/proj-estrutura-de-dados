@@ -13,7 +13,7 @@ void treatM (FILE *arqTxt, HashTable persons, HashTable residents, char cep[]);
 
 void printResidentData(char *cpf, HashTable residents, FILE *arqTxt);
 
-void treatMud (FILE *arqTxt, HashTable residents, char cpf[], char cep[], char face[], int num, char compl[]);
+void treatMud (FILE *arqTxt, HashTable residents, HashTable buildingsTable, char cpf[], char cep[], char face[], int num, char compl[]);
 
     
 #endif

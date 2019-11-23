@@ -174,14 +174,14 @@ int main(int argc, char *argv[]){
     /*Cria as tabelas hash*/
     HashTable blocksTable = createHashTable(nq, NULL);
     HashTable formsTable = createHashTable(nx, NULL);
-    HashTable hydrantsTable = createHashTable(10000, NULL);
-    HashTable tLightsTable = createHashTable(10000, NULL);
-    HashTable rTowersTable = createHashTable(10000, NULL);
-    HashTable buildingsTable = createHashTable(1000, NULL);
-    HashTable stores = createHashTable(10000, destroyStore);
-    HashTable storeTypes = createHashTable(10000, destroyStore);
-    HashTable persons = createHashTable(10000, destroyPerson);
-    HashTable residents = createHashTable(10000, destroyResident);
+    HashTable hydrantsTable = createHashTable(nh, NULL);
+    HashTable tLightsTable = createHashTable(ns, NULL);
+    HashTable rTowersTable = createHashTable(nr, NULL);
+    HashTable buildingsTable = createHashTable(np, NULL);
+    HashTable stores = createHashTable(1000, destroyStore);
+    HashTable storeTypes = createHashTable(1000, destroyStore);
+    HashTable persons = createHashTable(1000, destroyPerson);
+    HashTable residents = createHashTable(1000, destroyResident);
     
     /*Le os dados dos elementos do arquivo de entrada .geo*/
     while(1){
@@ -273,7 +273,7 @@ int main(int argc, char *argv[]){
                 scanStoreType (arqEst, storeTypes);
             }
             if (!strcmp (command, "e")){
-                scanStore (arqEst, stores, storeTypes, persons);
+                scanStore (arqEst, stores, storeTypes, persons, blocksTable);
             }
         }
     }
@@ -281,7 +281,7 @@ int main(int argc, char *argv[]){
     /*Le os dados de consulta(se existir)*/
     if(arqSvgQ != NULL){
         treatQueries(arqQuery, arqText, arqSvgQ, arqAux, nameInT, nameQueryT, pathIn, pathOut, nm, np, figures, blocks, hydrants, 
-        tLights, rTowers, walls, buildings, formsTable, blocksTable, hydrantsTable, tLightsTable, rTowersTable, persons, residents, stores, storeTypes);
+        tLights, rTowers, walls, buildings, formsTable, blocksTable, hydrantsTable, tLightsTable, rTowersTable, buildingsTable, persons, residents, stores, storeTypes);
 
         printQuery(arqSvgQ, arqAux, figures, blocks, hydrants, tLights, rTowers, buildings, walls);
     }
@@ -289,7 +289,7 @@ int main(int argc, char *argv[]){
     //Loop de interatividade(se existir)
     if (isInteractive != NULL){
         console(pathIn, pathOut, nameInT, nm, np, figures, blocks, hydrants, tLights, rTowers, walls, buildings, formsTable, blocksTable, 
-        hydrantsTable, tLightsTable, rTowersTable, persons, residents, stores, storeTypes);
+        hydrantsTable, tLightsTable, rTowersTable, buildingsTable, persons, residents, stores, storeTypes);
     }
 
     /*Finalização, libreracao de memoria e fechamento dos arquivos*/
@@ -355,6 +355,7 @@ int main(int argc, char *argv[]){
     destroyHashTable(hydrantsTable);
     destroyHashTable(tLightsTable);
     destroyHashTable(rTowersTable);
+    destroyHashTable(buildingsTable);
     destroyHashTable(stores);
     destroyHashTable(storeTypes);
     destroyHashTable(persons);

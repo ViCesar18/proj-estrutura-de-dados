@@ -8,7 +8,7 @@ typedef struct stBuilding{
     Block *block;
     HashTable residents;
     char key[64];
-    bool hasResidents;
+    int nResidents;
 }*BuildingImp;
 
 Building createBuilding(char cep[], char face[], double num, double faceSize, double depth, double margin, Block block){
@@ -61,7 +61,7 @@ Building createBuilding(char cep[], char face[], double num, double faceSize, do
     strcat(building->key, building->face);
     strcat(building->key, n);
 
-    building->hasResidents = false;
+    building->nResidents = 0;
 
     return building;
 }
@@ -136,6 +136,7 @@ int getBuildingTreeY(Building b){
 
 void destroyBuilding(Building b){
     BuildingImp building = (BuildingImp) b;
+    
     destroyHashTable(building->residents);
     free(building);   
 }
@@ -188,10 +189,10 @@ HashTable getBuildingResidents(Building b){
     return building->residents;
 }
 
-bool getBuildingHasResidents(Building b){
+int getBuildingNResidents(Building b){
     BuildingImp building = (BuildingImp) b;
 
-    return building->hasResidents;
+    return building->nResidents;
 }
 
 void setBuildingBlock(Building b, Block block){
@@ -213,8 +214,14 @@ void setBuildingTreeXY(Building b, int x, int y){
     building->y = y;
 }
 
-void setBuildingHasResidents(Building b, bool hasResidents){
+void increaseBuildingNResidents(Building b){
     BuildingImp building = (BuildingImp) b;
 
-    building->hasResidents = hasResidents;
+    (building->nResidents)++;
+}
+
+void decreaseBuildingNResidents(Building b){
+    BuildingImp building = (BuildingImp) b;
+
+    if(building->nResidents > 0) (building->nResidents)--;
 }

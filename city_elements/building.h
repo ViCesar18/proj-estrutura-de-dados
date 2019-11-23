@@ -55,16 +55,18 @@ char *getBuildingKey(Building b);
 
 HashTable getBuildingResidents(Building b);
 
-bool getBuildingHasResidents(Building b);
+int getBuildingNResidents(Building b);
 
 void setBuildingBlock(Building b, Tree blocks);
 
 void setBuildingFillCollor(Building b, char *fillColor);
 
 void setBuildingTreeXY(Building b, int x, int y);
-
-void setBuildingHasResidents(Building b, bool hasResidents);
 /*Fim getters e setters*/
+
+void increaseBuildingNResidents(Building b);
+
+void decreaseBuildingNResidents(Building b);
 
 /*Libera memoria de um predio*/
 void destroyBuilding(Building b);

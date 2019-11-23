@@ -1,20 +1,41 @@
 #include"store.h"
 
 typedef struct stStore {
-    char cnpj[32],  cep[32], face[2], nome[32];
+    char cnpj[32], cep[32], face[2], nome[32];
     int num;
+    double x, y;
     StoreType storeType;
     Person owner;
+    Block block;
 } *StoreImp;
 
-Store createStore (char cnpj[], char cpf[], char codt[], char cep[], char face[], int num, char nome[], HashTable storeTypes, HashTable persons){
-    StoreImp rStore = (StoreImp) malloc (sizeof (struct stStore));
+Store createStore (char cnpj[], char cpf[], char codt[], char cep[], char face[], int num, char nome[], HashTable storeTypes, HashTable persons, Block block){
+    StoreImp store = (StoreImp) malloc (sizeof (struct stStore));
 
-    strcpy (rStore->cnpj, cnpj);
-    strcpy (rStore->cep, cep);
-    strcpy (rStore->face, face);
-    rStore->num = num;
-    strcpy (rStore->nome, nome);
+    double xB = getBlockX(block), yB = getBlockY(block), wB = getBlockW(block), hB = getBlockH(block);
+
+    if(!strcmp(face, "N")){
+        store->x = xB + num;
+        store->y = yB + hB;
+    }
+    else if(!strcmp(face, "S")){
+        store->x = xB + num;
+        store->y = yB;
+    }
+    else if(!strcmp(face, "O")){
+        store->x = xB + wB;
+        store->y = yB + num;
+    }
+    else if(!strcmp(face, "L")){
+        store->x = xB;
+        store->y = yB + num;
+    }
+
+    strcpy (store->cnpj, cnpj);
+    strcpy (store->cep, cep);
+    strcpy (store->face, face);
+    store->num = num;
+    strcpy (store->nome, nome);
 
     bool found = false;
     for(int i = 0; i < getHashTableSize(storeTypes); i++){
@@ -24,7 +45,7 @@ Store createStore (char cnpj[], char cpf[], char codt[], char cep[], char face[]
 
             if(!strcmp(codt, getStoreTypeCodt(storeType))){
                 found = true;
-                rStore->storeType = storeType;
+                store->storeType = storeType;
                 break;
             }
             node = getHashNodeNext(node);
@@ -40,7 +61,7 @@ Store createStore (char cnpj[], char cpf[], char codt[], char cep[], char face[]
             Person person = getHashNodeElement(node);
             if(!strcmp(cpf, getPersonCpf(person))){
                 found = true;
-                rStore->owner = person;
+                store->owner = person;
                 break;
             }
             node = getHashNodeNext(node);
@@ -49,7 +70,9 @@ Store createStore (char cnpj[], char cpf[], char codt[], char cep[], char face[]
         if(found) break;
     }
 
-    return rStore;
+    store->block = block;
+
+    return store;
 }
 
 char* getStoreCnpj (Store s){
@@ -88,10 +111,28 @@ int getStoreNum (Store s){
     return store->num;
 }
 
+double getStoreX(Store s){
+    StoreImp store = (StoreImp) s;
+
+    return store->x;
+}
+
+double getStoreY(Store s){
+    StoreImp store = (StoreImp) s;
+
+    return store->y;
+}
+
 StoreType getStoreStoreType(Store s){
     StoreImp store = (StoreImp) s;
 
     return store->storeType;
+}
+
+Block getStoreBlock(Store s){
+    StoreImp store = (StoreImp) s;
+
+    return store->block;
 }
 
 void destroyStore(Store s){

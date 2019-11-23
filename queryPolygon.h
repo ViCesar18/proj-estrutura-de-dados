@@ -13,4 +13,6 @@
 
 void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree blocks, Tree buildings);
 
+void treatEPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *storeType, char *pathIn, HashTable stores);
+
 #endif

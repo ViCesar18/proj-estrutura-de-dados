@@ -10,21 +10,36 @@
 #include "../data_structures/hash_table.h"
 
 typedef void *Resident;
+typedef void *Building;
 
 Resident createResident (char cpf[], char cep[], char face[], char compl[], int num, HashTable persons, HashTable buildingsTable, HashTable blocksTable);
+
 char* getResidentCep (Resident r);
+
 char* getResidentCpf (Resident r);
+
 char* getResidentFace (Resident r);
+
 char* getResidentCompl (Resident r);
+
 int getResidentNum (Resident r);
 
-void setResidentCep (Resident r, char cep[]);
-void setResidentFace (Resident r, char face[]);
-void setResidentNum (Resident r, int num);
-void setResidentCompl (Resident r, char compl[]);
-void changeResidentAdress (Resident r, char cep[], char face[], int num, char compl[]);
 Person getResidentPerson(Resident r);
-void destroyResident(Resident r);
 
+Building getResidentBuilding(Resident r);
+
+void setResidentCep (Resident r, char cep[]);
+
+void setResidentFace (Resident r, char face[]);
+
+void setResidentNum (Resident r, int num);
+
+void setResidentCompl (Resident r, char compl[]);
+
+void setResidentBuilding(Resident r, Building b);
+
+void changeResidentAdress (Resident r, char cep[], char face[], int num, char compl[]);
+
+void destroyResident(Resident r);
 
 #endif

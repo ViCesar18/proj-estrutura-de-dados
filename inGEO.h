@@ -69,7 +69,7 @@ void scanWall(FILE *arqIn, Tree walls);
 
 void scanStoreType (FILE *arqEst, HashTable storeTypes);
 
-void scanStore (FILE *arqEst, HashTable stores, HashTable storeTypes, HashTable persons);
+void scanStore (FILE *arqEst, HashTable stores, HashTable storeTypes, HashTable persons, HashTable blocksTable);
 
 void scanPerson (FILE *arqPes, HashTable persons);
 

@@ -4,15 +4,16 @@ typedef struct stResident {
     char cep[32], face[2], compl[16];
     int num;
     Person person;
+    Building building;
 } *ResidentImp;
 
 Resident createResident (char cpf[], char cep[], char face[], char compl[], int num, HashTable persons, HashTable buildingsTable, HashTable blocksTable){
-    ResidentImp rResident = (ResidentImp) malloc (sizeof (struct stResident));
+    ResidentImp resident = (ResidentImp) malloc (sizeof (struct stResident));
 
-    strcpy (rResident->cep, cep);
-    strcpy (rResident->face, face);
-    strcpy (rResident->compl, compl);
-    rResident->num = num;
+    strcpy (resident->cep, cep);
+    strcpy (resident->face, face);
+    strcpy (resident->compl, compl);
+    resident->num = num;
 
     Person person = NULL;
     bool found = false;
@@ -31,28 +32,30 @@ Resident createResident (char cpf[], char cep[], char face[], char compl[], int 
         if(found) break;
     }
 
-    rResident->person = person;
+    resident->person = person;
     char key[64];
     char n[8];
-    sprintf(n, "%d", rResident->num);
-    strcpy(key, rResident->cep);
-    strcat(key, rResident->face);
+    sprintf(n, "%d", resident->num);
+    strcpy(key, resident->cep);
+    strcat(key, resident->face);
     strcat(key, n);
 
     Building building = searchHashTable(buildingsTable, key);
 
     if(building != NULL){
-        insertHashTable(getBuildingResidents(building), getPersonCpf(person), rResident);
-        setBuildingHasResidents(building, true);
+        insertHashTable(getBuildingResidents(building), getPersonCpf(person), resident);
+        increaseBuildingNResidents(building);
     }
 
     Block block = searchHashTable(blocksTable, cep);
 
     if(block != NULL){
-        insertHashTable(getBlockResidents(block), getPersonCpf(person), rResident);
+        insertHashTable(getBlockResidents(block), getPersonCpf(person), resident);
     }
+    
+    resident->building = building;
 
-    return rResident;
+    return resident;
 }
 
 char* getResidentCpf (Resident r){
@@ -82,6 +85,18 @@ int getResidentNum (Resident r){
     return resident->num;
 }
 
+Person getResidentPerson(Resident r){
+    ResidentImp resident = (ResidentImp) r;
+
+    return resident->person;
+}
+
+Building getResidentBuilding(Resident r){
+    ResidentImp resident = (ResidentImp) r;
+
+    return resident->building;
+}
+
 void setResidentCep (Resident r, char cep[]){
     ResidentImp resident = (ResidentImp) r;
 
@@ -106,17 +121,17 @@ void setResidentCompl (Resident r, char compl[]){
     strcpy (resident->compl, compl);
 }
 
+void setResidentBuilding(Resident r, Building b){
+    ResidentImp resident = (ResidentImp) r;
+
+    resident->building = b;
+}
+
 void changeResidentAdress (Resident r, char cep[], char face[], int num, char compl[]){
     setResidentCep (r, cep);
     setResidentFace (r, face);
     setResidentNum (r, num);
     setResidentCompl (r, compl);
-}
-
-Person getResidentPerson(Resident r){
-    ResidentImp resident = (ResidentImp) r;
-
-    return resident->person;
 }
 
 void destroyResident(Resident r){

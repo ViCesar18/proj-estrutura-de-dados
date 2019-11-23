@@ -254,7 +254,7 @@ void scanResident (FILE *arqPes, HashTable residents, HashTable persons, HashTab
     insertHashTable(residents, getResidentCpf(resident), resident);
 }
 
-void scanStore (FILE *arqEst, HashTable stores, HashTable storeTypes, HashTable persons){
+void scanStore (FILE *arqEst, HashTable stores, HashTable storeTypes, HashTable persons, HashTable blocksTable){
     char cnpj[32], cpf [32], codt [32], cep[32], face[2], nome[32];
     int num;
 
@@ -266,7 +266,9 @@ void scanStore (FILE *arqEst, HashTable stores, HashTable storeTypes, HashTable 
     fscanf (arqEst, "%d", &num);
     fscanf (arqEst, "%s", nome);
 
-    Store store = createStore (cnpj, cpf, codt, cep, face, num, nome, storeTypes, persons);
+    Block block = searchHashTable(blocksTable, cep);
+
+    Store store = createStore (cnpj, cpf, codt, cep, face, num, nome, storeTypes, persons, block);
     insertHashTable(stores, getStoreCnpj(store), store);
 }
 
