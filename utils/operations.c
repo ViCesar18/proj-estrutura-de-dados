@@ -291,7 +291,7 @@ void segmentIntersection(Segment s1, Segment s2, double *x, double *y){
 }
 
 bool pointInsidePolygon(Point point, Polygon polygon){
-    Point xMaxPoint = createPoint(getPolygonXMax(polygon), getPointY(point));
+    Point xMaxPoint = createPoint(getPolygonXMax(polygon) + 1, getPointY(point));
     Vertex v1 = createVertex(point, 0, 0), v2 = createVertex(xMaxPoint, 0, 0);
     Segment s = createSegment(v1, v2);
 
@@ -306,4 +306,39 @@ bool pointInsidePolygon(Point point, Polygon polygon){
 
     if(cont % 2 != 0) return true;
     else return false;
+}
+
+bool rectInsidePolygon(Form rect, Polygon polygon){
+    bool entirelyIn = false;
+
+    Point p11 = createPoint(getFormX(rect), getFormY(rect));
+    Point p12 = createPoint(getFormX(rect), getFormY(rect));
+    Point p21 = createPoint(getFormX(rect) + getFormW(rect), getFormY(rect));
+    Point p22 = createPoint(getFormX(rect) + getFormW(rect), getFormY(rect));
+    Point p31 = createPoint(getFormX(rect) + getFormW(rect), getFormY(rect) + getFormH(rect));
+    Point p32 = createPoint(getFormX(rect) + getFormW(rect), getFormY(rect) + getFormH(rect));
+    Point p41 = createPoint(getFormX(rect), getFormY(rect) + getFormH(rect));
+    Point p42 = createPoint(getFormX(rect), getFormY(rect) + getFormH(rect));
+
+    Segment s1 = createSegment(createVertex(p11, 0, 0), createVertex(p21, 0, 0));
+    Segment s2 = createSegment(createVertex(p22, 0, 0), createVertex(p31, 0, 0));
+    Segment s3 = createSegment(createVertex(p32, 0, 0), createVertex(p41, 0, 0));
+    Segment s4 = createSegment(createVertex(p42, 0, 0), createVertex(p12, 0, 0));
+
+    if(pointInsidePolygon(p11, polygon) && pointInsidePolygon(p21, polygon) && pointInsidePolygon(p31, polygon) && pointInsidePolygon(p41, polygon)){
+        entirelyIn = true;
+        for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux)){
+            if(checkSegmentsIntersection(s1, aux) || checkSegmentsIntersection(s2, aux) 
+            || checkSegmentsIntersection(s3, aux) || checkSegmentsIntersection(s4, aux)){
+                entirelyIn = false;
+            }
+        }
+    }
+
+    freeSegment(s1);
+    freeSegment(s2);
+    freeSegment(s3);
+    freeSegment(s4);
+
+    return entirelyIn;
 }

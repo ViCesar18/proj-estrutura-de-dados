@@ -189,47 +189,7 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
         }
         else if(!strcmp(command, "del")){
             fscanf(arqQuery, "%s", id1);
-
-            element1 = searchHashTable(blocksTable, id1);
-            if(element1 != NULL){
-                x = getBlockX(element1);
-                y = getBlockY(element1);
-                removeNode(blocks, element1);
-                removeHashTable(blocksTable, getBlockCep(element1));
-                destroyBlock(element1);
-            }
-            else{
-                element1 = searchHashTable(hydrantsTable, id1);
-                if(element1 != NULL){
-                    x = getHydrantX(element1);
-                    y = getHydrantY(element1);
-                    removeNode(hydrants, element1);
-                    removeHashTable(hydrantsTable, getHydrantId(element1));
-                    destroyHydrant(element1);
-                }
-                else{
-                    element1 = searchHashTable(tLightsTable, id1);
-                    if(element1 != NULL){
-                        x = getTrafficLightX(element1);
-                        y = getTrafficLightY(element1);
-                        removeNode(tLights, element1);
-                        removeHashTable(tLightsTable, getTrafficLightId(element1));
-                        destroyTrafficLight(element1);
-                    }
-                    else{
-                        element1 = searchHashTable(rTowersTable, id1);
-                        if(element1 != NULL){
-                            x = getRadioTowerX(element1);
-                            y = getRadioTowerY(element1);
-                            removeNode(rTowers, element1);
-                            removeHashTable(rTowersTable, getRadioTowerId(element1));
-                            destroyRadioTower(element1);
-                        }
-                    }
-                }
-            }
-            fprintf(arqText, "del %s\n", id1);
-            fprintf(arqText, "\tEquipamento Urbano Removido: %s (%lf %lf)\n\n", id1, x, y);
+            treatDEL(arqText, id1, blocks, blocksTable, hydrants, hydrantsTable, tLights, tLightsTable, rTowers, rTowersTable);
         }
         else if(!strcmp(command, "cbq")){
             element1 = scanCBQ(arqQuery, cstrkQ);
@@ -320,7 +280,8 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
         }
         else if(!strcmp(command, "catac")){
             fscanf(arqQuery, "%s", id1);
-            //treatCATAC(ArqAux, arqText)
+            treatCATAC(arqAux, arqText, id1, pathIn, blocks, hydrants, tLights, rTowers, buildings, blocksTable, hydrantsTable, tLightsTable, rTowersTable, 
+            buildingsTable, residents);
         }
         else if(!strcmp(command, "dmprbt")){
             scanDMPRBT(arqQuery, id1, id2);

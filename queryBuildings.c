@@ -48,6 +48,78 @@ void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, HashTable blocksTable, ch
     treatDQ_Util(arqTxt, arqSvgQ, blocks, getTreeRoot(blocks), blocksTable, metric, circle);
 }
 
+void deleteBlock(Block block, Tree blocks, HashTable blocksTable){
+
+    removeNode(blocks, block);
+    removeHashTable(blocksTable, getBlockCep(block));
+    destroyBlock(block);
+}
+
+void deleteHydrant(Hydrant hydrant, Tree hydrants, HashTable hydrantsTable){
+
+    removeNode(hydrants, hydrant);
+    removeHashTable(hydrantsTable, getHydrantId(hydrant));
+    destroyHydrant(hydrant);
+}
+
+void deleteBuilding(Building building, Tree buildings, HashTable buildingsTable){
+
+    removeNode(buildings, building);
+    removeHashTable(buildingsTable, getBuildingKey(building));
+    destroyBuilding(building);
+}
+
+void deleteTrafficLight(TrafficLight tLight, Tree tLights, HashTable tLightsTable){
+
+    removeNode(tLights, tLight);
+    removeHashTable(tLightsTable, getTrafficLightId(tLight));
+    destroyTrafficLight(tLight);
+}
+
+void deleteRadioTower(RadioTower rTower, Tree rTowers, HashTable rTowersTable){
+
+    removeNode(rTowers, rTower);
+    removeHashTable(rTowersTable, getRadioTowerId(rTower));
+    destroyRadioTower(rTower);
+}
+
+void treatDEL(FILE *arqText, char *id, Tree blocks, HashTable blocksTable, Tree hydrants, HashTable hydrantsTable, Tree tLights, HashTable tLightsTable, Tree rTowers, HashTable rTowersTable){
+    double x, y;
+
+    Element element = searchHashTable(blocksTable, id);
+    if(element != NULL){
+        x = getBlockX(element);
+        y = getBlockY(element);
+        deleteBlock(element, blocks, blocksTable);
+    }
+    else{
+        element = searchHashTable(hydrantsTable, id);
+        if(element != NULL){
+            x = getHydrantX(element);
+            y = getHydrantY(element);
+            deleteHydrant(element, hydrants, hydrantsTable);
+        }
+        else{
+            element = searchHashTable(tLightsTable, id);
+            if(element != NULL){
+                x = getTrafficLightX(element);
+                y = getTrafficLightY(element);
+                deleteTrafficLight(element, tLights, tLightsTable);
+            }
+            else{
+                element = searchHashTable(rTowersTable, id);
+                if(element != NULL){
+                    x = getRadioTowerX(element);
+                    y = getRadioTowerY(element);
+                    deleteRadioTower(element, rTowers, rTowersTable);
+                }
+            }
+        }
+    }
+    fprintf(arqText, "del %s\n", id);
+    fprintf(arqText, "\tEquipamento Urbano Removido: %s (%lf %lf)\n\n", id, x, y);
+}
+
 void treatCBQ(FILE *arqTxt, Tree blocks, Node node, Form circle, char *cstrk){
     Block block = getElement(blocks, node);
     

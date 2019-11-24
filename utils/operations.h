@@ -60,4 +60,6 @@ void segmentIntersection(Segment s1, Segment s2, double *x, double *y);
 
 bool pointInsidePolygon(Point point, Polygon polygon);
 
+bool rectInsidePolygon(Form rect, Polygon polygon);
+
 #endif
