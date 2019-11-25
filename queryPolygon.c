@@ -288,15 +288,15 @@ void treatCATAC_hydrants(FILE *arqTxt, Tree hydrants, Node node, HashTable hydra
 void treatCATAC_tLights(FILE *arqTxt, Tree tLights, Node node, HashTable tLightsTable, Polygon polygon){
     if(node == getNil(tLights)) return;
 
-    treatCATAC_hydrants(arqTxt, tLights, getLeft(tLights, node), tLightsTable, polygon);
+    treatCATAC_tLights(arqTxt, tLights, getLeft(tLights, node), tLightsTable, polygon);
 
-    treatCATAC_hydrants(arqTxt, tLights, getRight(tLights, node), tLightsTable, polygon);
+    treatCATAC_tLights(arqTxt, tLights, getRight(tLights, node), tLightsTable, polygon);
 
     TrafficLight tLight = getElement(tLights, node);
     Point p = createPoint(getTrafficLightX(tLight), getTrafficLightY(tLight));
     if(pointInsidePolygon(p, polygon)){
         fprintf(arqTxt, "\t-Semáforo removido: %s\n", getTrafficLightId(tLight));
-        deleteHydrant(tLight, tLights, tLightsTable);
+        deleteTrafficLight(tLight, tLights, tLightsTable);
     }
 
     freePoint(p);
@@ -305,9 +305,9 @@ void treatCATAC_tLights(FILE *arqTxt, Tree tLights, Node node, HashTable tLights
 void treatCATAC_rTowers(FILE *arqTxt, Tree rTowers, Node node, HashTable rTowersTable, Polygon polygon){
     if(node == getNil(rTowers)) return;
 
-    treatCATAC_hydrants(arqTxt, rTowers, getLeft(rTowers, node), rTowersTable, polygon);
+    treatCATAC_rTowers(arqTxt, rTowers, getLeft(rTowers, node), rTowersTable, polygon);
 
-    treatCATAC_hydrants(arqTxt, rTowers, getRight(rTowers, node), rTowersTable, polygon);
+    treatCATAC_rTowers(arqTxt, rTowers, getRight(rTowers, node), rTowersTable, polygon);
 
     RadioTower rTower = getElement(rTowers, node);
     Point p = createPoint(getRadioTowerX(rTower), getRadioTowerY(rTower));
@@ -330,6 +330,12 @@ void treatCATAC_buildings(FILE *arqSVG, FILE *arqTxt, Tree buildings, Node node,
     Form rect = createRect("", getBuildingX(building), getBuildingY(building), getBuildingW(building), getBuildingH(building), "", "", 0, "");
 
     if(rectInsidePolygon(rect, polygon)){
+        printLine(arqSVG, getBuildingX(building), getBuildingY(building), getBuildingX(building) + getBuildingW(building), getBuildingY(building) + getBuildingH(building), "red");
+        printLine(arqSVG, getBuildingX(building) + getBuildingW(building), getBuildingY(building), getBuildingX(building), getBuildingY(building) + getBuildingH(building), "red");
+        char nResidents[8];
+        sprintf(nResidents, "%d", getBuildingNResidents(building));
+        printText(arqSVG, getBuildingX(building) + getBuildingW(building) / 2, getBuildingY(building), nResidents, "black");
+
         fprintf(arqTxt, "\t-Prédio removido: %s, %s, %d\n", getBuildingCep(building), getBuildingFace(building), getBuildingNum(building));
         deleteBuilding(building, buildings, buildingsTable);
     }
