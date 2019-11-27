@@ -85,6 +85,7 @@ void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree block
         checkFile(pFile, fName);
     }
 
+    double xFirst, yFirst;
     while(1){
         if(first){
             fscanf(pFile, "%lf", &x1);
@@ -98,6 +99,8 @@ void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree block
             if(first){
                 polygon = createPolygon(s1);
                 first = false;
+                xFirst = x1;
+                yFirst = y1;
             }
             else{
                 setSegmentProx(s2, s1);
@@ -116,6 +119,8 @@ void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree block
         if(feof(pFile)) break;
     }
     fclose(pFile);
+    Segment final = createSegment(createVertex(createPoint(x2, y2), 0, 0), createVertex(createPoint(xFirst, yFirst), 0, 0));
+    setSegmentProx(verify ? s2 : s1, final);
 
     double xMax = getPointX(getVertexV(getSegmentV1(getPolygonFirstSegment(polygon))));
 
@@ -158,6 +163,7 @@ void treatEPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *codt, char *pathIn
         checkFile(pFile, fName);
     }
 
+    double xFirst, yFirst;
     while(1){
         if(first){
             fscanf(pFile, "%lf", &x1);
@@ -171,6 +177,8 @@ void treatEPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *codt, char *pathIn
             if(first){
                 polygon = createPolygon(s1);
                 first = false;
+                xFirst = x1;
+                yFirst = y1;
             }
             else{
                 setSegmentProx(s2, s1);
@@ -189,6 +197,8 @@ void treatEPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *codt, char *pathIn
         if(feof(pFile)) break;
     }
     fclose(pFile);
+    Segment final = createSegment(createVertex(createPoint(x2, y2), 0, 0), createVertex(createPoint(xFirst, yFirst), 0, 0));
+    setSegmentProx(verify ? s2 : s1, final);
 
     double xMax = getPointX(getVertexV(getSegmentV1(getPolygonFirstSegment(polygon))));
 
@@ -250,81 +260,89 @@ void treatEPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *codt, char *pathIn
     destroyPolygon(polygon);
 }
 
-void treatCATAC_blocks(FILE *arqTxt, Tree blocks, Node node, HashTable blocksTable, Polygon polygon){
+int static counterDeletedElements = 0;
+
+void treatCATAC_blocks(FILE *arqTxt, Tree blocks, Node node, HashTable blocksTable, Polygon polygon, Block deletedBlocks[]){
     if(node == getNil(blocks)) return;
     
-    treatCATAC_blocks(arqTxt, blocks, getLeft(blocks, node), blocksTable, polygon);
+    treatCATAC_blocks(arqTxt, blocks, getLeft(blocks, node), blocksTable, polygon, deletedBlocks);
 
-    treatCATAC_blocks(arqTxt, blocks, getRight(blocks, node), blocksTable, polygon);
+    treatCATAC_blocks(arqTxt, blocks, getRight(blocks, node), blocksTable, polygon, deletedBlocks);
 
     Block block = getElement(blocks, node);
     Form rect = createRect("", getBlockX(block), getBlockY(block), getBlockW(block), getBlockH(block), "", "", 0, "");
 
     if(rectInsidePolygon(rect, polygon)){
         fprintf(arqTxt, "\t-Quadra removida: %s\n", getBlockCep(block));
-        deleteBlock(block, blocks, blocksTable);
+        deletedBlocks[counterDeletedElements] = block;
+        counterDeletedElements++;
     }
 
     destroyForm(rect);
 }
 
-void treatCATAC_hydrants(FILE *arqTxt, Tree hydrants, Node node, HashTable hydrantsTable, Polygon polygon){
+void treatCATAC_hydrants(FILE *arqTxt, Tree hydrants, Node node, HashTable hydrantsTable, Polygon polygon, Hydrant deletedHydrants[]){
     if(node == getNil(hydrants)) return;
 
-    treatCATAC_hydrants(arqTxt, hydrants, getLeft(hydrants, node), hydrantsTable, polygon);
-
-    treatCATAC_hydrants(arqTxt, hydrants, getRight(hydrants, node), hydrantsTable, polygon);
-
+    treatCATAC_hydrants(arqTxt, hydrants, getLeft(hydrants, node), hydrantsTable, polygon, deletedHydrants);
+    
     Hydrant hydrant = getElement(hydrants, node);
     Point p = createPoint(getHydrantX(hydrant), getHydrantY(hydrant));
     if(pointInsidePolygon(p, polygon)){
         fprintf(arqTxt, "\t-Hidrante removido: %s\n", getHydrantId(hydrant));
-        deleteHydrant(hydrant, hydrants, hydrantsTable);
+        deletedHydrants[counterDeletedElements] = hydrant;
+        counterDeletedElements++;
     }
+
+    treatCATAC_hydrants(arqTxt, hydrants, getRight(hydrants, node), hydrantsTable, polygon, deletedHydrants);
 
     freePoint(p);
 }
 
-void treatCATAC_tLights(FILE *arqTxt, Tree tLights, Node node, HashTable tLightsTable, Polygon polygon){
+void treatCATAC_tLights(FILE *arqTxt, Tree tLights, Node node, HashTable tLightsTable, Polygon polygon, TrafficLight deletedTLights[]){
     if(node == getNil(tLights)) return;
 
-    treatCATAC_tLights(arqTxt, tLights, getLeft(tLights, node), tLightsTable, polygon);
+    treatCATAC_tLights(arqTxt, tLights, getLeft(tLights, node), tLightsTable, polygon, deletedTLights);
 
-    treatCATAC_tLights(arqTxt, tLights, getRight(tLights, node), tLightsTable, polygon);
+    treatCATAC_tLights(arqTxt, tLights, getRight(tLights, node), tLightsTable, polygon, deletedTLights);
 
     TrafficLight tLight = getElement(tLights, node);
     Point p = createPoint(getTrafficLightX(tLight), getTrafficLightY(tLight));
     if(pointInsidePolygon(p, polygon)){
         fprintf(arqTxt, "\t-Semáforo removido: %s\n", getTrafficLightId(tLight));
-        deleteTrafficLight(tLight, tLights, tLightsTable);
+        deletedTLights[counterDeletedElements] = tLight;
+        counterDeletedElements++;
     }
 
     freePoint(p);
 }
 
-void treatCATAC_rTowers(FILE *arqTxt, Tree rTowers, Node node, HashTable rTowersTable, Polygon polygon){
+void treatCATAC_rTowers(FILE *svg, FILE *arqTxt, Tree rTowers, Node node, HashTable rTowersTable, Polygon polygon, RadioTower deletedRTowers[]){
     if(node == getNil(rTowers)) return;
 
-    treatCATAC_rTowers(arqTxt, rTowers, getLeft(rTowers, node), rTowersTable, polygon);
+    treatCATAC_rTowers(svg, arqTxt, rTowers, getLeft(rTowers, node), rTowersTable, polygon, deletedRTowers);
 
-    treatCATAC_rTowers(arqTxt, rTowers, getRight(rTowers, node), rTowersTable, polygon);
+    treatCATAC_rTowers(svg, arqTxt, rTowers, getRight(rTowers, node), rTowersTable, polygon, deletedRTowers);
 
     RadioTower rTower = getElement(rTowers, node);
     Point p = createPoint(getRadioTowerX(rTower), getRadioTowerY(rTower));
+    
+    //printLine(svg, getRadioTowerX(rTower), getRadioTowerY(rTower), getPolygonXMax(polygon) + 1, getRadioTowerY(rTower), "black");
     if(pointInsidePolygon(p, polygon)){
         fprintf(arqTxt, "\t-Torre de Rádio removida: %s\n", getRadioTowerId(rTower));
-        deleteRadioTower(rTower, rTowers, rTowersTable);
+        deletedRTowers[counterDeletedElements] = rTower;
+        counterDeletedElements++;
     }
 
     freePoint(p);
 }
 
-void treatCATAC_buildings(FILE *arqSVG, FILE *arqTxt, Tree buildings, Node node, HashTable buildingsTable, Polygon polygon){
+void treatCATAC_buildings(FILE *arqSVG, FILE *arqTxt, Tree buildings, Node node, HashTable buildingsTable, Polygon polygon, Building deletedBuildings[]){
     if(node == getNil(buildings)) return;
     
-    treatCATAC_buildings(arqSVG, arqTxt, buildings, getLeft(buildings, node), buildingsTable, polygon);
+    treatCATAC_buildings(arqSVG, arqTxt, buildings, getLeft(buildings, node), buildingsTable, polygon, deletedBuildings);
 
-    treatCATAC_buildings(arqSVG, arqTxt, buildings, getRight(buildings, node), buildingsTable, polygon);
+    treatCATAC_buildings(arqSVG, arqTxt, buildings, getRight(buildings, node), buildingsTable, polygon, deletedBuildings);
 
     Building building = getElement(buildings, node);
     Form rect = createRect("", getBuildingX(building), getBuildingY(building), getBuildingW(building), getBuildingH(building), "", "", 0, "");
@@ -337,7 +355,8 @@ void treatCATAC_buildings(FILE *arqSVG, FILE *arqTxt, Tree buildings, Node node,
         printText(arqSVG, getBuildingX(building) + getBuildingW(building) / 2, getBuildingY(building), nResidents, "black");
 
         fprintf(arqTxt, "\t-Prédio removido: %s, %s, %d\n", getBuildingCep(building), getBuildingFace(building), getBuildingNum(building));
-        deleteBuilding(building, buildings, buildingsTable);
+        deletedBuildings[counterDeletedElements] = building;
+        counterDeletedElements++;
     }
 
     destroyForm(rect);
@@ -365,6 +384,7 @@ void treatCATAC(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree bloc
         checkFile(pFile, fName);
     }
 
+    double xFirst, yFirst;
     while(1){
         if(first){
             fscanf(pFile, "%lf", &x1);
@@ -378,6 +398,8 @@ void treatCATAC(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree bloc
             if(first){
                 polygon = createPolygon(s1);
                 first = false;
+                xFirst = x1;
+                yFirst = y1;
             }
             else{
                 setSegmentProx(s2, s1);
@@ -396,6 +418,8 @@ void treatCATAC(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree bloc
         if(feof(pFile)) break;
     }
     fclose(pFile);
+    Segment final = createSegment(createVertex(createPoint(x2, y2), 0, 0), createVertex(createPoint(xFirst, yFirst), 0, 0));
+    setSegmentProx(verify ? s2 : s1, final);
 
     double xMax = getPointX(getVertexV(getSegmentV1(getPolygonFirstSegment(polygon))));
 
@@ -411,15 +435,35 @@ void treatCATAC(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree bloc
 
     setPolygonXMax(polygon, xMax);
 
-    treatCATAC_blocks(arqTxt, blocks, getTreeRoot(blocks), blocksTable, polygon);
+    counterDeletedElements = 0;
+    Block *deletedBlocks = malloc(getSize(blocks) * sizeof(Block));
+    treatCATAC_blocks(arqTxt, blocks, getTreeRoot(blocks), blocksTable, polygon, deletedBlocks);
+    for(int i = 0; i < counterDeletedElements; i++) deleteBlock(deletedBlocks[i], blocks, blocksTable);
+    free(deletedBlocks);
 
-    treatCATAC_hydrants(arqTxt, hydrants, getTreeRoot(hydrants), hydrantsTable, polygon);
+    counterDeletedElements = 0;
+    Hydrant *deletedHydrants = malloc(getSize(hydrants) * sizeof(Hydrant));
+    treatCATAC_hydrants(arqTxt, hydrants, getTreeRoot(hydrants), hydrantsTable, polygon, deletedHydrants);
+    for(int i = 0; i < counterDeletedElements; i++) deleteHydrant(deletedHydrants[i], hydrants, hydrantsTable);
+    free(deletedHydrants);
 
-    treatCATAC_tLights(arqTxt, tLights, getTreeRoot(tLights), tLightsTable, polygon);
+    counterDeletedElements = 0;
+    TrafficLight *deletedTLights = malloc(getSize(tLights) * sizeof(TrafficLight));
+    treatCATAC_tLights(arqTxt, tLights, getTreeRoot(tLights), tLightsTable, polygon, deletedTLights);
+    for(int i = 0; i < counterDeletedElements; i++) deleteTrafficLight(deletedTLights[i], tLights, tLightsTable);
+    free(deletedTLights);
 
-    treatCATAC_rTowers(arqTxt, rTowers, getTreeRoot(rTowers), rTowersTable, polygon);
+    counterDeletedElements = 0;
+    RadioTower *deletedRTowers = malloc(getSize(rTowers) * sizeof(RadioTower));
+    treatCATAC_rTowers(arqSVG, arqTxt, rTowers, getTreeRoot(rTowers), rTowersTable, polygon, deletedRTowers);
+    for(int i = 0; i < counterDeletedElements; i++) deleteRadioTower(deletedRTowers[i], rTowers, rTowersTable);
+    free(deletedRTowers);
 
-    treatCATAC_buildings(arqSVG, arqTxt, buildings, getTreeRoot(buildings), buildingsTable, polygon);
+    counterDeletedElements = 0;
+    Building *deletedBuildings = malloc(getSize(buildings) * sizeof(Building));
+    treatCATAC_buildings(arqSVG, arqTxt, buildings, getTreeRoot(buildings), buildingsTable, polygon, deletedBuildings);
+    for(int i = 0; i < counterDeletedElements; i++) deleteBuilding(deletedBuildings[i], buildings, buildingsTable);
+    free(deletedBuildings);
 
     destroyPolygon(polygon);
 }

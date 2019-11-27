@@ -257,11 +257,11 @@ bool checkLeftTurn(Point a, Point b, Point c){
 bool checkSegmentsIntersection(Segment s1, Segment s2){
 	if(s1 == NULL || s2 == NULL) return false;
 	
-	Segment a = getVertexV(getSegmentV1(s1));
-	Segment b = getVertexV(getSegmentV2(s1));
+	Point a = getVertexV(getSegmentV1(s1));
+	Point b = getVertexV(getSegmentV2(s1));
 
-	Segment c = getVertexV(getSegmentV1(s2));
-	Segment d = getVertexV(getSegmentV2(s2));
+	Point c = getVertexV(getSegmentV1(s2));
+	Point d = getVertexV(getSegmentV2(s2));
 
 	return (checkLeftTurn(c, d, a) ^ checkLeftTurn(c, d, b)) &&
 	 		(checkLeftTurn(a, b, c) ^ checkLeftTurn(a, b, d));
@@ -297,12 +297,35 @@ bool pointInsidePolygon(Point point, Polygon polygon){
 
     int cont = 0;
     for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux)){
-        if(checkSegmentsIntersection(s, aux)) cont++;
+        //printLine(svg, getPointX(getVertexV(getSegmentV1(aux))), getPointY(getVertexV(getSegmentV1(aux))), getPointX(getVertexV(getSegmentV2(aux))), getPointY(getVertexV(getSegmentV2(aux))), "blue");
+        double pY = getPointY(getVertexV(getSegmentV1(s)));
+        double auxY1 = getPointY(getVertexV(getSegmentV1(aux)));
+        double auxY2 = getPointY(getVertexV(getSegmentV2(aux)));
+
+        if(checkSegmentsIntersection(s, aux)){
+            cont++;
+        }
+        //Caso o ponto esteja no ponto de conexao entre dois segmentos
+        else{
+            if(pY == auxY1 || pY == auxY2){
+                aux = getSegmentProx(aux);
+                if(aux != NULL){
+                    auxY2 = getPointY(getVertexV(getSegmentV2(aux)));
+                    if(auxY2 > pY) cont++;
+                }
+                else{
+                    break;
+                }
+            }
+        }
     }
 
     free(v1);
     freeVertex(v2);
     free(s);
+
+    char t[10];
+    sprintf(t, "%d", cont);
 
     if(cont % 2 != 0) return true;
     else return false;

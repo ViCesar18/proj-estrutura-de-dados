@@ -1,34 +1,34 @@
 #include "queryBuildings.h"
 
-void treatDQ_Util(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, HashTable blocksTable, char *metric, Form circle){
+int static counterDeletedElements = 0;
+
+void treatDQ_Util(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, Node node, HashTable blocksTable, char *metric, Form circle, Block deletedBlocks[]){
     Block block = getElement(blocks, node);
 
     if(!strcmp(metric, "L1")){
         if(node == getNil(blocks)) return;
 
-        treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), blocksTable, metric, circle);
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), blocksTable, metric, circle, deletedBlocks);
 
-        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), blocksTable, metric, circle);
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), blocksTable, metric, circle, deletedBlocks);
 
         if(quadInsideCirc(block, circle, "L1")){
             fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
-            removeNode(blocks, block);
-            removeHashTable(blocksTable, getBlockCep(block));
-            destroyBlock(block);
+            deletedBlocks[counterDeletedElements] = block;
+            counterDeletedElements++;
         }
     }
     else if(!strcmp(metric, "L2")){
         if(node == getNil(blocks)) return;
 
-        treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), blocksTable, metric, circle);
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getLeft(blocks, node), blocksTable, metric, circle, deletedBlocks);
 
-        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), blocksTable, metric, circle);
+        treatDQ_Util(arqTxt, arqSvgQ, blocks, getRight(blocks, node), blocksTable, metric, circle, deletedBlocks);
 
         if(quadInsideCirc(block, circle, "L2")){
             fprintf(arqTxt, "\tQuadra Removida: %s\n", getBlockCep(block));
-            removeNode(blocks, block);
-            removeHashTable(blocksTable, getBlockCep(block));
-            destroyBlock(block);
+            deletedBlocks[counterDeletedElements] = block;
+            counterDeletedElements++;
         }
     }
 }
@@ -45,7 +45,11 @@ void treatDQ(FILE *arqTxt, FILE *arqSvgQ, Tree blocks, HashTable blocksTable, ch
     free(ring1);
     free(ring2);
 
-    treatDQ_Util(arqTxt, arqSvgQ, blocks, getTreeRoot(blocks), blocksTable, metric, circle);
+    counterDeletedElements = 0;
+    Block *deletedBlocks = malloc(getSize(blocks) * sizeof(Block));
+    treatDQ_Util(arqTxt, arqSvgQ, blocks, getTreeRoot(blocks), blocksTable, metric, circle, deletedBlocks);
+    for(int i = 0; i < counterDeletedElements; i++) deleteBlock(deletedBlocks[i], blocks, blocksTable);
+    free(deletedBlocks);
 }
 
 void deleteBlock(Block block, Tree blocks, HashTable blocksTable){
