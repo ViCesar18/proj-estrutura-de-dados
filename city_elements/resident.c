@@ -5,6 +5,7 @@ typedef struct stResident {
     int num;
     Person person;
     Building building;
+    double x, y;
 } *ResidentImp;
 
 Resident createResident (char cpf[], char cep[], char face[], char compl[], int num, HashTable persons, HashTable buildingsTable, HashTable blocksTable){
@@ -46,14 +47,31 @@ Resident createResident (char cpf[], char cep[], char face[], char compl[], int 
         insertHashTable(getBuildingResidents(building), getPersonCpf(person), resident);
         increaseBuildingNResidents(building);
     }
+    resident->building = building;
 
     Block block = searchHashTable(blocksTable, cep);
 
     if(block != NULL){
         insertHashTable(getBlockResidents(block), getPersonCpf(person), resident);
+
+        double xB = getBlockX(block), yB = getBlockY(block), wB = getBlockW(block), hB = getBlockH(block);
+        if(!strcmp(face, "N")){
+            resident->x = xB + num;
+            resident->y = yB + hB;
+        }
+        else if(!strcmp(face, "S")){
+            resident->x = xB + num;
+            resident->y = yB;
+        }
+        else if(!strcmp(face, "O")){
+            resident->x = xB + wB;
+            resident->y = yB + num;
+        }
+        else if(!strcmp(face, "L")){
+            resident->x = xB;
+            resident->y = yB + num;
+        }
     }
-    
-    resident->building = building;
 
     return resident;
 }
@@ -95,6 +113,18 @@ Building getResidentBuilding(Resident r){
     ResidentImp resident = (ResidentImp) r;
 
     return resident->building;
+}
+
+double getResidentX(Resident r){
+    ResidentImp resident = (ResidentImp) r;
+
+    return resident->x;
+}
+
+double getResidentY(Resident r){
+    ResidentImp resident = (ResidentImp) r;
+
+    return resident->y;
 }
 
 void setResidentCep (Resident r, char cep[]){

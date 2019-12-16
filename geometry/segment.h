@@ -22,9 +22,23 @@ Vertex getSegmentV2(Segment s);
 
 Segment getSegmentProx(Segment s);
 
+Vertex getSegmentVStart(Segment s);
+
+Vertex getSegmentVEnd(Segment s);
+
+double getSegmentDistance(Segment s);
+
+double getSegmentXBiombo(Segment s);
+
+double getSegmentYBiombo(Segment s);
+
 void setSegmentStartVertex(Segment s);
 
 void setSegmentProx(Segment s, Segment prox);
+
+void setSegmentXYBiombo(Segment s, double x, double y);
+
+void setSegmentDistance(Segment s, double dist);
 /*Fim Getters e Setters de segmento*/
 
 /*Libera memoria de um segmento s*/

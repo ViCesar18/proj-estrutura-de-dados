@@ -10,6 +10,9 @@
 #include "geometry/vertex.h"
 #include "geometry/segment.h"
 #include "geometry/polygon.h"
+#include "utils/bomb.h"
+
+void treatBRN(FILE *arqSVG, FILE *arqText, char *pathIn, double x, double y, Tree walls, Tree buildings, char *nPol, HashTable residents);
 
 void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree blocks, Tree buildings);
 

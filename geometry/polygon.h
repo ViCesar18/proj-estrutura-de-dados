@@ -8,13 +8,17 @@
 typedef void *Segment;
 typedef void *Polygon;
 
-Polygon createPolygon(Segment s);
+Polygon createPolygon();
 
 Segment getPolygonFirstSegment(Polygon p);
 
 double getPolygonXMax(Polygon p);
 
 void setPolygonXMax(Polygon p, double xMax);
+
+void insertPointPolygon(Polygon p, double x, double y);
+
+void connectPolygon(Polygon p);
 
 void destroyPolygon(Polygon p);
 

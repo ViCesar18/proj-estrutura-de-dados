@@ -146,6 +146,42 @@ int getNodeColor(Node n){
 	return node->color;
 }
 
+Node getFirstNode(Tree t){
+	TreeImp tree = (TreeImp) t;
+	NodeImp currentNode = tree->root;
+
+	if(currentNode == tree->nil) return NULL;
+
+	while(currentNode->left != tree->nil)
+		currentNode = currentNode->left;
+
+	return currentNode;
+}
+
+Node getSuccessor(Tree t, Node n){
+	TreeImp tree = (TreeImp) t;
+	NodeImp node = (NodeImp) n;
+
+	NodeImp currentNode = node->right;
+	if(currentNode == tree->nil){
+		currentNode = node;
+		while(currentNode->parent != tree->nil){
+			if(currentNode->parent->left == currentNode){
+				return currentNode->parent;
+			}
+			else{
+				currentNode = currentNode->parent;
+			}
+		}
+		return NULL;
+	}
+
+	while(currentNode->left != tree->nil){
+		currentNode = currentNode->left;
+	}
+	return currentNode;
+}
+
 void fixInsert(TreeImp tree, NodeImp node){
 
 	while(node != tree->root && node->parent != tree->root && node->parent->color == RED){

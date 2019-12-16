@@ -1,5 +1,51 @@
 #include "queryPolygon.h"
 
+void treatBRN(FILE *arqSVG, FILE *arqText, char *pathIn, double x, double y, Tree walls, Tree buildings, char *nPol, HashTable residents){
+    Polygon polygon = createPolygon();
+    bombAreaRadiation(arqSVG, polygon, x, y, walls, buildings, true);
+
+    fprintf(arqSVG, "<polygon points=\"");
+    for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux))
+        fprintf(arqSVG, "%lf,%lf ", getPointX(getVertexV(getSegmentV1(aux))), getPointY(getVertexV(getSegmentV1(aux))));
+    fprintf(arqSVG, "\" opacity=\"0.5\" style=\"fill:lime;stroke:purple;stroke-width:1\" />");
+
+    char *fDirectory;
+    FILE *pFile;
+
+    if(pathIn != NULL){
+        allocateFileMamory(nPol, pathIn, &fDirectory);
+        pFile = fopen(fDirectory, "w");
+        free(fDirectory);
+        checkFile(pFile, fDirectory);
+    }
+    else{
+        pFile = fopen(nPol, "w");
+        checkFile(pFile, nPol);
+    }
+
+    for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux)){
+        fprintf(pFile, "%lf %lf\n", getPointX(getVertexV(getSegmentV1(aux))), getPointY(getVertexV(getSegmentV1(aux))));
+    }
+    fclose(pFile);
+
+    fprintf(arqText, "Área e Moradores afetados pela Bomba de Radiação Luminosa:\n");
+
+    for(int i = 0; i < getHashTableSize(residents); i++){
+        ListNode node = getHashNode(residents, i);
+        while(node != NULL){
+            Resident resident = getHashNodeElement(node);
+            Point p = createPoint(getResidentX(resident), getResidentY(resident));
+
+            if(pointInsidePolygon(p, polygon)){
+                Person person = getResidentPerson(resident);
+                fprintf(arqText, "\tMorador: %s %s\n\tCPF: %s\n\n", getPersonName(person), getPersonLastName(person), getPersonCpf(person));
+            }
+            freePoint(p);
+            node = getHashNodeNext(node);
+        }
+    }
+}
+
 void treatMPLG_blocks(FILE *arqSvg, Tree blocks, Node node, Polygon polygon){
     if(node == getNil(blocks)) return;
 
@@ -65,11 +111,7 @@ void treatMPLG_buildings(FILE *arqTxt, Tree buildings, Node node, Polygon polygo
 }
 
 void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree blocks, Tree buildings){
-    double x1, y1, x2, y2;
-    bool first = true, verify = true;
-    Segment s1, s2;
-    Polygon polygon;
-    Segment aux;
+    double x, y;
     
     char *fDirectory;
     FILE *pFile;
@@ -85,54 +127,22 @@ void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree block
         checkFile(pFile, fName);
     }
 
-    double xFirst, yFirst;
+    Polygon polygon = createPolygon();
     while(1){
-        if(first){
-            fscanf(pFile, "%lf", &x1);
-            fscanf(pFile, "%lf", &y1);
-        }
-        fscanf(pFile, "%lf", &x2);
-        fscanf(pFile, "%lf", &y2);
+        fscanf(pFile, "%lf", &x);
+        fscanf(pFile, "%lf", &y);
 
-        if(verify){
-            s1 = createSegment(createVertex(createPoint(x1, y1), 0, 0), createVertex(createPoint(x2, y2), 0, 0));
-            if(first){
-                polygon = createPolygon(s1);
-                first = false;
-                xFirst = x1;
-                yFirst = y1;
-            }
-            else{
-                setSegmentProx(s2, s1);
-            }
-            verify = false;
-        }
-        else{
-            s2 = createSegment(createVertex(createPoint(x1, y1), 0, 0), createVertex(createPoint(x2, y2), 0, 0));
-            setSegmentProx(s1, s2);
-            verify = true;
-        }
-
-        x1 = x2;
-        y1 = y2;
+        insertPointPolygon(polygon, x, y);
 
         if(feof(pFile)) break;
     }
     fclose(pFile);
-    Segment final = createSegment(createVertex(createPoint(x2, y2), 0, 0), createVertex(createPoint(xFirst, yFirst), 0, 0));
-    setSegmentProx(verify ? s2 : s1, final);
-
-    double xMax = getPointX(getVertexV(getSegmentV1(getPolygonFirstSegment(polygon))));
+    connectPolygon(polygon);
 
     fprintf(arqSVG, "<polygon points=\"");
-    for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux)){
+    for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux))
         fprintf(arqSVG, "%lf,%lf ", getPointX(getVertexV(getSegmentV1(aux))), getPointY(getVertexV(getSegmentV1(aux))));
-
-        if(getPointX(getVertexV(getSegmentV1(aux))) > xMax) xMax = getPointX(getVertexV(getSegmentV1(aux)));
-    }
     fprintf(arqSVG, "\" opacity=\"0.5\" style=\"fill:lime;stroke:purple;stroke-width:1\" />");
-
-    setPolygonXMax(polygon, xMax);
 
     treatMPLG_blocks(arqSVG, blocks, getTreeRoot(blocks), polygon);
 
@@ -143,11 +153,7 @@ void treatMPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree block
 }
 
 void treatEPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *codt, char *pathIn, HashTable stores){
-    double x1, y1, x2, y2;
-    bool first = true, verify = true;
-    Segment s1, s2;
-    Polygon polygon;
-    Segment aux;
+    double x, y;
     
     char *fDirectory;
     FILE *pFile;
@@ -163,54 +169,22 @@ void treatEPLG(FILE *arqSVG, FILE *arqTxt, char *fName, char *codt, char *pathIn
         checkFile(pFile, fName);
     }
 
-    double xFirst, yFirst;
+    Polygon polygon = createPolygon();
     while(1){
-        if(first){
-            fscanf(pFile, "%lf", &x1);
-            fscanf(pFile, "%lf", &y1);
-        }
-        fscanf(pFile, "%lf", &x2);
-        fscanf(pFile, "%lf", &y2);
+        fscanf(pFile, "%lf", &x);
+        fscanf(pFile, "%lf", &y);
 
-        if(verify){
-            s1 = createSegment(createVertex(createPoint(x1, y1), 0, 0), createVertex(createPoint(x2, y2), 0, 0));
-            if(first){
-                polygon = createPolygon(s1);
-                first = false;
-                xFirst = x1;
-                yFirst = y1;
-            }
-            else{
-                setSegmentProx(s2, s1);
-            }
-            verify = false;
-        }
-        else{
-            s2 = createSegment(createVertex(createPoint(x1, y1), 0, 0), createVertex(createPoint(x2, y2), 0, 0));
-            setSegmentProx(s1, s2);
-            verify = true;
-        }
-
-        x1 = x2;
-        y1 = y2;
+        insertPointPolygon(polygon, x, y);
 
         if(feof(pFile)) break;
     }
     fclose(pFile);
-    Segment final = createSegment(createVertex(createPoint(x2, y2), 0, 0), createVertex(createPoint(xFirst, yFirst), 0, 0));
-    setSegmentProx(verify ? s2 : s1, final);
-
-    double xMax = getPointX(getVertexV(getSegmentV1(getPolygonFirstSegment(polygon))));
+    connectPolygon(polygon);
 
     fprintf(arqSVG, "<polygon points=\"");
-    for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux)){
+    for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux))
         fprintf(arqSVG, "%lf,%lf ", getPointX(getVertexV(getSegmentV1(aux))), getPointY(getVertexV(getSegmentV1(aux))));
-
-        if(getPointX(getVertexV(getSegmentV1(aux))) > xMax) xMax = getPointX(getVertexV(getSegmentV1(aux)));
-    }
     fprintf(arqSVG, "\" opacity=\"0.5\" style=\"fill:lime;stroke:purple;stroke-width:1\" />");
-
-    setPolygonXMax(polygon, xMax);
 
     fprintf (arqTxt, "eplg? Estabelecimentos comerciais do tipo %s inteiramente contidos no poligono:\n", codt);
 
@@ -365,10 +339,7 @@ void treatCATAC_buildings(FILE *arqSVG, FILE *arqTxt, Tree buildings, Node node,
 void treatCATAC(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree blocks, Tree hydrants, Tree tLights, 
                 Tree rTowers, Tree buildings, HashTable blocksTable, HashTable hydrantsTable, HashTable tLightsTable, HashTable rTowersTable, 
                 HashTable buildingsTable, HashTable residents){
-    bool first = true, verify = true;
-    double x1, x2, y1, y2;
-    Polygon polygon;
-    Segment s1, s2;
+    double x, y;
 
     char *fDirectory;
     FILE *pFile;
@@ -384,56 +355,24 @@ void treatCATAC(FILE *arqSVG, FILE *arqTxt, char *fName, char *pathIn, Tree bloc
         checkFile(pFile, fName);
     }
 
-    double xFirst, yFirst;
+    Polygon polygon = createPolygon();
     while(1){
-        if(first){
-            fscanf(pFile, "%lf", &x1);
-            fscanf(pFile, "%lf", &y1);
-        }
-        fscanf(pFile, "%lf", &x2);
-        fscanf(pFile, "%lf", &y2);
+        fscanf(pFile, "%lf", &x);
+        fscanf(pFile, "%lf", &y);
 
-        if(verify){
-            s1 = createSegment(createVertex(createPoint(x1, y1), 0, 0), createVertex(createPoint(x2, y2), 0, 0));
-            if(first){
-                polygon = createPolygon(s1);
-                first = false;
-                xFirst = x1;
-                yFirst = y1;
-            }
-            else{
-                setSegmentProx(s2, s1);
-            }
-            verify = false;
-        }
-        else{
-            s2 = createSegment(createVertex(createPoint(x1, y1), 0, 0), createVertex(createPoint(x2, y2), 0, 0));
-            setSegmentProx(s1, s2);
-            verify = true;
-        }
-
-        x1 = x2;
-        y1 = y2;
+        insertPointPolygon(polygon, x, y);
 
         if(feof(pFile)) break;
     }
     fclose(pFile);
-    Segment final = createSegment(createVertex(createPoint(x2, y2), 0, 0), createVertex(createPoint(xFirst, yFirst), 0, 0));
-    setSegmentProx(verify ? s2 : s1, final);
-
-    double xMax = getPointX(getVertexV(getSegmentV1(getPolygonFirstSegment(polygon))));
+    connectPolygon(polygon);
 
     fprintf(arqSVG, "<polygon points=\"");
-    for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux)){
+    for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux))
         fprintf(arqSVG, "%lf,%lf ", getPointX(getVertexV(getSegmentV1(aux))), getPointY(getVertexV(getSegmentV1(aux))));
-
-        if(getPointX(getVertexV(getSegmentV1(aux))) > xMax) xMax = getPointX(getVertexV(getSegmentV1(aux)));
-    }
     fprintf(arqSVG, "\" opacity=\"0.5\" style=\"fill:lime;stroke:purple;stroke-width:1\" />");
 
     fprintf(arqTxt, "Cataclisma na área do polígono %s!!!\n", fName);
-
-    setPolygonXMax(polygon, xMax);
 
     counterDeletedElements = 0;
     Block *deletedBlocks = malloc(getSize(blocks) * sizeof(Block));

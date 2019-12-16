@@ -233,6 +233,18 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
             treatTRNS_rTower(arqText, rTowers, getTreeRoot(rTowers), rect, x, y, arqSvgQ);
             free(rect);
         }
+        else if(!strcmp(command, "brl")){
+            fscanf(arqQuery, "%lf", &x);
+            fscanf(arqQuery, "%lf", &y);
+            Polygon polygon = createPolygon();
+            bombAreaRadiation(arqAux, polygon, x, y, walls, buildings, false);
+
+            fprintf(arqAux, "<polygon points=\"");
+            for(Segment aux = getPolygonFirstSegment(polygon); aux != NULL; aux = getSegmentProx(aux))
+                fprintf(arqAux, "%lf,%lf ", getPointX(getVertexV(getSegmentV1(aux))), getPointY(getVertexV(getSegmentV1(aux))));
+            fprintf(arqAux, "\" opacity=\"0.5\" style=\"fill:lime;stroke:purple;stroke-width:1\" />");
+
+        }
         else if(!strcmp(command, "fi")){
             scanFI(arqQuery, &x, &y, &n, &r);
             treatFI(arqAux, arqText, x, y, n, r, tLights, hydrants);
@@ -247,9 +259,15 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
             getAddress(id1, id2, n, &x, &y, blocksTable);
             treatFS(arqText, arqSvgQ, tLights, k, x, y);
         }
+        else if(!strcmp(command, "brn")){
+            fscanf(arqQuery, "%lf", &x);
+            fscanf(arqQuery, "%lf", &y);
+            fscanf(arqQuery, "%s", id1);
+            treatBRN(arqAux, arqText, pathIn, x, y, walls, buildings, id1, residents);
+        }
         else if (!strcmp (command, "m?")){
             scanM (arqQuery, cep);
-            treatM (arqText, persons, residents, cep);    
+            treatM (arqText, persons, residents, cep);
         }
         else if(!strcmp(command, "mplg?")){
             fscanf(arqQuery, "%s", id1);

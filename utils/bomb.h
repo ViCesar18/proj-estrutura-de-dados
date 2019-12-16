@@ -18,6 +18,6 @@ int cmpVertex(const void *a, const void *b);
 Segment segmentBombVertex(double xc, double yc, Vertex v, Point pontoMin, Point pontoMax);
 
 /*Calcula a area de radiacao luminosa da bomba brl e desenha esse area no arquivo SVG*/
-void bombAreaRadiation(double x, double y, int capacity, Tree walls, Tree buildings, FILE *arq);
+void bombAreaRadiation(FILE *arq, Polygon polygon, double x, double y, Tree walls, Tree buildings, bool brn);
 
 #endif

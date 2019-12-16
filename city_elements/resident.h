@@ -28,6 +28,10 @@ Person getResidentPerson(Resident r);
 
 Building getResidentBuilding(Resident r);
 
+double getResidentX(Resident r);
+
+double getResidentY(Resident r);
+
 void setResidentCep (Resident r, char cep[]);
 
 void setResidentFace (Resident r, char face[]);

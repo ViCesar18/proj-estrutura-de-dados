@@ -36,6 +36,10 @@ Node findNode(Tree t, Element element);
 
 int getNodeColor(Node n);
 
+Node getFirstNode(Tree t);
+
+Node getSuccessor(Tree t, Node n);
+
 /*Insere o no n na arvore t*/
 void insertNode(Tree t, Element element);
 
