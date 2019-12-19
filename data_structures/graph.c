@@ -126,7 +126,8 @@ void depthSearch_Aux(graphImp graph, gNodeImp u, int cont){
 	u->vertex->color = BLACK;
 }
 
-bool depthSearch(graphImp graph, char *id){
+bool depthSearch(Graph g, char *id){
+	graphImp graph = (graphImp) g;
 	gNodeImp start = NULL;
 
 	for(int i = 0; i < graph->free; i++){
@@ -140,6 +141,7 @@ bool depthSearch(graphImp graph, char *id){
 
 	for(int i = 0; i < graph->free; i++){
 		graph->vertexes[i]->vertex->color = WHITE;
+		graph->vertexes[i]->vertex->dist = -1;
 		graph->vertexes[i]->vertex->p = NULL;
 
 	}
@@ -150,8 +152,10 @@ bool depthSearch(graphImp graph, char *id){
 	return true;
 }
 
-bool widthSearch(graphImp graph, char *id){
+bool widthSearch(Graph g, char *id){
+	graphImp graph = (graphImp) g;
 	gNodeImp start = NULL;
+
 	for(int i = 0; i < graph->free; i++){
 		if(!strcmp(graph->vertexes[i]->vertex->id, id)){
 			start = graph->vertexes[i];
@@ -195,8 +199,6 @@ void relax_Dijkstra(gNodeImp u, gNodeImp v, bool itsSpeed){
 		edgeWeight = v->edge->speed;
 	else
 		edgeWeight = v->edge->length;
-
-	printf("%lf\n", edgeWeight);
 
 	if(v->vertex->dist < 0){
 		v->vertex->dist = u->vertex->dist + edgeWeight;
@@ -243,11 +245,14 @@ bool shortestWat_Dijkstra(Graph g, char *id, bool itsSpeed){
 	return true;
 }
 
-void printVertexInformation(Graph g){
+void printGraphVertexInformation(FILE *arqSVG, Graph g){
 	graphImp graph = (graphImp) g;
 
 	for(int i = 0; i < graph->free; i++){
+		Form circle = createCircle("", graph->vertexes[i]->vertex->x, graph->vertexes[i]->vertex->y, 10, "red", "red", "1");
 		printf("id: %s dist: %d ant: %s\n", graph->vertexes[i]->vertex->id, graph->vertexes[i]->vertex->dist, graph->vertexes[i]->vertex->p->id);
+		printCircle(arqSVG, circle);
+		free(circle);
 	}
 }
 

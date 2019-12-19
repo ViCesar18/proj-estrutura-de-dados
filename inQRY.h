@@ -16,6 +16,7 @@
 #include "queryUtils.h"
 #include "queryFire.h"
 #include "queryPolygon.h"
+#include "queryVia.h"
 
 /*Le os parametros de consulta do comando "o?"*/
 void scanO(FILE *arqQuery, char j[], char k[]);

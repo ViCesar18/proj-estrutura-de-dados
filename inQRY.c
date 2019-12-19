@@ -122,6 +122,9 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
     FILE *arqSvgBB = NULL;
     char *nameOutBB = NULL, *arqOutBB = NULL;
 
+    //Registradores [R0 - R10]
+    Point *registers = (Point) calloc(11, sizeof(Point));
+
     while(1){
         fscanf(arqQuery, "%s", command);
 
@@ -205,21 +208,21 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
 
             element1 = searchHashTable(blocksTable, id1);
             if(element1 != NULL)
-                fprintf(arqText, "\tQuadra %s: (%lf, %lf)\n", id1, getBlockX(element1), getBlockY(element1));
+                fprintf(arqText, "crd? %s\n\tQuadra %s: (%lf, %lf)\n", id1, id1, getBlockX(element1), getBlockY(element1));
             else{
                 element1 = searchHashTable(hydrantsTable, id1);
                 if(element1 != NULL)
-                    fprintf(arqText, "\tHidrante %s: (%lf, %lf)\n", id1, getHydrantX(element1), getHydrantY(element1));
+                    fprintf(arqText, "crd? %s\n\tHidrante %s: (%lf, %lf)\n", id1, id1, getHydrantX(element1), getHydrantY(element1));
                 else{
                     element1 = searchHashTable(tLightsTable, id1);
                     if(element1 != NULL)
-                        fprintf(arqText, "\tSemáforo %s: (%lf, %lf)\n", id1, getTrafficLightX(element1), getTrafficLightY(element1));
+                        fprintf(arqText, "crd? %s\n\tSemáforo %s: (%lf, %lf)\n", id1, id1, getTrafficLightX(element1), getTrafficLightY(element1));
                     else{
                         element1 = searchHashTable(rTowersTable, id1);
                         if(element1 != NULL)
-                            fprintf(arqText, "\tRadio-Base %s: (%lf, %lf)\n", id1, getRadioTowerX(element1), getRadioTowerY(element1));
+                            fprintf(arqText, "crd? %s\n\tRadio-Base %s: (%lf, %lf)\n", id1, id1, getRadioTowerX(element1), getRadioTowerY(element1));
                         else
-                            fprintf(arqText, "\tEquipamento Urbano não encontrado!\n");
+                            fprintf(arqText, "crd? %s\n\tEquipamento Urbano não encontrado!\n", id1);
                     }
                 }
             }
@@ -305,6 +308,39 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
             scanDMPRBT(arqQuery, id1, id2);
             treatDMPRBT(id1, id2, pathOut, blocks, hydrants, tLights, rTowers, buildings, walls);
         }
+        else if(!strcmp(command, "@m?")){
+            fscanf(arqQuery, "%s", id1);
+            fscanf(arqQuery, "%s", cep);
+            
+            treatRegisterM(registers, id1, cep, residents);
+        }
+        else if(!strcmp(command, "@e?")){
+            fscanf(arqQuery, "%s", id1);
+            fscanf(arqQuery, "%s", cep);
+            fscanf(arqQuery, "%s", face);
+            fscanf(arqQuery, "%d", &n);
+
+            treatRegisterE(registers, id1, cep, face, n, blocksTable);
+        }
+        else if(!strcmp(command, "@g?")){
+            fscanf(arqQuery, "%s", id1);
+            fscanf(arqQuery, "%s", id2);
+
+            treatRegisterG(registers, id1, id2, hydrantsTable, tLightsTable, rTowersTable);
+        }
+        else if(!strcmp(command, "@xy")){
+            fscanf(arqQuery, "%s", id1);
+            fscanf(arqQuery, "%lf", &x);
+            fscanf(arqQuery, "%lf", &y);
+
+            Point point = createPoint(x, y);
+            setRegister(registers, id1, point);
+        }
+    }
+
+    for(int i = 0; i < 11; i++){
+        if(registers[i] != NULL)
+            printf("R%d %lf %lf\n", i, getPointX(registers[i]), getPointY(registers[i]));
     }
 
     fclose(arqQuery);
