@@ -19,6 +19,7 @@
 #include "city_elements/person.h"
 #include "city_elements/resident.h"
 #include "city_elements/storeType.h"
+#include "data_structures/graph.h"
 
 /*Nesse header encontra-se todas as funcoes relacionadas a entrada/leitura de dados*/
 
@@ -26,7 +27,7 @@
 void checkFile(FILE *arq, char fname[]);
 
 /*Função que recebe os parâmetros digitados do terminal*/
-void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **nameEC, char **namePM, char **pathOut, char **isInteractive);
+void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **nameEC, char **namePM, char **pathOut, char **isInteractive, char **nameVia);
 
 /*Trata o nome do arquivo geo/qry caso ele seja passado como parametro junto com um diretorio relativo*/
 void treatFileName(char nameIn[], char **nameInT);
@@ -77,5 +78,9 @@ void scanResident (FILE *arqPes, HashTable residents, HashTable persons, HashTab
 
 /*Le as informacoes de texto do arquivo .geo e armazena em variaveis locais*/
 void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2);
+
+void scanGraphVertex(FILE *arqIn, Graph pathways);
+
+void scanGraphEdge(FILE *arqIn, Graph pathways);
 
 #endif

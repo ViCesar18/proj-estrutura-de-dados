@@ -8,7 +8,7 @@ void checkFile(FILE *arq, char fname[]){
     }
 }
 
-void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **nameEC, char **namePM, char **pathOut, char **isInteractive){
+void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, char **nameConsulta, char **nameEC, char **namePM, char **pathOut, char **isInteractive, char **nameVia){
     int i = 1;
 
     while(i < argc){
@@ -46,6 +46,11 @@ void receiveParameters(int argc, char *argv[], char **pathIn, char **nameIn, cha
             i++;
             *isInteractive = (char *) malloc (6 * sizeof(char));
             strcpy (*isInteractive, "true");
+        }
+        else if(strcmp("-v", argv[i]) == 0){
+            i++;
+            *nameVia = (char *) malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(*nameVia, argv[i]);
         }
         i++;
     }
@@ -316,4 +321,30 @@ void scanText(FILE *arqIn, FILE *arqOut, FILE *arqOut2){
     printText(arqOut, x, y, text, "black");
     if(arqOut2 != NULL)
         printText(arqOut2, x, y, text, "black");
+}
+
+void scanGraphVertex(FILE *arqIn, Graph pathways){
+    char id[32];
+    double x, y;
+
+    fscanf(arqIn, "%s", id);
+    fscanf(arqIn, "%lf", &x);
+    fscanf(arqIn, "%lf", &y);
+
+    addVertex(pathways, id, x, y);
+}
+
+void scanGraphEdge(FILE *arqIn, Graph pathways){
+    char id1[32], id2[32], bRight[32], bLeft[32], street[32];
+    double length, speed;
+
+    fscanf(arqIn, "%s", id1);
+    fscanf(arqIn, "%s", id2);
+    fscanf(arqIn, "%s", bRight);
+    fscanf(arqIn, "%s", bLeft);
+    fscanf(arqIn, "%lf", &length);
+    fscanf(arqIn, "%lf", &speed);
+    fscanf(arqIn, "%s", street);
+
+    addEdge(pathways, id1, id2, street, bRight, bLeft, length, speed);
 }

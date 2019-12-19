@@ -22,6 +22,7 @@
 #include "queryResident.h"
 #include "queryStore.h"
 #include "inQRY.h"
+#include "data_structures/graph.h"
 
 int main(int argc, char *argv[]){
     int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000, np = 1000, nm = 1000;  //Número máximo padrão dos elementos urbanos
@@ -29,6 +30,7 @@ int main(int argc, char *argv[]){
     char *nameIn = NULL, *nameInT = NULL, *arqIn = NULL;   //Dados para o arquivo de entrada (.geo)
     char *nameEC = NULL, *nameECT = NULL, *arqEC = NULL;
     char *namePM = NULL, *namePMT = NULL, *arqPM = NULL;
+    char *nameVia = NULL, *nameViaT = NULL, *arqV = NULL;
     char *isInteractive = NULL;
     char *nameQuery = NULL, *nameQueryT = NULL, *arqQry = NULL; //Dados para o arquivo de entrada (.qry)
     char *pathOut = NULL;   //Diretório de saída
@@ -36,7 +38,7 @@ int main(int argc, char *argv[]){
     char *nameOutQ = NULL, *arqOutQ = NULL; //Dados para o segundo arquivo de saida (.svg com .qry aplicado)
     char *nameTxt = NULL, *arqTxt = NULL;   //Dados para o arquivo de saída (.txt)
     char *nameOutBB = NULL, *arqOutBB = NULL; //Dados para o terceiro arquivo de saida (.svg com o bb aplicado)
-    FILE *arqGeo = NULL, *arqQuery = NULL, *arqSvg = NULL, *arqSvgQ = NULL, *arqText = NULL, *arqSvgBB = NULL, *arqEst = NULL, *arqPes = NULL, *arqAux = NULL; //Arquivos
+    FILE *arqGeo = NULL, *arqQuery = NULL, *arqSvg = NULL, *arqSvgQ = NULL, *arqText = NULL, *arqSvgBB = NULL, *arqEst = NULL, *arqPes = NULL, *arqAux = NULL, *arqVia = NULL; //Arquivos
 
     char command[8];   //Armazena o comando lido do arquivo .qry
 
@@ -55,9 +57,10 @@ int main(int argc, char *argv[]){
     strcpy(cstrkR, "black");
 
     Tree figures, blocks, hydrants, tLights, rTowers, buildings, walls;    //Arvore rubro negra de cada elemento urbano
+    Graph pathways; //Grafo da via urbada da cidade
 
     /*Recebe os parametros da main (argv)*/
-    receiveParameters(argc, argv, &pathIn, &nameIn, &nameQuery, &nameEC, &namePM, &pathOut, &isInteractive);
+    receiveParameters(argc, argv, &pathIn, &nameIn, &nameQuery, &nameEC, &namePM, &pathOut, &isInteractive, &nameVia);
 
     /*Trata o nome do arquivo de entrada se ele for um diretorio relativo*/
     treatFileName(nameIn, &nameInT);
@@ -96,7 +99,7 @@ int main(int argc, char *argv[]){
         if (pathIn != NULL){
             allocateFileMamory (nameEC, pathIn, &arqEC);
             arqEst = fopen (arqEC, "r");
-            checkFile (arqEst, nameEC);
+            checkFile (arqEst, arqEC);
         }
         else{
             arqEst = fopen (nameEC, "r");
@@ -111,11 +114,26 @@ int main(int argc, char *argv[]){
         if (pathIn != NULL){
             allocateFileMamory (namePM, pathIn, &arqPM);
             arqPes = fopen (arqPM, "r");
-            checkFile (arqPes, namePM);
+            checkFile (arqPes, arqPM);
         }
         else{
             arqPes = fopen (namePM, "r");
             checkFile (arqPes, namePM);
+        }
+    }
+
+    //.via
+    if(nameVia != NULL){
+        treatFileName(nameVia, &nameViaT);
+
+        if(pathIn != NULL){
+            allocateFileMamory(nameVia, pathIn, &arqV);
+            arqVia = fopen(arqV, "r");
+            checkFile(arqVia, arqV);
+        }
+        else{
+            arqVia = fopen(nameVia, "r");
+            checkFile(arqVia, nameVia);
         }
     }
     
@@ -278,6 +296,25 @@ int main(int argc, char *argv[]){
         }
     }
 
+    /*Le os dados dos elementos do arquivo de entrada .via*/
+    if(arqVia != NULL){
+        pathways = createGraph(10000);  //Cria o grafo caso o arquivo de vias exista
+
+        while(1){
+            fscanf(arqVia, "%s", command);
+
+            if(feof(arqVia))
+                break;
+
+            if(!strcmp(command, "v")){
+                scanGraphVertex(arqVia, pathways);
+            }
+            else if(!strcmp(command, "e")){
+                scanGraphEdge(arqVia, pathways);
+            }
+        }
+    }
+
     /*Le os dados de consulta(se existir)*/
     if(arqSvgQ != NULL){
         treatQueries(arqQuery, arqText, arqSvgQ, arqAux, nameInT, nameQueryT, pathIn, pathOut, nm, np, figures, blocks, hydrants, 
@@ -338,6 +375,16 @@ int main(int argc, char *argv[]){
     //interatividade
     if (isInteractive != NULL){
         free (isInteractive);
+    }
+
+    if(nameVia != NULL){
+        free(nameVia);
+        free(nameViaT);
+        free(arqV);
+        fclose(arqVia);
+
+        //Liberação da memória do grafo
+        destroyGraph(pathways);
     }
 
     //Liberação da memória das asvores
