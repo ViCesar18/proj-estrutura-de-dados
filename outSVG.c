@@ -92,6 +92,10 @@ void printLine(FILE *arqOut, double x1, double y1, double x2, double y2, char co
     fprintf(arqOut, "\n<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\"/>\n", x1, y1, x2, y2, color);
 }
 
+void printWay(FILE *arqOut, double x1, double y1, double x2, double y2, char *color, int sw){
+    fprintf(arqOut, "\n<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"%d\" style=\"opacity: 1\"/>\n", x1, y1, x2, y2, color, sw);
+}
+
 void printEllipse(FILE *arqOut, double xC, double yC, double rX, double rY, char cor[]){
 
     fprintf(arqOut, "\n<ellipse cx=\"%lf\" cy=\"%lf\" rx=\"%lf\" ry=\"%lf\" fill=\"none\" stroke=\"%s\"/>\n", xC, yC, rX, rY, cor);

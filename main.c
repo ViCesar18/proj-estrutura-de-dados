@@ -318,7 +318,7 @@ int main(int argc, char *argv[]){
     /*Le os dados de consulta(se existir)*/
     if(arqSvgQ != NULL){
         treatQueries(arqQuery, arqText, arqSvgQ, arqAux, nameInT, nameQueryT, pathIn, pathOut, nm, np, figures, blocks, hydrants, 
-        tLights, rTowers, walls, buildings, formsTable, blocksTable, hydrantsTable, tLightsTable, rTowersTable, buildingsTable, persons, residents, stores, storeTypes);
+        tLights, rTowers, walls, buildings, formsTable, blocksTable, hydrantsTable, tLightsTable, rTowersTable, buildingsTable, persons, residents, stores, storeTypes, pathways);
 
         printQuery(arqSvgQ, arqAux, figures, blocks, hydrants, tLights, rTowers, buildings, walls);
     }
@@ -326,7 +326,7 @@ int main(int argc, char *argv[]){
     //Loop de interatividade(se existir)
     if (isInteractive != NULL){
         console(pathIn, pathOut, nameInT, nm, np, figures, blocks, hydrants, tLights, rTowers, walls, buildings, formsTable, blocksTable, 
-        hydrantsTable, tLightsTable, rTowersTable, buildingsTable, persons, residents, stores, storeTypes);
+        hydrantsTable, tLightsTable, rTowersTable, buildingsTable, persons, residents, stores, storeTypes, pathways);
     }
 
     /*Finalização, libreracao de memoria e fechamento dos arquivos*/

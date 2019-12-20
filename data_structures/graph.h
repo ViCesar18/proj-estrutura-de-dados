@@ -18,6 +18,24 @@ Graph createGraph(int size);
 
 double getGraphVertexDist(GNode n);
 
+int getGraphFree(Graph g);
+
+GNode getGraphNode(Graph g, int i);
+
+char *getGraphNodeId(GNode n);
+
+double getGraphNodeX(GNode n);
+
+double getGraphNodeY(GNode n);
+
+GVertex getGraphNodeP(GNode n);
+
+double getGraphVertexX(GVertex v);
+
+double getGraphVertexY(GVertex v);
+
+GNode getGraphVertexNode(GVertex v);
+
 bool addVertex(Graph g, char *id, double x, double y);
 
 bool addEdge(Graph g, char *id1, char *id2, char *street, char *bR, char *bL, double length, double speed);

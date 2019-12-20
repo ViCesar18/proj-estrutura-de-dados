@@ -50,6 +50,60 @@ double getGraphVertexDist(GNode n){
 	return node->vertex->dist;
 }
 
+int getGraphFree(Graph g){
+	graphImp graph = (graphImp) g;
+
+	return graph->free;
+}
+
+GNode getGraphNode(Graph g, int i){
+	graphImp graph = (graphImp) g;
+
+	return graph->vertexes[i];
+}
+
+char *getGraphNodeId(GNode n){
+	gNodeImp node = (gNodeImp) n;
+
+	return node->vertex->id;
+}
+
+double getGraphNodeX(GNode n){
+	gNodeImp node = (gNodeImp) n;
+
+	return node->vertex->x;
+}
+
+double getGraphNodeY(GNode n){
+	gNodeImp node = (gNodeImp) n;
+
+	return node->vertex->y;
+}
+
+GVertex getGraphNodeP(GNode n){
+	gNodeImp node = (gNodeImp) n;
+
+	return node->vertex->p;
+}
+
+double getGraphVertexX(GVertex v){
+	gVertexImp vertex = (gVertexImp) v;
+
+	return vertex->x;
+}
+
+GNode getGraphVertexNode(GVertex v){
+	gVertexImp vertex = (gVertexImp) v;
+
+	return vertex->node;
+}
+
+double getGraphVertexY(GVertex v){
+	gVertexImp vertex = (gVertexImp) v;
+
+	return vertex->y;
+}
+
 bool addVertex(Graph g, char *id, double x, double y){
     graphImp graph = (graphImp) g;
 

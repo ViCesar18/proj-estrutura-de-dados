@@ -61,7 +61,7 @@ void scanDMPRBT(FILE *arqQuery, char *type, char *fileName);
 void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, char *nameInT, char *nameQueryT, char*PathIn, char *pathOut, int nm, int np, 
                 Tree figures, Tree blocks, Tree hydrants, Tree tLights, Tree rTowers, Tree walls, Tree buildings, 
                 HashTable formsTable, HashTable blocksTable, HashTable hydrantsTable, HashTable tLightsTable, HashTable rTowersTable, HashTable buildingsTable, 
-                HashTable persons, HashTable residents, HashTable stores, HashTable storeTypes);
+                HashTable persons, HashTable residents, HashTable stores, HashTable storeTypes, Graph pathways);
 
 void printQuery(FILE *arqSvgQ, FILE *arqAux, Tree figures, Tree blocks, Tree hydrants, Tree tLights, Tree rTowers, Tree buildings, Tree walls);
 

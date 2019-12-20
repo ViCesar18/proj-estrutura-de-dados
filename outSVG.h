@@ -42,6 +42,8 @@ void printText(FILE *arqOut, double x, double y, char text[], char fillColor[]);
 /*Desenha uma linha no arquivo SVG*/
 void printLine(FILE *arqOut, double x1, double y1, double x2, double y2, char color[]);
 
+void printWay(FILE *arqOut, double x1, double y1, double x2, double y2, char *color, int sw);
+
 /*Desenha uma elipse no arquivo SVG*/
 void printEllipse(FILE *arqOut, double xC, double yC, double rX, double rY, char cor[]);
 

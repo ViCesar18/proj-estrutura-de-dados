@@ -110,17 +110,22 @@ void scanDMPRBT(FILE *arqQuery, char *type, char *fileName){
 void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, char *nameInT, char *nameQueryT, char *pathIn, char *pathOut, int nm, int np, 
                 Tree figures, Tree blocks, Tree hydrants, Tree tLights, Tree rTowers, Tree walls, Tree buildings, 
                 HashTable formsTable, HashTable blocksTable, HashTable hydrantsTable, HashTable tLightsTable, HashTable rTowersTable, HashTable buildingsTable, 
-                HashTable persons, HashTable residents, HashTable stores, HashTable storeTypes){
+                HashTable persons, HashTable residents, HashTable stores, HashTable storeTypes, Graph pathways){
 
     char command[8];
-    char sufixo[32], cor[32], id1[32], id2[32], metric[4], cep[32], cpf[32], cnpj[32], face[2], compl[32];
+    char sufixo[32], cor[32], cor2[32], id1[32], id2[32], metric[4], cep[32], cpf[32], cnpj[32], face[2], compl[32];
     double x, y, r;
     int n, k, vectSize = 0;
     Element element1, element2;
     char cstrkQ[24];
 
+    //Dados para a consulta de bouding box
     FILE *arqSvgBB = NULL;
     char *nameOutBB = NULL, *arqOutBB = NULL;
+
+    //Dados para a consulta de vias
+    FILE *arqSvgVia = NULL;
+    char *nameOutVia = NULL, *arqOutVia = NULL;
 
     //Registradores [R0 - R10]
     Point *registers = (Point) calloc(11, sizeof(Point));
@@ -336,11 +341,36 @@ void treatQueries(FILE *arqQuery, FILE *arqText, FILE *arqSvgQ, FILE *arqAux, ch
             Point point = createPoint(x, y);
             setRegister(registers, id1, point);
         }
-    }
+        else if(!strcmp(command, "p?")){
+            fscanf(arqQuery, "%s", sufixo);
+            fscanf(arqQuery, "%s", id1);
+            fscanf(arqQuery, "%s", id2);
+            fscanf(arqQuery, "%s", cor);
+            fscanf(arqQuery, "%s", cor2);
 
-    for(int i = 0; i < 11; i++){
-        if(registers[i] != NULL)
-            printf("R%d %lf %lf\n", i, getPointX(registers[i]), getPointY(registers[i]));
+            createOutputBBFileName(&nameOutVia, nameInT, nameQueryT, sufixo);
+            strcat(nameOutVia, ".svg");
+            allocateFileMamory(nameOutVia, pathOut, &arqOutVia);
+            arqSvgVia = fopen(arqOutVia, "w");
+            checkFile(arqSvgVia, arqOutVia);
+
+            fprintf(arqSvgVia, "<svg>\n");
+            printTreeElements(figures, getTreeRoot(figures), arqSvgVia, printRect);
+            printTreeElements(figures, getTreeRoot(figures), arqSvgVia, printCircle);
+            printTreeElements(blocks, getTreeRoot(blocks), arqSvgVia, printBlock);
+            printTreeElements(hydrants, getTreeRoot(hydrants), arqSvgVia, printHydrant);
+            printTreeElements(tLights, getTreeRoot(tLights), arqSvgVia, printTrafficLight);
+            printTreeElements(rTowers, getTreeRoot(rTowers), arqSvgVia, printRadioTower);
+            printTreeElements(buildings, getTreeRoot(buildings), arqSvgVia, printBuilding);
+            printTreeElements(walls, getTreeRoot(walls), arqSvgVia, printWall);
+
+            treatP(arqSvgVia, registers, id1, id2, cor, cor2, pathways);
+            fprintf(arqSvgVia, "\n</svg>");
+
+            fclose(arqSvgVia);
+            free(nameOutVia);
+            free(arqOutVia);
+        }
     }
 
     fclose(arqQuery);
